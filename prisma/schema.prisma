@@ -105,3 +105,15 @@ model Result {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Expense {
+  id String @id @default(cuid())
+  description String
+  total Int
+  attendeeId String
+  attendee Attendee @relation(fields: [attendeeId], references: [id], onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
