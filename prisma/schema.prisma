@@ -33,10 +33,10 @@ model Password {
 model Attendee {
   tripId String
   trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  
-  ownerId String
-  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade) // owner ID is for this owner field, id is referencing user id
-  
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade) // user ID is for this owner field, id is referencing user id
+
   deciderId String
   decider Decider @relation(fields: [deciderId], references: [id])
 
@@ -55,9 +55,9 @@ model Attendee {
 model Trip {
   id String @id @default(cuid())
 
-  ownerId String 
+  ownerId String
   owner User @relation(fields: [ownerId], references: [id])
-  
+
   attendees User[]
 
   stops Stop[]
@@ -110,10 +110,21 @@ model Expense {
   id String @id @default(cuid())
   description String
   total Int
-  attendeeId String
-  attendee Attendee @relation(fields: [attendeeId], references: [id], onUpdate: Cascade)
+  tripId String
+  userId String
+  attendee Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onUpdate: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model PackingList {
+  id String @id @default(cuid())
+  tripId String
+  userId String
+  attendee Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onDelete: Cascade, onUpdate: Cascade)
+  item Item[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
