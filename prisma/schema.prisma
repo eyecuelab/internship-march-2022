@@ -46,8 +46,6 @@ model TripUser{
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 
-
-
   isAccepted DateTime?
 
   expenseTripUsers ExpenseTripUser[]
