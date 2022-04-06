@@ -8,65 +8,49 @@ generator client {
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
+  id       String  @id @default(cuid())
+  email    String  @unique
   userName String?
-
   avatarUrl String?
-
   password Password?
-
   attendees Attendee[] @relation("attendee")
-  trips Trip[] @relation("trips")
-
+  trips     Trip[]     @relation("trips")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Password {
   hash String
-
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique
 }
 
 model Attendee {
   tripId String
-  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
+  trip   Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
-  user User @relation(name: "attendee", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade) // user ID is for this owner field, id is referencing user id
-
+  user   User   @relation(name: "attendee", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade) // user ID is for this owner field, id is referencing user id
   deciderId String
-  decider Decider @relation(fields: [deciderId], references: [id])
-
+  decider   Decider @relation(fields: [deciderId], references: [id])
   expenses Expense[]
-
   packingListId String
-  packingList Item[]
-
+  packingList   Item[]
   isAccepted DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
   @@id([tripId, userId])
 }
 
 model Trip {
   id String @id @default(cuid())
-
   ownerId String
-  owner User @relation(name: "trips", fields: [ownerId], references: [id])
-
+  owner   User   @relation(name: "trips", fields: [ownerId], references: [id])
   attendees Attendee[]
-
   stops Stop[]
-
   startDate DateTime?
-  endDate DateTime?
-
+  endDate   DateTime?
   nickName String
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -75,55 +59,50 @@ model Stop {
   id String @id @default(cuid())
 
   tripId String
-  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  name String
+  trip   Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  name             String
   formattedAddress String
-  websiteUrl String
-
-  isOrigin DateTime?
+  websiteUrl       String
+  isOrigin      DateTime?
   isDestination DateTime?
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Decider {
   id String @id @default(cuid())
-
   attendees Attendee[]
-  results Result[]
-  
+  results   Result[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Result {
-  id String @id @default(cuid())
-  winner String
+  id        String   @id @default(cuid())
+  winner    String
   deciderId String
-  decider Decider @relation(fields: [deciderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  decider   Decider  @relation(fields: [deciderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Expense {
-  id String @id @default(cuid())
+  id          String   @id @default(cuid())
   description String
-  total Int
-  tripId String
-  userId String
-  attendee Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onUpdate: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  total       Int
+  tripId      String
+  userId      String
+  attendee    Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onUpdate: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Item {
-  id String @id @default(cuid())
+  id          String   @id @default(cuid())
   description String
-  tripId String
-  userId String
-  attendee Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onDelete: Cascade, onUpdate: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  tripId      String
+  userId      String
+  attendee    Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onDelete: Cascade, onUpdate: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
