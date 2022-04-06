@@ -43,7 +43,7 @@ model Attendee {
   expenses Expense[]
 
   packingListId String
-  packingList PackingList @relation(fields: [packingListId], references: [id])
+  packingList Item[]
 
   isAccepted DateTime?
   createdAt DateTime @default(now())
@@ -58,7 +58,7 @@ model Trip {
   ownerId String
   owner User @relation(name: "trips", fields: [ownerId], references: [id])
 
-  attendees User[]
+  attendees Attendee[]
 
   stops Stop[]
 
@@ -101,7 +101,8 @@ model Decider {
 model Result {
   id String @id @default(cuid())
   winner String
-
+  deciderId String
+  decider Decider @relation(fields: [deciderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -113,18 +114,6 @@ model Expense {
   tripId String
   userId String
   attendee Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onUpdate: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model PackingList {
-  id String @id @default(cuid())
-  tripId String
-  userId String
-  attendee Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onDelete: Cascade, onUpdate: Cascade)
-  item Item[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -132,7 +121,9 @@ model PackingList {
 model Item {
   id String @id @default(cuid())
   description String
-
+  tripId String
+  userId String
+  attendee Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
