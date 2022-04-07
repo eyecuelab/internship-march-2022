@@ -8,7 +8,7 @@ const Index: FC = () => {
   return (
     <div>
       <Link
-        to="/new"
+        to="/trips/new/"
         className={join(
           `flex`,
           `items-center`,
