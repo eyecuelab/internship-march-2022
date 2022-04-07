@@ -7,6 +7,9 @@ import { join } from "~/utils"
 const New: FC = () => {
   return (
     <div>
+      <h1 className={join(`flex`, `items-center`, `justify-center`)}>
+        Trips New
+      </h1>
       <Link
         to="/trips"
         className={join(
