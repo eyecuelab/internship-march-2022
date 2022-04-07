@@ -1,17 +1,30 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "email" TEXT NOT NULL,
+    "userName" TEXT,
+    "avatarUrl" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
 
-  - You are about to drop the `Note` table. If the table is not empty, all the data it contains will be lost.
+-- CreateTable
+CREATE TABLE "Note" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "title" TEXT NOT NULL,
+    "body" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "userId" TEXT NOT NULL,
+    CONSTRAINT "Note_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
 
-*/
--- AlterTable
-ALTER TABLE "User" ADD COLUMN "avatarUrl" TEXT;
-ALTER TABLE "User" ADD COLUMN "userName" TEXT;
-
--- DropTable
-PRAGMA foreign_keys=off;
-DROP TABLE "Note";
-PRAGMA foreign_keys=on;
+-- CreateTable
+CREATE TABLE "Password" (
+    "hash" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    CONSTRAINT "Password_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 -- CreateTable
 CREATE TABLE "Attendee" (
@@ -94,3 +107,9 @@ CREATE TABLE "Item" (
     "updatedAt" DATETIME NOT NULL,
     CONSTRAINT "Item_tripId_userId_fkey" FOREIGN KEY ("tripId", "userId") REFERENCES "Attendee" ("tripId", "userId") ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Password_userId_key" ON "Password"("userId");
