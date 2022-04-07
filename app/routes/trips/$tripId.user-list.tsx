@@ -4,14 +4,14 @@ import { Link } from "remix"
 
 import { join } from "~/utils"
 
-const Index: FC = () => {
+const UserList: FC = () => {
   return (
     <div>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>
-        Trips List
+        User List
       </h1>
       <Link
-        to="/trips/new/"
+        to="/trips/example/"
         className={join(
           `flex`,
           `items-center`,
@@ -30,10 +30,10 @@ const Index: FC = () => {
           `sm:px-8`,
         )}
       >
-        Create Trip
+        Return to trip dashboard
       </Link>
       <Link
-        to="/trips/trip-id-goes-here"
+        to="/profile"
         className={join(
           `flex`,
           `items-center`,
@@ -52,10 +52,10 @@ const Index: FC = () => {
           `sm:px-8`,
         )}
       >
-        Example Trip
+        Return to profile
       </Link>
     </div>
   )
 }
 
-export default Index
+export default UserList

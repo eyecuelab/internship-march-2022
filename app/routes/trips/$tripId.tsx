@@ -1,6 +1,6 @@
 import type { FC } from "react"
 
-import { Link } from "remix"
+import { Link, Outlet } from "remix"
 
 import { join } from "~/utils"
 

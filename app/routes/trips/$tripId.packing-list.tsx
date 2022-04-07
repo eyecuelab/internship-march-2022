@@ -4,34 +4,12 @@ import { Link } from "remix"
 
 import { join } from "~/utils"
 
-const Index: FC = () => {
+const PackingList: FC = () => {
   return (
     <div>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>
-        Trips List
+        User List
       </h1>
-      <Link
-        to="/trips/new/"
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
-      >
-        Create Trip
-      </Link>
       <Link
         to="/trips/trip-id-goes-here"
         className={join(
@@ -52,10 +30,32 @@ const Index: FC = () => {
           `sm:px-8`,
         )}
       >
-        Example Trip
+        Return to trip dashboard
+      </Link>
+      <Link
+        to="/profile"
+        className={join(
+          `flex`,
+          `items-center`,
+          `justify-center`,
+          `rounded-md`,
+          `border`,
+          `border-transparent`,
+          `bg-white`,
+          `px-4`,
+          `py-3`,
+          `text-base`,
+          `font-medium`,
+          `text-yellow-700`,
+          `shadow-sm`,
+          `hover:bg-yellow-50`,
+          `sm:px-8`,
+        )}
+      >
+        Return to profile
       </Link>
     </div>
   )
 }
 
-export default Index
+export default PackingList
