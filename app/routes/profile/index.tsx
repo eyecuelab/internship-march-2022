@@ -7,6 +7,9 @@ import { join } from "~/utils"
 const Index: FC = () => {
   return (
     <div>
+      <h1 className={join(`flex`, `items-center`, `justify-center`)}>
+        Profile Home
+      </h1>
       <Link
         to="/trips"
         className={join(
