@@ -69,7 +69,7 @@ export const action: ActionFunction = async ({ request }) => {
     request,
     userId: user.id,
     remember: remember === `on` ? true : false,
-    redirectTo: typeof redirectTo === `string` ? redirectTo : `/notes`,
+    redirectTo: typeof redirectTo === `string` ? redirectTo : `/profile`,
   })
 }
 
@@ -81,7 +81,7 @@ export const meta: MetaFunction = () => {
 
 const LoginPage: FC = () => {
   const [searchParams] = useSearchParams()
-  const redirectTo = searchParams.get(`redirectTo`) || `/notes`
+  const redirectTo = searchParams.get(`redirectTo`) || `/profile`
   const actionData = useActionData() as ActionData
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)

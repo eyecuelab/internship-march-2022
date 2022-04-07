@@ -2,10 +2,9 @@ import type { FC } from "react"
 
 import { Link } from "remix"
 
-import { join, useOptionalUser } from "~/utils"
+import { join } from "~/utils"
 
 const Index: FC = () => {
-  const user = useOptionalUser()
   return (
     <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
       <div className="relative sm:pb-16 sm:pt-8">
@@ -59,9 +58,18 @@ const Index: FC = () => {
                 project deployed.
               </p>
               <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
-                {user ? (
+                <div
+                  className={join(
+                    `space-y-4`,
+                    `sm:mx-auto`,
+                    `sm:inline-grid`,
+                    `sm:grid-cols-2`,
+                    `sm:gap-5`,
+                    `sm:space-y-0`,
+                  )}
+                >
                   <Link
-                    to="/notes"
+                    to="/join"
                     className={join(
                       `flex`,
                       `items-center`,
@@ -80,60 +88,26 @@ const Index: FC = () => {
                       `sm:px-8`,
                     )}
                   >
-                    View Notes for {user.email}
+                    Sign up
                   </Link>
-                ) : (
-                  <div
+                  <Link
+                    to="/login"
                     className={join(
-                      `space-y-4`,
-                      `sm:mx-auto`,
-                      `sm:inline-grid`,
-                      `sm:grid-cols-2`,
-                      `sm:gap-5`,
-                      `sm:space-y-0`,
+                      `flex`,
+                      `items-center`,
+                      `justify-center`,
+                      `rounded-md`,
+                      `bg-yellow-500`,
+                      `px-4`,
+                      `py-3`,
+                      `font-medium`,
+                      `text-white`,
+                      `hover:bg-yellow-600`,
                     )}
                   >
-                    <Link
-                      to="/join"
-                      className={join(
-                        `flex`,
-                        `items-center`,
-                        `justify-center`,
-                        `rounded-md`,
-                        `border`,
-                        `border-transparent`,
-                        `bg-white`,
-                        `px-4`,
-                        `py-3`,
-                        `text-base`,
-                        `font-medium`,
-                        `text-yellow-700`,
-                        `shadow-sm`,
-                        `hover:bg-yellow-50`,
-                        `sm:px-8`,
-                      )}
-                    >
-                      Sign up
-                    </Link>
-                    <Link
-                      to="/login"
-                      className={join(
-                        `flex`,
-                        `items-center`,
-                        `justify-center`,
-                        `rounded-md`,
-                        `bg-yellow-500`,
-                        `px-4`,
-                        `py-3`,
-                        `font-medium`,
-                        `text-white`,
-                        `hover:bg-yellow-600`,
-                      )}
-                    >
-                      Log In
-                    </Link>
-                  </div>
-                )}
+                    Log In
+                  </Link>
+                </div>
               </div>
               <a href="https://remix.run">
                 <img
