@@ -52,7 +52,7 @@ const Index: FC = () => {
         Notes
       </Link>
       <Link
-        to="/edit"
+        to="/profile/edit"
         className={join(
           `flex`,
           `items-center`,
