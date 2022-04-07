@@ -32,3 +32,5 @@ const Index: FC = () => {
     </div>
   )
 }
+
+export default Index
