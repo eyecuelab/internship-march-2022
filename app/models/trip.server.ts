@@ -12,12 +12,11 @@ export async function getTrips(): Promise<Trip[]> {
 //   return prisma.trip.findUnique({ where: { id } })
 // }
 
-export function createTrip(
+export async function createTrip(
   trip: Pick<Trip, `nickName` | `ownerId`>,
 ): Promise<Trip> {
   return prisma.trip.create({ data: trip })
 }
-
 /* start notes
 
 export async function getUsersLists(userId: User["id"]): Promise<List[]> {
