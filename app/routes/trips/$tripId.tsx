@@ -77,7 +77,7 @@ const TripOverview: FC = () => {
         Expenses
       </Link>
       <Link
-        to="expenses/"
+        to="attendees/"
         className={join(
           `flex`,
           `items-center`,

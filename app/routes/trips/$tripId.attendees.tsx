@@ -8,10 +8,10 @@ const UserList: FC = () => {
   return (
     <div>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>
-        User List
+        Attendees
       </h1>
       <Link
-        to="/trips/example/"
+        to="/trips/trip-id-goes-here/"
         className={join(
           `flex`,
           `items-center`,
@@ -53,6 +53,28 @@ const UserList: FC = () => {
         )}
       >
         Return to profile
+      </Link>
+      <Link
+        to="/trips/trip-id-goes-here/attendees/new"
+        className={join(
+          `flex`,
+          `items-center`,
+          `justify-center`,
+          `rounded-md`,
+          `border`,
+          `border-transparent`,
+          `bg-white`,
+          `px-4`,
+          `py-3`,
+          `text-base`,
+          `font-medium`,
+          `text-yellow-700`,
+          `shadow-sm`,
+          `hover:bg-yellow-50`,
+          `sm:px-8`,
+        )}
+      >
+        Add New Attendee
       </Link>
     </div>
   )

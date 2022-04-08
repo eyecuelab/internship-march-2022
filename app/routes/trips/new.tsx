@@ -4,11 +4,11 @@ import { Link } from "remix"
 
 import { join } from "~/utils"
 
-const New: FC = () => {
+const NewTrip: FC = () => {
   return (
     <div>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>
-        Trips New
+        New Trip Form
       </h1>
       <Link
         to="/trips"
@@ -58,4 +58,4 @@ const New: FC = () => {
   )
 }
 
-export default New
+export default NewTrip

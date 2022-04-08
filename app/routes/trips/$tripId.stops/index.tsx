@@ -11,7 +11,7 @@ const Stops: FC = () => {
         Stops List
       </h1>
       <Link
-        to="/trips/trip-id-goes-here/stops/exampleStop"
+        to="exampleStop/"
         className={join(
           `flex`,
           `items-center`,

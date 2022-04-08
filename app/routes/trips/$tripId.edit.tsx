@@ -9,7 +9,7 @@ const Edit: FC = () => {
     <div>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>Edit</h1>
       <Link
-        to="/trips/example/"
+        to="/trips/trip-id-goes-here/"
         className={join(
           `flex`,
           `items-center`,
