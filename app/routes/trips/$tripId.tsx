@@ -52,10 +52,10 @@ const TripOverview: FC = () => {
           `sm:px-8`,
         )}
       >
-        Pack List
+        Packing List
       </Link>
       <Link
-        to="cost-sharing/"
+        to="expenses/"
         className={join(
           `flex`,
           `items-center`,
@@ -74,10 +74,10 @@ const TripOverview: FC = () => {
           `sm:px-8`,
         )}
       >
-        Cost Sharing
+        Expenses
       </Link>
       <Link
-        to="user-list/"
+        to="expenses/"
         className={join(
           `flex`,
           `items-center`,
@@ -96,7 +96,7 @@ const TripOverview: FC = () => {
           `sm:px-8`,
         )}
       >
-        User List
+        Attendees
       </Link>
       <Link
         to="decider/"

@@ -4,10 +4,12 @@ import { Link } from "remix"
 
 import { join } from "~/utils"
 
-const Edit: FC = () => {
+const Expenses: FC = () => {
   return (
     <div>
-      <h1 className={join(`flex`, `items-center`, `justify-center`)}>Edit</h1>
+      <h1 className={join(`flex`, `items-center`, `justify-center`)}>
+        Expenses
+      </h1>
       <Link
         to="/trips/example/"
         className={join(
@@ -56,4 +58,4 @@ const Edit: FC = () => {
   )
 }
 
-export default Edit
+export default Expenses

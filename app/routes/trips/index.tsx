@@ -59,3 +59,4 @@ const Index: FC = () => {
 }
 
 export default Index
+//outlet
