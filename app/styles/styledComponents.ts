@@ -3,7 +3,7 @@ import styled from "styled-components"
 // font-family: 'Lato', sans-serif;
 // font-family: 'Playfair Display', serif;
 
-const MrBtn = styled.button`
+export const MainBtn = styled.button`
   border: 1px solid #cad2c5;
   background: #cad2c5;
   color: #2f3e46;
@@ -15,19 +15,21 @@ const MrBtn = styled.button`
   width: 315px;
   height: 56px;
 `
-export default MrBtn
-export const MrsBtn = styled(MrBtn)`
+
+export const ClearBtn = styled(MainBtn)`
   box-sizing: border-box;
   background: rgba(202, 210, 197, 0);
-  font-family: "Playfair Display", serif;
+  font-family: "Lato", sans-serif;
+  color: #ffffff;
 `
-export const BtnJr = styled(MrBtn)`
+export const SmMainBtn = styled(MainBtn)`
   width: 153px;
   height: 56px;
 `
-export const BbyBtn = styled(MrsBtn)`
+export const SmClearBtn = styled(ClearBtn)`
   width: 153px;
   height: 56px;
+  color: #ffffff;
 `
 
 // .button {

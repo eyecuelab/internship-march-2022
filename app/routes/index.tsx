@@ -2,6 +2,7 @@ import type { FC } from "react"
 
 import { Link, Form } from "remix"
 
+import { SmMainBtn, SmClearBtn } from "~/styles/styledComponents"
 import { join, useOptionalUser } from "~/utils"
 
 const Index: FC = () => {
@@ -111,44 +112,11 @@ const Index: FC = () => {
                         `sm:space-y-0`,
                       )}
                     >
-                      <Link
-                        to="/join"
-                        className={join(
-                          `flex`,
-                          `items-center`,
-                          `justify-center`,
-                          `rounded-md`,
-                          `border`,
-                          `border-transparent`,
-                          `bg-white`,
-                          `px-4`,
-                          `py-3`,
-                          `text-base`,
-                          `font-medium`,
-                          `text-yellow-700`,
-                          `shadow-sm`,
-                          `hover:bg-yellow-50`,
-                          `sm:px-8`,
-                        )}
-                      >
-                        Sign up
+                      <Link to="/join">
+                        <SmClearBtn>Register</SmClearBtn>
                       </Link>
-                      <Link
-                        to="/login"
-                        className={join(
-                          `flex`,
-                          `items-center`,
-                          `justify-center`,
-                          `rounded-md`,
-                          `bg-yellow-500`,
-                          `px-4`,
-                          `py-3`,
-                          `font-medium`,
-                          `text-white`,
-                          `hover:bg-yellow-600`,
-                        )}
-                      >
-                        Log In
+                      <Link to="/login">
+                        <SmMainBtn>Log In</SmMainBtn>
                       </Link>
                     </div>
                   )}

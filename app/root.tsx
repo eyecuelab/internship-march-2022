@@ -46,6 +46,7 @@ const App: FC = () => {
       <head>
         <Meta />
         <Links />
+        {typeof document === `undefined` ? `__STYLES__` : null}
       </head>
       <body className={join(`h-full`, `bg-[#2F3E46DE]`)}>
         <Outlet />
