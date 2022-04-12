@@ -14,10 +14,14 @@ import type { LinksFunction, MetaFunction, LoaderFunction } from "remix"
 import { join } from "~/utils"
 
 import { getUser } from "./session.server"
+import ourStyles from "./styles/index.css"
 import tailwindStylesheetUrl from "./styles/tailwind.css"
 
 export const links: LinksFunction = () => {
-  return [{ rel: `stylesheet`, href: tailwindStylesheetUrl }]
+  return [
+    { rel: `stylesheet`, href: tailwindStylesheetUrl },
+    { rel: `stylesheet`, href: ourStyles },
+  ]
 }
 
 export const meta: MetaFunction = () => ({

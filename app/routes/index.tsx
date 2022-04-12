@@ -21,7 +21,7 @@ const Index: FC = () => {
                 className={join(
                   `absolute`,
                   `inset-0`,
-                  `bg-[color:rgba(254,204,27,0.5)]`,
+                  `bg-[color:rgba(11,26,7,0.46)]`,
                   `mix-blend-multiply`,
                 )}
               />
@@ -50,10 +50,13 @@ const Index: FC = () => {
                   `lg:text-9xl`,
                 )}
               >
-                <span className="block uppercase text-yellow-500 drop-shadow-md">
+                <span className="block uppercase text-[color:rgb(229,222,228)] drop-shadow-md">
                   GoGoYonder
                 </span>
               </h1>
+              <p className="mx-auto mt-6 max-w-lg text-center text-xl text-white sm:max-w-3xl">
+                Discover the world, on the road.
+              </p>
               <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                 <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                   {user ? (
