@@ -23,16 +23,14 @@ async function seed() {
       },
     },
   })
-
-  await Promise.all(
-    getTrips().map((trip) => {
-      return prisma.trip.create({ data: trip })
-    }),
-  )
-
   await Promise.all(
     getUsers().map((user) => {
       return prisma.user.create({ data: user })
+    }),
+  )
+  await Promise.all(
+    getTrips().map((trip) => {
+      return prisma.trip.create({ data: trip })
     }),
   )
   await Promise.all(
@@ -109,7 +107,7 @@ const getAttendees = (): Attendee[] => {
     {
       tripId: `1`,
       userId: `1`,
-      deciderId: `1`,
+      // deciderId: `1`,
       packingListId: `1`,
       isAccepted: null,
       createdAt: new Date(0),
@@ -118,7 +116,7 @@ const getAttendees = (): Attendee[] => {
     {
       tripId: `2`,
       userId: `2`,
-      deciderId: `2`,
+      // deciderId: `2`,
       packingListId: `2`,
       isAccepted: null,
       createdAt: new Date(0),
@@ -127,7 +125,7 @@ const getAttendees = (): Attendee[] => {
     {
       tripId: `3`,
       userId: `3`,
-      deciderId: `3`,
+      // deciderId: `3`,
       packingListId: `3`,
       isAccepted: null,
       createdAt: new Date(0),

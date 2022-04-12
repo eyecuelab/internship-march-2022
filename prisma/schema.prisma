@@ -8,16 +8,16 @@ generator client {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  email    String  @unique
-  userName String?
+  id        String     @id @default(cuid())
+  email     String     @unique
+  userName  String?
   avatarUrl String?
-  password Password?
+  password  Password?
   attendees Attendee[] @relation("attendee")
   trips     Trip[]     @relation("trips")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  notes Note[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  notes     Note[]
 }
 
 model Note {
@@ -33,58 +33,58 @@ model Note {
 }
 
 model Password {
-  hash String
+  hash   String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique
 }
 
 model Attendee {
-  tripId String
-  trip   Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String
-  user   User   @relation(name: "attendee", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade) // user ID is for this owner field, id is referencing user id
-  deciderId String
-  decider   Decider @relation(fields: [deciderId], references: [id])
-  expenses Expense[]
+  tripId        String
+  trip          Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId        String
+  user          User      @relation(name: "attendee", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade) // user ID is for this owner field, id is referencing user id
+  // deciderId String
+  // decider   Decider @relation(fields: [deciderId], references: [id])
+  expenses      Expense[]
   packingListId String
   packingList   Item[]
-  isAccepted DateTime?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  isAccepted    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@id([tripId, userId])
 }
 
 model Trip {
-  id String @id @default(cuid())
-  ownerId String
-  owner   User   @relation(name: "trips", fields: [ownerId], references: [id])
+  id        String     @id @default(cuid())
+  ownerId   String
+  owner     User       @relation(name: "trips", fields: [ownerId], references: [id])
   attendees Attendee[]
-  stops Stop[]
+  stops     Stop[]
   startDate DateTime?
   endDate   DateTime?
-  nickName String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  nickName  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model Stop {
   id String @id @default(cuid())
 
-  tripId String
-  trip   Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tripId           String
+  trip             Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   name             String
   formattedAddress String
   websiteUrl       String
-  isOrigin      DateTime?
-  isDestination DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isOrigin         DateTime?
+  isDestination    DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
 model Decider {
-  id String @id @default(cuid())
-  attendees Attendee[]
+  id        String   @id @default(cuid())
+  // attendees Attendee[]
   results   Result[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
