@@ -11,6 +11,8 @@ import {
 } from "remix"
 import type { LinksFunction, MetaFunction, LoaderFunction } from "remix"
 
+import { join } from "~/utils"
+
 import { getUser } from "./session.server"
 import tailwindStylesheetUrl from "./styles/tailwind.css"
 
@@ -41,7 +43,7 @@ const App: FC = () => {
         <Meta />
         <Links />
       </head>
-      <body className="h-full">
+      <body className={join(`h-full`, `bg-[#2F3E46DE]`)}>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
