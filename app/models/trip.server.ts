@@ -8,6 +8,10 @@ export async function getTrips(): Promise<Trip[]> {
   return prisma.trip.findMany()
 }
 
+export async function getTrip(id: string): Promise<Trip | null> {
+  return prisma.trip.findUnique({ where: { id } })
+}
+
 // export async function getTripById(id: string) {
 //   return prisma.trip.findUnique({ where: { id } })
 // }
