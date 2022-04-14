@@ -1,18 +1,19 @@
-import type { FC } from "react"
+import type { FC, useEffect } from "react"
 
 import type { ActionFunction, LoaderFunction } from "remix"
 import { Link, json, Form, redirect, useActionData, useParams, useLoaderData } from "remix"
 
 import invariant from "tiny-invariant"
 
+import { useCatch } from "@remix-run/react";
 
 import { Trip, getTrip } from "~/models/trip.server"
 import { createAttendee } from "~/models/attendee.server"
 import { getUserByEmail } from "~/models/user.server"
 import { requireUserId } from "~/session.server"
-import { join } from "~/utils"
+import { join, validateEmail} from "~/utils"
+import {MainBtn, InputField, InputLabel, Header, ErrorDiv} from "../../styles/styledComponents"
 
- 
 type LoaderData = {
   trip: Trip;
 };
@@ -28,74 +29,89 @@ export const loader: LoaderFunction = async ({
   return json<LoaderData>({ trip });
 };
 
-type ActionData =
-  | {
-      tripIdInput: string | null
-      email: string | null
-      user: string | null
-    }
-  | undefined
+interface ActionData {
+  errors: {
+    tripId?: string 
+    email?: string    
+    user?: string  
+  }
+}
 
 export const action: ActionFunction = async ({ request }) => {
-  const ownerId = await requireUserId(request)
   const formData = await request.formData()
 
-  const tripIdInput = formData.get(`tripId`)
+  const tripIdInput = formData.get(`tripId`) 
   const email = formData.get(`email`)!
   const tripId = tripIdInput ? tripIdInput.toString() : null
-  const user = await getUserByEmail(email.toString())!
-  const userId = user?.id
-  
-  const errors: ActionData = {
-    tripIdInput: tripId ? null : "this tripId is not available",
-    user: user ? null : `this person doesn't have an account yet`,
-    email: email ? null : `email is required`,
+  const user = await getUserByEmail(email.toString())
+  const userId = user
+ 
+  if(!validateEmail(email)) {
+    return json<ActionData>(
+      { errors: {email: `Please enter a valid email address`}},
+      { status: 400}
+    )
   }
-  // variable: whatToCheck ? ifCheckTrue : ifCheckFalse
-  
-  const hasErrors = Object.values(errors).some((errorMessage) => errorMessage)
-  if (hasErrors) {
-    return json<ActionData>(errors)
+  if(!user){
+    return json<ActionData>(
+      { errors: {user: `Please enter an existing user`}},
+      { status: 400}
+    )
   }
-  invariant(typeof tripId === null, "Must have a valid trip id")
-  invariant(typeof email === `string`, `email must be a string`)
-  invariant(user, `user must have an account`)
+  if(!tripId){
+    return json<ActionData>(
+      { errors: {tripId: `This trip is no longer valid`}},
+      { status: 400}
+    )
+  }
 
-  await createAttendee({ tripId, user.id })
+  invariant(typeof userId === `string`, `userId must be a string`)
+
+  await createAttendee({ tripId, userId })
   return redirect(`/trips`)
 }
 
 const NewAttendee: FC = () => {
   const data = useLoaderData() as LoaderData;
+  const actionData = useActionData();
   return (
     <div>
-      <h1 className={join(`flex`, `items-center`, `justify-center`)}>
+      <Header>
         Add New Attendee
-      </h1>
+      </Header>
 
       <Form method="post">
-        <input type="hidden"
-          name="tripId"
-          value={data.trip.id}
-        />
-        <p>
-          <label>
-            User Email:{` `}
-            {errors?.email ? (
-              <em className="text-red-600">{errors.email}</em>
-            ) : null}
-            <input type="text" name="email" className={inputClassName} />
-          </label>
-        </p>
-        <p className="text-right">
-          <button
+        <div className={join(`text-center`,`my-5`)}>
+          <input type="hidden"
+            name="tripId"
+            value={data.trip.id}
+          />
+          <InputLabel>
+            User Email:  
+            <InputField type="text" name="email"
+            className={join(`mx-auto`,`block`)}/>
+          </InputLabel>
+          <br/>
+            {actionData?.errors?.tripId ? (
+              <ErrorDiv>
+                <em>{actionData.errors.tripId}</em>
+              </ErrorDiv>
+              ) : actionData?.errors?.user ? (
+                <ErrorDiv>
+                <em>{actionData.errors.user}</em>
+                </ErrorDiv>
+                ) : actionData?.errors?.email ? (
+                  <ErrorDiv>
+                  <em>{actionData.errors.email}</em>
+                  </ErrorDiv>
+                  ) : null
+          }
+          <MainBtn
             type="submit"
-            className="rounded bg-blue-500 py-2 px-4 
-            text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
-          >
-            Add User
-          </button>
-        </p>
+            >
+            Add Attendee
+          </MainBtn>
+        </div>
       </Form>
 
       <Link
@@ -166,6 +182,20 @@ const NewAttendee: FC = () => {
       </Link>
     </div>
   )
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  return (
+    <ErrorDiv>
+      <h1>Caught</h1>
+      <p>Status: {caught.status}</p>
+      <pre>
+        <code>{JSON.stringify(caught.data, null, 2)}</code>
+      </pre>
+    </ErrorDiv>
+  );
 }
 
 export default NewAttendee
