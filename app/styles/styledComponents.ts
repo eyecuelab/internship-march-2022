@@ -7,10 +7,11 @@ export const MainBtn = styled.button`
   border: 1px solid #cad2c5;
   background: #cad2c5;
   color: #2f3e46;
-  font-family: "Lato", sans-serif;
   border-radius: 15px;
   padding: 12px 32px;
-  font-size: 12px;
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 1em;
   text-align: center;
   width: 315px;
   height: 56px;
@@ -31,14 +32,30 @@ export const SmClearBtn = styled(ClearBtn)`
   height: 56px;
   color: #ffffff;
 `
-
-// .button {
-//   background-color: #4CAF50; /* Green */
-//   border: none;
-//   color: white;
-//   padding: 15px 32px;
-//   font-size: 16px;
-//   text-align: center;
-//   text-decoration: none;
-//   display: inline-block;
-// }
+export const Header = styled.h1`
+  font-family: 'Playfair Display', serif;
+  font-size: 2em;
+  margin-top: 1em;
+  margin-left: 1em;
+  color: #ffffff;
+`
+export const InputLabel = styled.label`
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #ffffff;
+  margin-left: -10em;
+`
+export const InputField = styled.input`
+  width: 315px;
+  height: 55px;
+  color: black;
+  padding .5em;
+  border-radius: 15px;
+  margin-top: .3em
+`
+export const ErrorDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: red;
+`
