@@ -1,17 +1,35 @@
 import type { FC } from "react"
-
-import { Link } from "remix"
-
+import type { Params } from "react-router"
+import { Link, json, Form, redirect, useActionData, useParams, useLoaderData, LoaderFunction } from "remix"
+import { getTripById } from "~/models/trip.server";
+import invariant from "tiny-invariant";
 import { join } from "~/utils"
 
+type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
+
+const getLoaderData = async (params: Params<string>) => {
+  invariant(params.tripId, `trips required`)
+  return await getTripById(params.tripId)
+}
+
+export const loader: LoaderFunction = async ({
+  params,
+}) => {
+  invariant(params.tripId, `trip id is required`)
+
+  return json<LoaderData>(await getLoaderData(params))
+};
+
 const UserList: FC = () => {
+  const data = useLoaderData<LoaderData>()
+
   return (
     <div>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>
         Attendees
       </h1>
       <Link
-        to="/trips/trip-id-goes-here/"
+        to={`/trips/${data?.id}`}
         className={join(
           `flex`,
           `items-center`,
@@ -33,7 +51,7 @@ const UserList: FC = () => {
         Return to trip dashboard
       </Link>
       <Link
-        to="/profile"
+        to="/profile/"
         className={join(
           `flex`,
           `items-center`,
@@ -55,7 +73,7 @@ const UserList: FC = () => {
         Return to profile
       </Link>
       <Link
-        to="/trips/trip-id-goes-here/attendees/new"
+        to="new/"
         className={join(
           `flex`,
           `items-center`,
