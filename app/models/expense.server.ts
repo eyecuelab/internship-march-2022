@@ -1,0 +1,58 @@
+import type { User, Trip, Attendee, Prisma } from "@prisma/client"
+
+import { prisma } from "../db.server"
+
+export type { Expense } from "@prisma/client"
+
+//Start Here Monday
+export function getExpense({
+  id,
+  userId,
+}: Pick<Expense, `id`> & {
+  userId: User[`id`]
+}): Promise<Note | null> {
+  return prisma.note.findFirst({
+    where: { id, userId },
+  })
+}
+
+export function getNoteListItems({
+  userId,
+}: {
+  userId: User[`id`]
+}): Promise<Pick<Note, `id` | `title`>[]> {
+  return prisma.note.findMany({
+    where: { userId },
+    select: { id: true, title: true },
+    orderBy: { updatedAt: `desc` },
+  })
+}
+
+export function createNote({
+  body,
+  title,
+  userId,
+}: Pick<Note, `body` | `title`> & {
+  userId: User[`id`]
+}): Promise<Note> {
+  return prisma.note.create({
+    data: {
+      title,
+      body,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
+  })
+}
+
+export function deleteNote({
+  id,
+  userId,
+}: Pick<Note, `id`> & { userId: User[`id`] }): Promise<Prisma.BatchPayload> {
+  return prisma.note.deleteMany({
+    where: { id, userId },
+  })
+}

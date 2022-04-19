@@ -1,10 +1,56 @@
 import type { FC } from "react"
 
-import { Link } from "remix"
+import type { ActionFunction, LoaderFunction } from "remix"
+
+import { Link, json, Form, redirect, useActionData, useParams, useLoaderData } from "remix"
+
+import { Expense, createExpense } from "~/models/expense.server"
+import { Attendee, getAttendeesByTripId } from "~/models/attendee.server"
+import { requireUserId } from "~/session.server"
+import { Trip } from "~/models/trip.server"
 
 import { join } from "~/utils"
+import invariant from "tiny-invariant"
+
+type ActionData = |{ 
+  userId:  string | null
+  inputDescription: string | null 
+  inputTotal: string | null
+} 
+| undefined
+
+export const action: ActionFunction = async({request}) => {
+  const userId= await requireUserId(request)
+  const formData = await request.formData()
+  const inputDescription = formData.get(`description`)
+  const inputTotal = formData.get(`total`)
+  const description = inputDescription?.toString()
+  
+  const total = Number(inputTotal)
+  
+  const errors: ActionData = {
+    userId: userId ? null : `not a valid id`,
+    inputDescription: inputDescription ? null : "Description is required",
+    inputTotal: inputTotal ? null : "Amount is required"
+  }
+  const hasErrors = Object.values(errors).some(
+    (errorMessage) => errorMessage
+    );
+    if (hasErrors) {
+      return json<ActionData>(errors);
+    }
+    
+    invariant(typeof inputDescription === `string`, "description should be a string"),
+    invariant(typeof inputTotal === `string`, "total should be a string")
+  
+  const expense = await createExpense({ userId, description, total })
+
+  return redirect("/expenses")
+}
 
 const NewExpense: FC = () => {
+
+
   return (
     <div>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>
