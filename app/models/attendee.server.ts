@@ -11,7 +11,9 @@ export async function getAttendeesByTripId(tripId: Trip[`id`]) {
     },
     include: {
       user: {},
-      expenses: {}
+      expenses: {},
+      packingList: {},
+      trip: {},
     } 
   })
 }
