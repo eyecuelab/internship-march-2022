@@ -24,6 +24,9 @@ export const loader: LoaderFunction = async({params}) => {
 
 const Expenses: FC = () => {
   const data = useLoaderData<LoaderData>() 
+  const tripId = data[0] + ""
+  console.log(data)
+
 
   return (
     <div>
@@ -85,7 +88,7 @@ const Expenses: FC = () => {
         Return to profile
       </Link>
       <Link
-        to="/trips/trip-id-goes-here/expenses/new"
+        to={`new`}
         className={join(
           `flex`,
           `items-center`,
