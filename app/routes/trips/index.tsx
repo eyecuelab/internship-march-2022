@@ -1,13 +1,13 @@
 import type { FC } from "react"
 
-import type { LoaderFunction } from "remix"
+import type { LoaderFunction, ActionFunction } from "remix"
 import { Link, json, useLoaderData, Form } from "remix"
 
 import type { Trip, Attendee, User } from "@prisma/client"
 import type { Params } from "react-router-dom"
 import invariant from "tiny-invariant"
 
-import { getAttendeesByUserId } from "~/models/attendee.server"
+import { getAttendeesByUserId, updateAttendee } from "~/models/attendee.server"
 import { getTripById } from "~/models/trip.server"
 import { requireUserId } from "~/session.server"
 import { join } from "~/utils"
@@ -51,6 +51,23 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return json<LoaderData>(await getLoaderData(request, params))
 }
 
+type ActionData =
+  | {
+      nickName: string | null
+    }
+  | undefined
+
+export const action: ActionFunction = async ({ request }) => {
+  console.log(`button pressed`)
+  const formData = await request.formData()
+  const userId = await requireUserId(request)
+  const tripIdData = formData.get(`tripId`)
+  const isAccepted = new Date()
+
+  invariant(tripIdData, `trip id can not be null`)
+  const tripId = tripIdData?.toString()
+  return await updateAttendee(tripId, userId, isAccepted)
+}
 const Index: FC = () => {
   const data = useLoaderData<LoaderData>()
   const categoryStyles = [
@@ -102,8 +119,9 @@ const Index: FC = () => {
               </TripLiDetail>
               <TripLiDetail>{trip?.stops.length}</TripLiDetail>
             </TripLiFlex>
-            <Form>
-              <TripBtn>Accept Trip Invite</TripBtn>
+            <Form method="post">
+              <input type="hidden" name="tripId" value={trip?.id} />
+              <TripBtn type="submit">Accept Trip Invite</TripBtn>
             </Form>
           </TripLiContainer>
         ))}

@@ -18,3 +18,18 @@ export async function createAttendee(
 ) {
   return prisma.attendee.create({ data: attendee })
 }
+
+export async function updateAttendee(
+  tripId: Attendee[`tripId`],
+  userId: Attendee[`userId`],
+  date: Date,
+) {
+  return prisma.attendee.update({
+    where: {
+      tripId_userId: { tripId, userId },
+    },
+    data: {
+      isAccepted: date,
+    },
+  })
+}
