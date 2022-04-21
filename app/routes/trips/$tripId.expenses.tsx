@@ -48,56 +48,60 @@ console.log(userTotals)
         Expenses
       </SubHeader>
       {data.map((attendee)=> (
-    <div key={attendee.tripId}>
-      <ul>      
-        {attendee.expenses.map((expense: Expense) =>(
-          <li key={expense.id}>
+        <div key={attendee.tripId}>
+         <ul>      
+          {attendee.expenses.map((expense: Expense) =>(
+           <li key={expense.id}>
             <RoundedRectangle>
               <SubHeader>{ attendee.user.userName}</SubHeader> 
-                {expense.description}
+               {expense.description}
               <CostText>${expense.total}</CostText>
             </RoundedRectangle>
           </li> 
-        ))}
-      </ul>
-    </div>
-    ))}
-    <br></br>
+         ))}
+         </ul>
+        </div>
+       ))}
+   <br></br>
     <SubHeader>
-        Expense Totals
+      Expense Totals
     </SubHeader>
-    {data.map((attendee, index)=> (
-      <div key={attendee.tripId}>
-        <ul>
-          <li><RoundedRectangle>
-            <SubHeader>{attendee.user.userName}</SubHeader> <CostText>${userTotals[index]}</CostText>
+      {data.map((attendee, index)=> (
+        <div key={attendee.tripId}>
+          <ul>
+            <li>
+              <RoundedRectangle>
+                <SubHeader>{attendee.user.userName}</SubHeader> 
+                <CostText>${userTotals[index]}</CostText>
               </RoundedRectangle>
-          </li>
-        </ul>
-      </div>
-    ))}
+            </li>
+          </ul>
+        </div>
+       ))}
     <br></br>
     <SubHeader>
-      <p><Link
+      <p>
+        <Link
         to="/trips"
-      >
+        >
         Return to trip dashboard
-      </Link>
+        </Link>
       </p>
       <p><Link
         to="/profile"
-      >
+        >
         Return to profile
-      </Link>
+        </Link>
       </p>
-      <p><Link
+      <p>
+        <Link
         to={`new`}
-      >
+        >
         Add Expense
-      </Link>
+        </Link>
       </p>
-      </SubHeader>
-    </div>
+    </SubHeader>
+  </div>
   )
 }
 
