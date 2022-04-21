@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { User, Note, Prisma } from "@prisma/client"
 
 import { prisma } from "../db.server"

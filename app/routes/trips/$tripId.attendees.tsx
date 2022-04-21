@@ -5,6 +5,7 @@ import { getTripById } from "~/models/trip.server";
 import invariant from "tiny-invariant";
 import { join } from "~/utils"
 
+
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
 const getLoaderData = async (params: Params<string>) => {
@@ -12,13 +13,11 @@ const getLoaderData = async (params: Params<string>) => {
   return await getTripById(params.tripId)
 }
 
-export const loader: LoaderFunction = async ({
-  params,
-}) => {
+export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.tripId, `trip id is required`)
 
   return json<LoaderData>(await getLoaderData(params))
-};
+}
 
 const UserList: FC = () => {
   const data = useLoaderData<LoaderData>()

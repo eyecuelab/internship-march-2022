@@ -4,16 +4,16 @@ import type { ActionFunction } from "remix"
 import { Link, json, Form, redirect, useActionData } from "remix"
 
 import invariant from "tiny-invariant"
-import { createAttendee } from "~/models/attendee.server"
 
+import { createAttendee } from "~/models/attendee.server"
 import { createTrip } from "~/models/trip.server"
 import { requireUserId } from "~/session.server"
 import { join } from "~/utils"
 
 type ActionData =
   | {
-    nickName: string | null
-  }
+      nickName: string | null
+    }
   | undefined
 
 export const action: ActionFunction = async ({ request }) => {
