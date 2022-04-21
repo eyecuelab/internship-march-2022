@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { Password, User } from "@prisma/client"
 import bcrypt from "bcryptjs"
 

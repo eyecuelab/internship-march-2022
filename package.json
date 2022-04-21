@@ -134,5 +134,8 @@
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
+  },
+  "rules": {
+    "linebreak-style": 0
   }
 }
