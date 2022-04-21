@@ -97,13 +97,14 @@ const Index: FC = () => {
   return (
     <div>
       <Header>Your Trips</Header>
-      <h1 className={join(...categoryStyles)}>Pending Trips</h1>
+      <h1 className={join(...categoryStyles)}>Trip Requests</h1>
       <ul>
         {data.trips.pending.map((trip) => (
           <TripLiContainer key={trip?.id}>
             <TripLiImage src="https://images.unsplash.com/photo-1541570213932-8cd806e3f8f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHJvYWQlMjB0cmlwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=400&q=60" />
             <TripLiTitle>
-              {trip?.stops[0] ? trip?.stops[0] : `Start`} to{` `}
+              {trip?.stops[0] ? trip?.stops[0] : `Start`}
+              <span className="mx-5">→</span>
               {trip?.stops[-1] ? trip?.stops[-1] : `End`}
             </TripLiTitle>
             <TripHr />
@@ -126,13 +127,15 @@ const Index: FC = () => {
           </TripLiContainer>
         ))}
       </ul>
-      <h1 className={join(...categoryStyles)}>Accepted Trips</h1>
+      <h1 className={join(...categoryStyles)}>My Trips</h1>
       <ul>
         {data.trips.accepted.map((trip) => (
           <TripLiContainer key={trip?.id}>
             <TripLiImage src="https://images.unsplash.com/photo-1541570213932-8cd806e3f8f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHJvYWQlMjB0cmlwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=400&q=60" />
             <TripLiTitle>
-              {trip?.stops[0]} to {trip?.stops[-1]}
+              {trip?.stops[0] ? trip?.stops[0] : `Start`}
+              <span className="mx-5">→</span>
+              {trip?.stops[-1] ? trip?.stops[-1] : `End`}
             </TripLiTitle>
             <TripHr />
             <TripLiFlex>
