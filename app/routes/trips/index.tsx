@@ -9,53 +9,81 @@ import { requireUserId } from "~/session.server"
 import { join } from "~/utils"
 
 type LoaderData = {
-  trips: Trip[]
+  pendingTrips: Trip[];
+  acceptedTrips: Trip[];
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request)
   const attendees = await getAttendeesByUserId(userId)
-  const promises = await Promise.all(
-    attendees.map(async (attendee) => (
+  console.log(attendees)
+  const pending = attendees.filter(trip => trip.isAccepted === null)
+  const accepted = attendees.filter(trip => trip.isAccepted !== null)
+  const pendingPromises = await Promise.all(
+    pending.map(async (attendee) => (
+      await getTripById(attendee.tripId)
+    )))
+  const acceptedPromises = await Promise.all(
+    accepted.map(async (attendee) => (
       await getTripById(attendee.tripId)
     )))
 
-  const trips = promises as Trip[]
+  const pendingTrips = pendingPromises as Trip[]
+  const acceptedTrips = acceptedPromises as Trip[]
 
+  console.log(pendingTrips);
+  console.log(acceptedTrips)
   return json<LoaderData>({
-    trips: trips
+    pendingTrips: pendingTrips,
+    acceptedTrips: acceptedTrips
   })
 }
 
 const Index: FC = () => {
-  const { trips } = useLoaderData() as LoaderData
+  const { pendingTrips, acceptedTrips } = useLoaderData() as LoaderData
+  const linkStyles = [
+    `flex`,
+    `items-center`,
+    `justify-center`,
+    `rounded-md`,
+    `border`,
+    `border-transparent`,
+    `bg-white`,
+    `px-4`,
+    `py-3`,
+    `text-base`,
+    `font-medium`,
+    `text-yellow-700`,
+    `shadow-sm`,
+    `hover:bg-yellow-50`,
+    `sm:px-8`,
+  ]
   return (
     <div>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>
-        Trips List
+        Pending Trips
       </h1>
       <ul>
-        {trips.map((trip: Trip) => (
+        {pendingTrips.map((trip: Trip) => (
           <li key={trip.id}>
             <Link
               to={trip.id}
-              className={join(
-                `flex`,
-                `items-center`,
-                `justify-center`,
-                `rounded-md`,
-                `border`,
-                `border-transparent`,
-                `bg-white`,
-                `px-4`,
-                `py-3`,
-                `text-base`,
-                `font-medium`,
-                `text-yellow-700`,
-                `shadow-sm`,
-                `hover:bg-yellow-50`,
-                `sm:px-8`,
-              )}
+              className={join(...linkStyles)}
+            >
+              {trip.nickName}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <h1 className={join(`flex`, `items-center`, `justify-center`)}>
+        Accepted Trips
+      </h1>
+      <ul>
+        {acceptedTrips.map((trip: Trip) => (
+          <li key={trip.id}>
+            <Link
+              to={trip.id}
+              className={join(...linkStyles)}
             >
               {trip.nickName}
             </Link>
@@ -64,45 +92,13 @@ const Index: FC = () => {
       </ul>
       <Link
         to="/trips/new/"
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
+        className={join(...linkStyles)}
       >
         Create Trip
       </Link>
       <Link
         to="/trips/trip-id-goes-here"
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
+        className={join(...linkStyles)}
       >
         Example Trip
       </Link>
