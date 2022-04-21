@@ -7,6 +7,7 @@ import { Trip, Attendee, Expense, User } from "@prisma/client"
 import { getExpensesByTripId } from "~/models/expense.server"
 import { getAttendeesByTripId } from "~/models/attendee.server"
 import { join } from "~/utils"
+import { MainBtn, InputField, InputLabel, Header, SubHeader, RoundedRectangle, CostText } from "../../styles/styledComponents"
 
 
 
@@ -24,91 +25,78 @@ export const loader: LoaderFunction = async({params}) => {
 
 const Expenses: FC = () => {
   const data = useLoaderData<LoaderData>() 
-  const tripId = data[0] + ""
-  console.log(data)
 
+  const totalExpenses = data.map((attendee)=> (
+                        attendee.expenses.map((expense: Expense) =>(
+                          expense.total
+                          ))
+                        ))
+  console.log(totalExpenses)
+
+  const userTotals = totalExpenses.map(
+                        expense =>[...expense].reduce(
+                          (prevExpense, currentExpense) => prevExpense + currentExpense))
+
+console.log(userTotals)
 
   return (
     <div>
-      <h1 className={join(`flex`, `items-center`, `justify-center`)}>
+    <Header>
+      Cost Sharing
+    </Header>
+      <SubHeader>
         Expenses
-      </h1>
+      </SubHeader>
       {data.map((attendee)=> (
     <div key={attendee.tripId}>
-      <h1>{attendee.user.userName}</h1>
-      <ul>
+      <ul>      
         {attendee.expenses.map((expense: Expense) =>(
-          <li key={expense.id}>Expense: {expense.description} Total: $ {expense.total}</li> 
+          <li key={expense.id}>
+            <RoundedRectangle>
+              <SubHeader>{ attendee.user.userName}</SubHeader> 
+                {expense.description}
+              <CostText>${expense.total}</CostText>
+            </RoundedRectangle>
+          </li> 
         ))}
       </ul>
     </div>
     ))}
-      <Link
-        to="/trips/trip-id-goes-here/"
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
+    <br></br>
+    <SubHeader>
+        Expense Totals
+    </SubHeader>
+    {data.map((attendee, index)=> (
+      <div key={attendee.tripId}>
+        <ul>
+          <li><RoundedRectangle>
+            <SubHeader>{attendee.user.userName}</SubHeader> <CostText>${userTotals[index]}</CostText>
+              </RoundedRectangle>
+          </li>
+        </ul>
+      </div>
+    ))}
+    <br></br>
+    <SubHeader>
+      <p><Link
+        to="/trips"
       >
         Return to trip dashboard
       </Link>
-      <Link
+      </p>
+      <p><Link
         to="/profile"
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
       >
         Return to profile
       </Link>
-      <Link
+      </p>
+      <p><Link
         to={`new`}
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
       >
         Add Expense
       </Link>
+      </p>
+      </SubHeader>
     </div>
   )
 }
