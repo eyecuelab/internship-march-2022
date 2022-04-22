@@ -371,8 +371,9 @@ const getItems = (): Item[] => {
     {
       id: `cl1xvdwqy0046qz1dfy8rfcc7`,
       description: `Camping Stove`,
-      tripId: `cl1xvd63a0068qz1dbhh557su`, //testTrip2
+      tripId: `cl1xvd63a0068qz1dbhh557su`, //testTrip21
       userId: `cl1ihz4wr02309c1dbp8gi835`, //ella@test
+      isChecked: true,
       createdAt: new Date(
         `Tue Sep 25 2021 16:16:50 GMT-0400 (Eastern Daylight Time)`,
       ),
@@ -385,6 +386,7 @@ const getItems = (): Item[] => {
       description: `Beach Towel`,
       tripId: `cl1xvd63a0068qz1dbhh557su`, //testTrip2
       userId: `cl1ihz4wr02309c1dbp8gi835`, //ella@test
+      isChecked: false,
       createdAt: new Date(
         `Tue Sep 25 2021 16:16:50 GMT-0400 (Eastern Daylight Time)`,
       ),
@@ -397,6 +399,7 @@ const getItems = (): Item[] => {
       description: `Propane`,
       tripId: `cl1xvd63a0068qz1dbhh557su`, //testTrip2
       userId: `cl1ihz4wr02309c1dbp8gi835`, //ella@test
+      isChecked: true,
       createdAt: new Date(
         `Tue Sep 25 2021 16:16:50 GMT-0400 (Eastern Daylight Time)`,
       ),
