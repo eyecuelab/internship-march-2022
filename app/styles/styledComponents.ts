@@ -56,6 +56,9 @@ export const InputField = styled.input`
 export const SearchBar = styled.input`
   background: rgba(47, 62, 70, 0.49);
   border-radius: 10px;
+  &::placeholder{
+    insert styles here
+  }
 `
 export const RoundedRectangle = styled.div`
   max-width: 600px;
