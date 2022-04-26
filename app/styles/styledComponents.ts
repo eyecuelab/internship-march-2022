@@ -53,6 +53,10 @@ export const InputField = styled.input`
   padding .5em;
   border-radius: 15px;
 `
+export const SearchBar = styled.input`
+  background: rgba(47, 62, 70, 0.49);
+  border-radius: 10px;
+`
 export const RoundedRectangle = styled.div`
   max-width: 600px;
   height: max-content;

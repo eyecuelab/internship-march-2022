@@ -75,6 +75,7 @@
     "/public/build"
   ],
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.13",
     "@prisma/client": "3.11.1",
     "@remix-run/react": "1.3.4",
     "@remix-run/serve": "1.3.4",
