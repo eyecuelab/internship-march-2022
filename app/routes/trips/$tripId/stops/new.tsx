@@ -3,7 +3,8 @@ import type { FC } from "react"
 import { redirect, Form } from "remix"
 import type { ActionFunction } from "remix"
 
-import { Client } from "@googlemaps/google-maps-services-js"
+import GoogleMapReact from "google-map-react"
+import CircleOptions from "google-maps"
 import invariant from "tiny-invariant"
 
 import { createStop } from "~/models/stop.server"
@@ -13,8 +14,8 @@ import { join } from "~/utils"
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const search = formData.get(`search`)
-  const client = new Client()
-  //client.findPlaceFromText(search)
+  let map: google.maps.Map
+  const center: google.maps.LatLngLiteral = { lat: 30, lng: -110 }
   return redirect(`/trips`)
 }
 
