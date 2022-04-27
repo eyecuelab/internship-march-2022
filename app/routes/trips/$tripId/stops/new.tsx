@@ -3,8 +3,6 @@ import type { FC } from "react"
 import { redirect, Form } from "remix"
 import type { ActionFunction } from "remix"
 
-import GoogleMapReact from "google-map-react"
-import CircleOptions from "google-maps"
 import invariant from "tiny-invariant"
 
 import { createStop } from "~/models/stop.server"
