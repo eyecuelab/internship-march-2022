@@ -1,4 +1,5 @@
 import type { FC } from "react"
+import { useState } from "react"
 
 import type { LoaderFunction } from "remix"
 import {
@@ -47,6 +48,12 @@ export const loader: LoaderFunction = async ({ params }) => {
 }
 
 const ExpenseLayout: FC = () => {
+  const [showModal, setShowModal] = useState(false)
+
+  const displayNewExpense = () => {
+    return setShowModal(true)
+  }
+
   const data = useLoaderData<LoaderData>()
 
   const userExpenses = data.map((attendee) =>
@@ -62,7 +69,11 @@ const ExpenseLayout: FC = () => {
     }
   })
 
+  const params = useParams()
+  const { tripId } = params
+
   console.log(userTotals)
+  console.log(params)
 
   const rectangleStyles = [`flex`, `mx-2`]
   const avatarDivStyles = [`ml-2`, `flex`]
@@ -127,16 +138,26 @@ const ExpenseLayout: FC = () => {
           ) : null}
         </div>
       ))}
-      <Outlet />
-      <AddButtonText>
-        <Link to={`new`}>
-          <span className={join(`flex`, `m-8`)}>
-            <SvgAddButton /> <span className={join(`ml-2`)}>Add Expense</span>
-          </span>
-        </Link>
-      </AddButtonText>
+      <div
+      // onClick={() => {
+      //   displayNewExpense()
+      // }}
+      >
+        <Outlet />
+        <AddButtonText>
+          <Link to={`new`}>
+            <span className={join(`flex`, `m-8`)}>
+              <SvgAddButton /> <span className={join(`ml-2`)}>Add Expense</span>
+            </span>
+          </Link>
+        </AddButtonText>
+      </div>
     </div>
   )
 }
 
 export default ExpenseLayout
+
+// {
+//   winModal && <WinModal shuffleCards={shuffleCards} className="card-grid" />
+// }
