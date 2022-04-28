@@ -18,23 +18,18 @@ const libraries: (
   | `places`
   | `visualization`
 )[] = [`places`]
-
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
-
-const getLoaderData = async (request: Request, params: Params<string>) => {
-  console.log(process.env)
-  const apiKey = process.env.REACT_APP_MAP_API
-  return {
-    apiKey: apiKey,
-  }
+const mapContainerStyle = {
+  width: `100vw`,
+  height: `100vh`,
+}
+const center = {
+  lat: 45.5152,
+  lng: 122.6784,
 }
 
-export const loader: LoaderFunction = async ({ request, params }) => {
-  return json<LoaderData>(await getLoaderData(request, params))
-}
-
-export const TestMap: FC = () => {
+export const TestMap: FC = (apiKey) => {
   const data = useLoaderData()
+  console.log(data)
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: data.apiKey,
     libraries: libraries,
@@ -44,7 +39,11 @@ export const TestMap: FC = () => {
   if (!isLoaded) return <h1>`Loading Maps`</h1>
   return (
     <div>
-      <GoogleMap></GoogleMap>
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        zoom={8}
+        center={center}
+      ></GoogleMap>
     </div>
   )
 }
