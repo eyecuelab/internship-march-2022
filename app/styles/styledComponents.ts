@@ -1,3 +1,5 @@
+import { Link } from "remix"
+
 import styled from "styled-components"
 
 // font-family: 'Lato', sans-serif;
@@ -32,7 +34,7 @@ export const Header = styled.h1`
   color: #ffffff;
 `
 
-export const SubHeader = styled.h2`
+export const SubHeader = styled.h3`
   font-family: "Lato";
   font-style: normal;
   font-weight: 600;
@@ -41,6 +43,25 @@ export const SubHeader = styled.h2`
   text-transform: capitalize;
   color: #ffffff;
 `
+
+export const MapInputField = styled.input`
+  font-family: "Lato";
+  width: 342px;
+  height: 39px;
+  color: white;
+  padding-left: 3em;
+  background: rgba(0, 0, 0, 0.6)
+    url("data:image/svg+xml,%3Csvg width='16' height='15' viewBox='0 0 16 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.05465 12.5555C10.5651 12.5555 13.4109 9.96875 13.4109 6.77777C13.4109 3.5868 10.5651 1 7.05465 1C3.54417 1 0.698364 3.5868 0.698364 6.77777C0.698364 9.96875 3.54417 12.5555 7.05465 12.5555Z' stroke='white' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M15.0001 14L11.5438 10.8583' stroke='white' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    no-repeat 13px center;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  &::placeholder {
+    color: white;
+  }
+`
+
 export const InputLabel = styled.label`
   font-size: 1em;
   font-weight: bold;
@@ -48,11 +69,26 @@ export const InputLabel = styled.label`
 `
 export const InputField = styled.input`
   width: 315px;
+  weight: semi-bold;
   height: 55px;
   color: black;
   padding .5em;
-  border-radius: 15px;
+  border-radius: 15px;`
+
+export const InputFieldMid = styled.input`
+  width: 276px;
+  weight: semi-bold;
+  height: 55px;
+  color: black;
+  padding .5em;
+  border-radius: 15px;`
+
+export const Avatar = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 `
+<<<<<<< HEAD
 export const SearchBar = styled.input`
   background: rgba(47, 62, 70, 0.49);
   border-radius: 10px;
@@ -61,8 +97,10 @@ export const SearchBar = styled.input`
     padding-left: 1em;
   }
 `
+=======
+
+>>>>>>> dev
 export const RoundedRectangle = styled.div`
-  max-width: 600px;
   height: max-content;
   margin: auto;
   margin-top: 1em;
@@ -72,14 +110,49 @@ export const RoundedRectangle = styled.div`
   padding: 2em;
   font-size: 0.5em;
 `
-export const CostText = styled.text`
-  font-family: "Lato";
-  font-style: normal;
-  font-weight: 600;
+export const ModalBackdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(55, 71, 80, 0.68);
+`
+export const Modal = styled.div`
+  position: absolute;
+  width: 100vw;
+  bottom: 0;
+  height: auto;
+  border: 2px;
+  background: #2a3840;
+  border-radius: 20px 20px 0px 0px;
+`
+export const CostAmount = styled.h3`
+  font-family: Lato;
+  font-style: SemiBold;
   font-size: 18px;
-  line-height: 22px;
-  text-align: right;
   color: #ffffff;
+  align: right;
+`
+export const TitleText = styled.h3`
+  font-family: Lato;
+  font-style: SemiBold;
+  font-size: 16px;
+  color: #ffffff;
+`
+export const CostDescription = styled.h4`
+  font-family: Lato;
+  font-style: SemiBold;
+  font-size: 16px;
+  color: #ffffff;
+`
+export const AddButtonText = styled.h4`
+Font family: Lato;
+Font style: Bold;
+Font size: 14px;
+Line height: 17px;
+Line height: 100%;
+color: #ffffff;
 `
 export const ErrorDiv = styled.div`
   display: flex;
@@ -140,7 +213,7 @@ export const TripLiDetail = styled.h2`
   text-transform: capitalize;
   margin-bottom: 1em;
 `
-export const NavButton = styled.div`
+export const NavButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
 `

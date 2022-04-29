@@ -1,44 +1,26 @@
 import type { FC } from "react"
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 
 import type { LoaderFunction } from "remix"
-import { Link, useLoaderData, json } from "remix"
+import { Link, useLoaderData, json, redirect, Form } from "remix"
 
 import { Navigator } from "node-navigator"
 import type { Params } from "react-router-dom"
-import type { Position } from "vitest"
+import { Position } from "vitest"
 
 import { join } from "~/utils"
 
+import { MapInputField } from "../styles/styledComponents"
 import NavBar from "./navbar"
-
-// if (navigator.geolocation) {
-//   navigator.geolocation.getCurrentPosition(
-//     (position: GeolocationPosition) => {
-//       const pos = {
-//         lat: position.coords.latitude,
-//         lng: position.coords.longitude,
-//       };
-
-//       infoWindow.setPosition(pos);
-//       infoWindow.setContent("Location found.");
-//       infoWindow.open(map);
-//       map.setCenter(pos);
-//     },
-//     () => {
-//       handleLocationError(true, infoWindow, map.getCenter()!);
-//     }
-//   );
-// } else {
-//   // Browser doesn't support Geolocation
-//   handleLocationError(false, infoWindow, map.getCenter()!);
-// }
-// });
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
 const getLoaderData = async (request: Request, params: Params<string>) => {
+<<<<<<< HEAD
   const apiKey = process.env.REACT_APP_MAP_API
+=======
+  const apiKey = process.env.MAP_API
+>>>>>>> dev
   return {
     apiKey: apiKey,
   }
@@ -48,31 +30,48 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return json<LoaderData>(await getLoaderData(request, params))
 }
 const Map: FC = () => {
+  const [position, setPosition] = useState({
+    lat: 45.523064,
+    lng: -122.676483,
+  })
   const data = useLoaderData<LoaderData>()
-  const navigator = new Navigator()
-  const pos = {
-    lat: 0,
-    lng: 0,
+
+  const geolocationCallback: PositionCallback = (geolocationObj) => {
+    console.log(`geolocationObj`, geolocationObj)
+    setPosition({
+      lat: geolocationObj.coords.latitude,
+      lng: geolocationObj.coords.longitude,
+    })
   }
-  const updatePosition = (position: any) => {
-    pos.lat = position.latitude
-    pos.lng = position.longitude
+
+  const errorCallback: PositionErrorCallback = (error) => {
+    console.log(`error`, error)
   }
-  const setPosition = (position: any) => {
-    updatePosition(position)
-  }
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(setPosition)
-    } else {
-      //do literally anything if you cant get the location
+
+  useEffect(() => {
+    // Set a listener for the geolocation when the component mounts
+    const watchId = navigator?.geolocation.watchPosition(
+      geolocationCallback,
+      errorCallback,
+    )
+
+    // When the component unmounts, clear the listener with the cleanup method
+    return () => {
+      navigator?.geolocation.clearWatch(watchId)
     }
+<<<<<<< HEAD
   }
   getLocation()
 
   const url = `https://www.google.com/maps/embed/v1/view?zoom=10&center=${pos.lat}%2C${pos.lng}&key=${data.apiKey}`
+=======
+  }, [])
+
+  const url = `https://www.google.com/maps/embed/v1/view?zoom=10&center=${position.lat}%2C${position.lng}&key=${data.apiKey}`
+
+>>>>>>> dev
   return (
-    <div>
+    <div className={join(`h-full`)}>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>Map</h1>
       <Link
         to="/trips/trip-id-goes-here/"
@@ -118,7 +117,21 @@ const Map: FC = () => {
       >
         Return to profile
       </Link>
-      <iframe width="600" height="450" loading="lazy" src={url}></iframe>
+      <Form method="post">
+        <div
+          className={join(`relative`, `flex`, `items-center`, `justify-center`)}
+        >
+          <MapInputField
+            className={join(`w-full`, `h-full`, `absolute`, `mt-14`)}
+            placeholder="Search..."
+          />
+        </div>
+      </Form>
+      <iframe
+        className={join(`w-full`, `h-full`)}
+        loading="lazy"
+        src={url}
+      ></iframe>
       <NavBar />
     </div>
   )
