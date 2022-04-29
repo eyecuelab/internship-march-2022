@@ -70,7 +70,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  console.log(`button pressed`)
   const formData = await request.formData()
   const userId = await requireUserId(request)
   const tripIdData = formData.get(`tripId`)

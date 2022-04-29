@@ -50,3 +50,10 @@ export function validateEmail(email: unknown): email is string {
 }
 
 export const join = (...args: string[]): string => args.join(` `)
+
+export function formatUrl(url: string): string {
+  const searchRegExp = /\s/g
+  const replaceWith = `%20`
+
+  return url.replace(searchRegExp, replaceWith)
+}

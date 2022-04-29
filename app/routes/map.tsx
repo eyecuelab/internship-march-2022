@@ -38,7 +38,6 @@ import NavBar from "./navbar"
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
 const getLoaderData = async (request: Request, params: Params<string>) => {
-  console.log(process.env)
   const apiKey = process.env.REACT_APP_MAP_API
   return {
     apiKey: apiKey,
@@ -70,9 +69,7 @@ const Map: FC = () => {
     }
   }
   getLocation()
-  console.log(pos)
 
-  console.log(data.apiKey)
   const url = `https://www.google.com/maps/embed/v1/view?zoom=10&center=${pos.lat}%2C${pos.lng}&key=${data.apiKey}`
   return (
     <div>

@@ -12,6 +12,8 @@ import {
 } from "remix"
 import type { LinksFunction, MetaFunction, LoaderFunction } from "remix"
 
+import comboboxStyles from "@reach/combobox/styles.css"
+
 import { join } from "~/utils"
 
 import { getUser } from "./session.server"
@@ -20,6 +22,7 @@ import tailwindStylesheetUrl from "./styles/tailwind.css"
 
 export const links: LinksFunction = () => {
   return [
+    { rel: `stylesheet`, href: comboboxStyles },
     { rel: `stylesheet`, href: tailwindStylesheetUrl },
     { rel: `stylesheet`, href: ourStyles },
   ]
