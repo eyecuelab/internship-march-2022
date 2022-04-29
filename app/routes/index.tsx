@@ -1,9 +1,18 @@
 import type { FC } from "react"
+import { useEffect } from "react"
 
-import { Link, Form } from "remix"
+import type { LoaderFunction } from "remix"
+import { Link, Form, json, redirect } from "remix"
 
+import { getUserId, createUserSession } from "~/session.server"
 import { SmMainBtn, SmClearBtn } from "~/styles/styledComponents"
 import { join, useOptionalUser } from "~/utils"
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const userId = await getUserId(request)
+  if (userId) return redirect(`/home`)
+  return json({})
+}
 
 const Index: FC = () => {
   const user = useOptionalUser()
