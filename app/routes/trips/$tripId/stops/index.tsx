@@ -11,6 +11,7 @@ import { TestMap } from "~/components/TestMap"
 import { getAttendeeById } from "~/models/attendee.server"
 import { getTripById } from "~/models/trip.server"
 import { requireUserId } from "~/session.server"
+import { RoundedRectangle } from "~/styles/styledComponents"
 import { join } from "~/utils"
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
@@ -23,6 +24,7 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
   invariant(trip, `Trip must exist`)
   return {
     stops: trip.stops,
+    apiKey: process.env.MAP_API,
   }
 }
 
@@ -32,12 +34,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const Stops: FC = () => {
   const data = useLoaderData()
-  console.log(data.stops)
   return (
     <div>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>
         Stops List
       </h1>
+      <TestMap apiKey={data.apiKey} />
+      {data.stops.map((stop: Stop) => (
+        <RoundedRectangle key={stop.id}>
+          <h1>
+            {stop.index} {stop.apiResult}
+          </h1>
+        </RoundedRectangle>
+      ))}
       <Link to="new">Add Stop</Link>
     </div>
   )

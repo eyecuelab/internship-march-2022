@@ -16,11 +16,7 @@ import NavBar from "./navbar"
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
 const getLoaderData = async (request: Request, params: Params<string>) => {
-<<<<<<< HEAD
-  const apiKey = process.env.REACT_APP_MAP_API
-=======
   const apiKey = process.env.MAP_API
->>>>>>> dev
   return {
     apiKey: apiKey,
   }
@@ -59,17 +55,10 @@ const Map: FC = () => {
     return () => {
       navigator?.geolocation.clearWatch(watchId)
     }
-<<<<<<< HEAD
-  }
-  getLocation()
-
-  const url = `https://www.google.com/maps/embed/v1/view?zoom=10&center=${pos.lat}%2C${pos.lng}&key=${data.apiKey}`
-=======
   }, [])
 
   const url = `https://www.google.com/maps/embed/v1/view?zoom=10&center=${position.lat}%2C${position.lng}&key=${data.apiKey}`
 
->>>>>>> dev
   return (
     <div className={join(`h-full`)}>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>Map</h1>

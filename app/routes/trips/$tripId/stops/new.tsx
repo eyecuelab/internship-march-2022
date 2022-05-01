@@ -6,7 +6,7 @@ import { useActionData, redirect, Form, json } from "remix"
 import invariant from "tiny-invariant"
 
 import { createStop } from "~/models/stop.server"
-import { SearchBar } from "~/styles/styledComponents"
+import { RoundedRectangle, SearchBar } from "~/styles/styledComponents"
 import { formatUrl, join } from "~/utils"
 
 export const action: ActionFunction = async ({ request }) => {
@@ -35,11 +35,19 @@ const NewStop: FC = () => {
         <button type="submit">Search</button>
       </Form>
       <ul>
-        {data?.results?.map((result: Record<string, unknown>, index: number) => (
-          <li key={index}>
-            {result.name} {result.formatted_address}
-          </li>
-        ))}
+        {data?.results?.map(
+          (result: Record<string, number | string>, index: number) => (
+            <li key={index}>
+              <RoundedRectangle>
+                <h1 className={join(`text-lg`, `m-1`)}>
+                  {result.name},{` `}
+                  <span className="ml-3">⭐: {result.rating}</span>
+                </h1>
+                <h1 className="text-base">{result.formatted_address}</h1>
+              </RoundedRectangle>
+            </li>
+          ),
+        )}
       </ul>
     </div>
   )

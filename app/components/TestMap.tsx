@@ -67,7 +67,7 @@ export const links: LinksFunction = () => {
 export const TestMap: FC = () => {
   const data = useLoaderData()
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: data.apiKey.toString(),
+    googleMapsApiKey: data.apiKey,
     libraries: libraries,
   })
 
