@@ -7,7 +7,6 @@ import type { Trip, Stop } from "@prisma/client"
 import type { Params } from "react-router"
 import invariant from "tiny-invariant"
 
-import { TestMap } from "~/components/TestMap"
 import { getAttendeeById } from "~/models/attendee.server"
 import { getTripById } from "~/models/trip.server"
 import { requireUserId } from "~/session.server"
@@ -15,15 +14,25 @@ import { RoundedRectangle } from "~/styles/styledComponents"
 import { join } from "~/utils"
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
-type TripWithStops = Trip & { stops: Stop[] }
-
+type FormattedStop = {
+  id: string
+  tripId: string
+  apiResult: Record<string, number | string>
+  index: number
+  createdAt: Date
+  updatedAt: Date
+}
 const getLoaderData = async (request: Request, params: Params<string>) => {
   const { tripId } = params
   invariant(tripId, `Trip Id must exist`)
   const trip = await getTripById(tripId)
   invariant(trip, `Trip must exist`)
+  console.log(trip.stops)
+  const formattedStops: FormattedStop[] = trip.stops.map(
+    (s) => s.apiResult && JSON.parse(s.apiResult),
+  )
   return {
-    stops: trip.stops,
+    stops: formattedStops,
     apiKey: process.env.MAP_API,
   }
 }
@@ -39,11 +48,11 @@ const Stops: FC = () => {
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>
         Stops List
       </h1>
-      <TestMap apiKey={data.apiKey} />
-      {data.stops.map((stop: Stop) => (
+      {data.stops.map((stop: FormattedStop) => (
         <RoundedRectangle key={stop.id}>
           <h1>
-            {stop.index} {stop.apiResult}
+            {stop.index}
+            {stop.apiResult?.formatted_address}
           </h1>
         </RoundedRectangle>
       ))}
