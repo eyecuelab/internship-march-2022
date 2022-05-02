@@ -20,12 +20,15 @@ import {
   InfoWindow,
 } from "@react-google-maps/api"
 import type { Params } from "react-router"
+import invariant from "tiny-invariant"
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete"
 
 import mapStyles from "~/styles/mapStyles"
+
+import Search from "./PlacesSearch"
 
 const libraries: (
   | `drawing`
@@ -35,8 +38,8 @@ const libraries: (
   | `visualization`
 )[] = [`places`]
 const mapContainerStyle = {
-  width: `90vw`,
-  height: `90vh`,
+  width: `100vw`,
+  height: `100vh`,
 }
 const center = {
   lat: 45.5152,
@@ -44,8 +47,9 @@ const center = {
 }
 const options = {
   styles: mapStyles,
-  disableDefaultUI: true, //This disables ALL base Ui, we can add back in individually what we want
-  zoomControl: true,
+  //This disables ALL base Ui, we can add back in individually what we want
+  // disableDefaultUI: true,
+  // zoomControl: true,
 }
 /* CONTROLS OPTIONS
   panControl: true,
@@ -64,20 +68,23 @@ export const links: LinksFunction = () => {
     },
   ]
 }
-export const TestMap: FC = () => {
+const TestMap: FC = () => {
   const data = useLoaderData()
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: data.apiKey,
     libraries: libraries,
   })
 
-  const mapRef = React.useRef()
+  const mapRef: React.MutableRefObject<google.maps.Map | null> =
+    React.useRef(null)
   const onMapLoad = React.useCallback((map) => {
     mapRef.current = map
   }, [])
-  const panTo = React.useCallback(({ lat, lng }) => {
-    mapRef.current.panTo({ lat, lng })
-    mapRef.current.setZoom(10)
+  const panTo = React.useCallback((position: google.maps.LatLng) => {
+    if (mapRef.current !== null) {
+      mapRef.current.panTo(position)
+      mapRef.current.setZoom(10)
+    }
   }, [])
 
   if (loadError) return <h1>`Error loading maps`</h1>
@@ -96,16 +103,19 @@ export const TestMap: FC = () => {
     </div>
   )
 }
-
-function Locate({ panTo }) {
+type LocateType = {
+  panTo: ({ lat, lng }: google.maps.LatLng) => void
+}
+const Locate: FC<LocateType> = ({ panTo }) => {
   return (
     <button
       onClick={() =>
         navigator?.geolocation.getCurrentPosition((position) => {
-          panTo({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          })
+          const pos = new google.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude,
+          )
+          panTo(pos)
         })
       }
       className={join(`right-0`)}
@@ -114,64 +124,4 @@ function Locate({ panTo }) {
     </button>
   )
 }
-
-function Search({ panTo }) {
-  const {
-    ready,
-    value,
-    suggestions: { status, data },
-    setValue,
-    clearSuggestions,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-      location: { lat: () => 45.5152, lng: () => -122.6784 },
-      radius: 200 * 1000,
-    },
-  })
-
-  return (
-    <div
-      className={join(
-        `absolute`,
-        `top-4`,
-        `left-2/4`,
-        `w-full`,
-        `max-w-{400px}`,
-        `z-10`,
-      )}
-    >
-      <Combobox
-        onSelect={async (address) => {
-          setValue(address, false)
-          clearSuggestions()
-
-          try {
-            const results = await getGeocode({ address })
-            const { lat, lng } = await getLatLng(results[0])
-            panTo({ lat, lng })
-          } catch (error) {
-            console.log(error)
-          }
-        }}
-      >
-        <ComboboxInput
-          className={join(`w-full`, `p-2`)}
-          value={value}
-          onChange={(e) => {
-            setValue(e.target.value)
-          }}
-          disabled={!ready}
-          placeholder="Enter an address"
-        />
-        <ComboboxPopover>
-          <ComboboxList>
-            {status === `OK` &&
-              data.map(({ description }, index) => (
-                <ComboboxOption key={index} value={description} />
-              ))}
-          </ComboboxList>
-        </ComboboxPopover>
-      </Combobox>
-    </div>
-  )
-}
+export default TestMap
