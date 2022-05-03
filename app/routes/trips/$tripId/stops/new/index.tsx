@@ -22,9 +22,7 @@ export const action: ActionFunction = async ({ request }) => {
   invariant(apiResult, `apiResult not found`)
   invariant(tripId, `tripId not found`)
   const stops = await getStopsByTripId(tripId)
-  console.log(stops)
   const index = stops.length > 2 ? stops.length - 1 : stops.length
-  // console.log(`api result : V`)
   await createStop({ apiResult, tripId, index })
 
   return redirect(`/trips/${tripId}/stops`)
