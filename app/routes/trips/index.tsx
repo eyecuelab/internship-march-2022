@@ -7,10 +7,15 @@ import type { Trip, Attendee, User, Stop } from "@prisma/client"
 import type { Params } from "react-router-dom"
 import invariant from "tiny-invariant"
 
-import { getAttendeesByUserId, updateAttendee } from "~/models/attendee.server"
+import {
+  deleteAttendee,
+  getAttendeesByUserId,
+  updateAttendee,
+} from "~/models/attendee.server"
 import { getTripById } from "~/models/trip.server"
 import { requireUserId } from "~/session.server"
-import { join } from "~/utils"
+import { join, formatStops } from "~/utils"
+import type { FormattedStop } from "~/utils"
 
 import {
   TripLiContainer,
@@ -22,10 +27,11 @@ import {
   TripHr,
   TripBtn,
   Header,
+  DangerBtn,
 } from "../../styles/styledComponents"
 import NavBar from "../navbar"
 
-type TripWithStops = Trip & { stops: Stop[] }
+type TripWithFormattedStops = Trip & { stops: FormattedStop[] }
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
@@ -36,13 +42,16 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
 
   const pending = attendees.filter((trip) => trip.isAccepted === null)
   const accepted = attendees.filter((trip) => trip.isAccepted !== null)
-  const pendingArray: TripWithStops[] = []
-  const acceptedArray: TripWithStops[] = []
+  const pendingArray: TripWithFormattedStops[] = []
+  const acceptedArray: TripWithFormattedStops[] = []
   await Promise.all(
     pending.map(async (attendee) => {
       const trip = await getTripById(attendee.tripId)
       if (trip) {
-        pendingArray.push(trip)
+        const fs = formatStops(trip.stops)
+        const { stops, ...rest } = trip
+        const newTrip: TripWithFormattedStops = { stops: fs, ...rest }
+        pendingArray.push(newTrip)
       }
     }),
   )
@@ -50,12 +59,13 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
     accepted.map(async (attendee) => {
       const trip = await getTripById(attendee.tripId)
       if (trip) {
-        acceptedArray.push(trip)
+        const fs = formatStops(trip.stops)
+        const { stops, ...rest } = trip
+        const newTrip: TripWithFormattedStops = { stops: fs, ...rest }
+        acceptedArray.push(newTrip)
       }
     }),
   )
-
-  //Fix possibility of null
 
   return {
     trips: {
@@ -74,9 +84,12 @@ export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request)
   const tripIdData = formData.get(`tripId`)
   const isAccepted = new Date()
-
+  const decline = formData.get(`decline`)
   invariant(tripIdData, `trip id can not be null`)
   const tripId = tripIdData?.toString()
+  if (decline) {
+    return await deleteAttendee(tripId, userId)
+  }
   return await updateAttendee(tripId, userId, isAccepted)
 }
 
@@ -107,7 +120,6 @@ const Index: FC = () => {
     `hover:bg-yellow-50`,
     `sm:px-8`,
   ]
-
   return (
     <div>
       <Header>Your Trips</Header>
@@ -117,9 +129,10 @@ const Index: FC = () => {
           <TripLiContainer key={trip.id}>
             <TripLiImage src="https://images.unsplash.com/photo-1541570213932-8cd806e3f8f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHJvYWQlMjB0cmlwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=400&q=60" />
             <TripLiTitle>
-              {trip.stops[0] ? trip.stops[0] : `Start`}
+              {trip.stops.find((s) => s.index == 0)?.apiResult?.name || `TBD`}
               <span className="mx-5">→</span>
-              {trip.stops[-1] ? trip.stops[-1] : `End`}
+              {trip.stops.find((s) => s.index == trip.stops.length - 1)
+                ?.apiResult?.name || `TBD`}
             </TripLiTitle>
             <TripHr />
             <TripLiFlex>
@@ -138,6 +151,16 @@ const Index: FC = () => {
               <input type="hidden" name="tripId" value={trip.id} />
               <TripBtn type="submit">Accept Trip Invite</TripBtn>
             </Form>
+            <Form method="post">
+              <input type="hidden" name="tripId" value={trip.id} />
+              <input type="hidden" name="decline" value="decline" />
+              <DangerBtn
+                type="submit"
+                className={join(`bg-[#2F3E46]`, `text-[#FF5E03]`)}
+              >
+                Decline Trip Invite
+              </DangerBtn>
+            </Form>
           </TripLiContainer>
         ))}
       </ul>
@@ -148,9 +171,10 @@ const Index: FC = () => {
             <Link to={trip.id}>
               <TripLiImage src="https://images.unsplash.com/photo-1541570213932-8cd806e3f8f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHJvYWQlMjB0cmlwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=400&q=60" />
               <TripLiTitle>
-                {trip.stops[0] ? trip.stops[0] : `Start`}
+                {trip.stops.find((s) => s.index == 0)?.apiResult?.name || `TBD`}
                 <span className="mx-5">→</span>
-                {trip.stops[-1] ? trip.stops[-1] : `End`}
+                {trip.stops.find((s) => s.index == trip.stops.length - 1)
+                  ?.apiResult?.name || `TBD`}
               </TripLiTitle>
               <TripHr />
               <TripLiFlex>
