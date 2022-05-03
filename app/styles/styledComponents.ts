@@ -109,6 +109,35 @@ export const RoundedRectangle = styled.div`
   padding: 2em;
   font-size: 0.5em;
 `
+export const RoundedRectangleNoMargin = styled.div`
+  height: max-content;
+  background: #52796f;
+  border-radius: 13px;
+  color: #ffffff;
+  padding: 2em;
+  font-size: 0.5em;
+  margin-bottom: 2em;
+`
+export const WhiteRoundedRectangle = styled.div`
+  height: max-content;
+  margin: auto;
+  margin-top: 1em;
+  background: #ffffff;
+  border-radius: 13px;
+  color: #2f3e46;
+  font-size: 0.5em;
+`
+export const BottomLineDiv = styled.div`
+  height: max-content;
+  margin: auto;
+  margin-top: 1em;
+  padding: 2em;
+  font-size: 0.5em;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(255, 255, 255, 0.19);
+  border-bottom-width: 1px;
+`
+
 export const ModalBackdrop = styled.div`
   position: fixed;
   top: 0;
@@ -138,6 +167,12 @@ export const TitleText = styled.h3`
   font-style: SemiBold;
   font-size: 16px;
   color: #ffffff;
+`
+export const TitleTextDark = styled.h3`
+  font-family: Lato;
+  font-style: SemiBold;
+  font-size: 16px;
+  color: #2a3840;
 `
 export const CostDescription = styled.h4`
   font-family: Lato;
