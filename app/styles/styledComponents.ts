@@ -79,20 +79,20 @@ export const InputLabel = styled.label`
   color: #ffffff;
 `
 export const InputField = styled.input`
-  width: 315px;
-  weight: semi-bold;
-  height: 55px;
-  color: black;
-  padding .5em;
-  border-radius: 15px;`
+width: 315px;
+weight: semi-bold;
+height: 55px;
+color: black;
+padding .5em;
+border-radius: 15px;`
 
 export const InputFieldMid = styled.input`
-  width: 276px;
-  weight: semi-bold;
-  height: 55px;
-  color: black;
-  padding .5em;
-  border-radius: 15px;`
+width: 276px;
+weight: semi-bold;
+height: 55px;
+color: black;
+padding .5em;
+border-radius: 15px;`
 
 export const Avatar = styled.img`
   width: 50px;
@@ -166,6 +166,12 @@ export const TripBtn = styled(MainBtn)`
   font-family: "Lato";
   font-weight: 700;
   font-size: 16px;
+`
+export const DangerBtn = styled(TripBtn)`
+  background: #2f3e46;
+  color: #ff5e03;
+  margin-bottom: 1rem;
+  margin-top: 0px;
 `
 export const TripLiContainer = styled.li`
   background: #52796f;
