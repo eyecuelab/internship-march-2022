@@ -2,6 +2,8 @@ import { useMemo } from "react"
 
 import { useMatches } from "remix"
 
+import type { Stop } from "@prisma/client"
+
 import type { User } from "~/models/user.server"
 
 /**
@@ -56,4 +58,28 @@ export function formatUrl(url: string): string {
   const replaceWith = `%20`
 
   return url.replace(searchRegExp, replaceWith)
+}
+export type FormattedStop = {
+  id: string
+  tripId: string
+  apiResult: Record<string, number | string> | null
+  index: number
+  createdAt: Date
+  updatedAt: Date
+}
+export function formatStops(stops: Stop[]): FormattedStop[] {
+  const fstops: FormattedStop[] = []
+  stops.map((s) => {
+    const { id, tripId, apiResult, index, createdAt, updatedAt } = s
+    const fs: FormattedStop = {
+      id,
+      tripId,
+      apiResult: apiResult ? JSON.parse(apiResult) : apiResult,
+      index,
+      createdAt,
+      updatedAt,
+    }
+    fstops.push(fs)
+  })
+  return fstops
 }
