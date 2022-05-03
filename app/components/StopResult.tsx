@@ -20,7 +20,7 @@ const StopResult: FC<ResultType> = ({ result, tripId }) => {
           <button type="submit">Add Stop</button>
         </div>
         <div className={join(`bg-[#84A98C]`, `p-1.5`, `ml-auto`, `mr-3`)}>
-          <h1>⭐: {result.rating}</h1>
+          <h1>⭐: {result.rating ? result.rating : `N/A`}</h1>
         </div>
       </div>
     </Form>
