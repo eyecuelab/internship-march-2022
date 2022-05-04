@@ -90,7 +90,7 @@ export async function deleteAttendee(
 }
 type FullTrip = Trip & {
   stops: Stop[]
-  decider: Decider[]
+  decider: Decider | null
   attendees: Attendee[]
 }
 export async function getUpcomingTripByUserId(userId: Attendee[`userId`]) {
