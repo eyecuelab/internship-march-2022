@@ -1,7 +1,7 @@
 import React from "react"
 import type { FC } from "react"
 
-import type { LinksFunction, LoaderFunction } from "remix"
+import type { LoaderFunction } from "remix"
 import { useLoaderData, json } from "remix"
 
 import {
@@ -26,6 +26,7 @@ import usePlacesAutocomplete, {
 
 import PlacesSearch from "~/components/PlacesSearch"
 import mapStyles from "~/styles/mapStyles"
+import SvgBullseye from "~/styles/SVGR/SVGBullseye"
 import { join } from "~/utils"
 
 import NavBar from "./navbar"
@@ -48,11 +49,11 @@ const center = {
 // These need to be decided on as a team
 const options = {
   styles: mapStyles,
-  //This disables ALL base Ui, we can add back in individually what we want
-  // disableDefaultUI: true,
-  // zoomControl: true,
+  streetViewControl: false,
+  zoomControl: false,
 }
 /* CONTROLS OPTIONS
+disableDefaultUI: true,
   panControl: true,
   zoomControl: true,
   mapTypeControl: true,
@@ -71,14 +72,6 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
   return {
     apiKey: apiKey,
   }
-}
-export const links: LinksFunction = () => {
-  return [
-    {
-      rel: `stylesheet`,
-      href: `@reach/combobox/styles.css`,
-    },
-  ]
 }
 export const loader: LoaderFunction = async ({ request, params }) => {
   return json<LoaderData>(await getLoaderData(request, params))
@@ -107,7 +100,7 @@ const Map: FC = () => {
   if (!isLoaded) return <h1>`Loading Maps`</h1>
   return (
     <div>
-      <div className={join(`absolute`, `top-5`, `right-0`, `z-10`)}>
+      <div className={join(`absolute`, `top-1.5`, `right-14`, `z-10`)}>
         <Locate panTo={panTo} />
       </div>
       <div
@@ -115,6 +108,7 @@ const Map: FC = () => {
           `absolute`,
           `left-1/2`,
           `-translate-x-2/4`,
+          `top-4`,
           `z-10`,
           `w-60`,
         )}
@@ -146,7 +140,7 @@ const Locate: FC<LocateType> = ({ panTo }) => {
         })
       }
     >
-      PAN TO MY LOCATION
+      <SvgBullseye />
     </button>
   )
 }
