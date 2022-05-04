@@ -5,13 +5,6 @@ import type { LoaderFunction } from "remix"
 import { useLoaderData, json } from "remix"
 
 import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-} from "@reach/combobox"
-import {
   GoogleMap,
   useLoadScript,
   Marker,
@@ -25,9 +18,12 @@ import usePlacesAutocomplete, {
 } from "use-places-autocomplete"
 
 import PlacesSearch from "~/components/PlacesSearch"
+import { getUpcomingTripByUserId } from "~/models/attendee.server"
+import { requireUserId } from "~/session.server"
 import mapStyles from "~/styles/mapStyles"
 import SvgBullseye from "~/styles/SVGR/SVGBullseye"
-import { join } from "~/utils"
+import type { FormattedStop } from "~/utils"
+import { formatStops, join } from "~/utils"
 
 import NavBar from "./navbar"
 
@@ -69,8 +65,11 @@ type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
 const getLoaderData = async (request: Request, params: Params<string>) => {
   const apiKey = process.env.MAP_API
+  const userId = await requireUserId(request)
+  const upcomingTrip = await getUpcomingTripByUserId(userId)
   return {
-    apiKey: apiKey,
+    apiKey,
+    upcomingTrip,
   }
 }
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -83,7 +82,9 @@ const Map: FC = () => {
     googleMapsApiKey: data.apiKey,
     libraries: libraries,
   })
-  const [markers, setMarkers] = React.useState([])
+
+  const stops = data.upcomingTrip ? formatStops(data.upcomingTrip.stops) : null
+
   const mapRef: React.MutableRefObject<google.maps.Map | null> =
     React.useRef(null)
   const onMapLoad = React.useCallback((map) => {
@@ -118,10 +119,16 @@ const Map: FC = () => {
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         zoom={8}
-        center={center}
+        center={stops ? stops[0].apiResult?.geometry.location : center}
         options={options}
         onLoad={onMapLoad}
-      />
+      >
+        {stops
+          ? stops.map((s: FormattedStop) => (
+              <Marker key={s.index} position={s.apiResult?.geometry.location} />
+            ))
+          : null}
+      </GoogleMap>
       <NavBar />
     </div>
   )
