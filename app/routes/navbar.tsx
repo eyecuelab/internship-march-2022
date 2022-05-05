@@ -23,8 +23,8 @@ const ROUTES = [
   },
   {
     to: `/map`,
-    Icon: SvgTrip,
-    text: `Trips`,
+    Icon: SvgMap,
+    text: `Map`,
   },
   {
     to: `/profile`,

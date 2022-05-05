@@ -2,6 +2,8 @@ import { useMemo } from "react"
 
 import { useMatches } from "remix"
 
+import type { Stop, Trip, Decider, Attendee } from "@prisma/client"
+
 import type { User } from "~/models/user.server"
 
 /**
@@ -50,3 +52,72 @@ export function validateEmail(email: unknown): email is string {
 }
 
 export const join = (...args: string[]): string => args.join(` `)
+
+export function formatUrl(url: string): string {
+  const searchRegExp = /\s/g
+  const replaceWith = `%20`
+
+  return url.replace(searchRegExp, replaceWith)
+}
+export type FullTrip = Trip & {
+  stops: Stop[]
+  decider: Decider | null
+  attendees: Attendee[]
+}
+type FormattedGeometry = {
+  location: google.maps.LatLng
+  viewport: Record<string, Record<string, number>>
+}
+type FormattedApiResult = {
+  geometry: FormattedGeometry
+  icon: string
+  name: string
+  place_id: string
+  rating: number
+  user_ratings_total: number
+}
+
+export type FormattedStop = {
+  id: string
+  tripId: string
+  apiResult: FormattedApiResult
+  index: number
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type TripWithFormattedStops = Trip & { stops: FormattedStop[] }
+
+export function formatStops(stops: Stop[]): FormattedStop[] {
+  const fstops: FormattedStop[] = []
+  stops.map((s) => {
+    const { id, tripId, apiResult, index, createdAt, updatedAt } = s
+    const fs: FormattedStop = {
+      id,
+      tripId,
+      apiResult: apiResult ? JSON.parse(apiResult) : apiResult,
+      index,
+      createdAt,
+      updatedAt,
+    }
+    fstops.push(fs)
+  })
+  return fstops
+}
+export function formatTrip(trip: FullTrip): TripWithFormattedStops {
+  const fs = formatStops(trip.stops)
+  const { stops, ...rest } = trip
+  const newTrip: TripWithFormattedStops = { stops: fs, ...rest }
+  return newTrip
+}
+export const findCenter = (pos1: number, pos2: number): number => {
+  return (pos1 + pos2) / 2
+}
+export const findDistance = (
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+): number => {
+  return Math.hypot(x2 - x1, y2 - y1)
+}

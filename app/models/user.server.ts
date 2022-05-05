@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { Password, User } from "@prisma/client"
 import bcrypt from "bcryptjs"
+import { data } from "msw/lib/types/context"
 
 import { prisma } from "../db.server"
+import { Trip } from "./trip.server"
 
 export type { User } from "@prisma/client"
 
@@ -11,7 +13,10 @@ export async function getUsers(): Promise<User[]> {
 }
 
 export async function getUserById(id: User[`id`]): Promise<User | null> {
-  return prisma.user.findUnique({ where: { id } })
+  return prisma.user.findUnique({
+    where: { id },
+    include: { trips: true, attendees: true },
+  })
 }
 
 export async function getUserByEmail(
@@ -19,6 +24,54 @@ export async function getUserByEmail(
 ): Promise<User | null> {
   return prisma.user.findUnique({ where: { email } })
 }
+
+export async function updateUserById(
+  id: User[`id`],
+  email: User[`email`],
+  userName: User[`userName`],
+): Promise<User | null> {
+  return prisma.user.update({
+    where: { id },
+    data: {
+      email: email,
+      userName: userName,
+    },
+  })
+}
+// export async function updateUserById(
+//   id: User[`id`],
+//   email: User[`email`],
+//   userName: User[`userName`],
+// ): Promise<User | null> {
+//   return prisma.user.update({
+//     where: { id  },
+//     data: {
+//       email,
+//       userName,
+//     },
+//   })
+// }
+
+// export async function updateChecked(
+//   id: Item[`id`],
+//   isChecked: Item[`isChecked`],
+// ) {
+//   return prisma.item.update({
+//     where: {
+//       id,
+//     },
+//     data: {
+//       isChecked,
+//     },
+//   })
+// }
+// export async function updateUserById(
+//   id: User[`id`],
+//   email: User[`email`],
+//   userName: User[`userName`],
+// ): Promise<User | null> {
+//   return prisma.user.delete({ where: { email } })
+// }
 
 export async function createUser(
   email: User[`email`],

@@ -1,81 +1,51 @@
 import type { FC } from "react"
 
-import { Link, Outlet } from "remix"
+import type { ActionFunction } from "remix"
+import { Outlet, Link, useActionData, redirect, Form, json } from "remix"
 
-import { join } from "~/utils"
+import invariant from "tiny-invariant"
+
+import { SearchBar } from "~/styles/styledComponents"
+import { formatUrl, join } from "~/utils"
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData()
+  const search = formData.get(`search`)
+  invariant(search, `search must be defined`)
+  const baseUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=`
+  const key = `&key=` + process.env.MAP_API
+  const formattedSearch = baseUrl + formatUrl(search.toString()) + key
+  const data = await fetch(formattedSearch).then((result) => result.json())
+  return json({ data })
+}
 
 const NewStop: FC = () => {
+  const actionData = useActionData()
   return (
-    <div>
-      <h1 className={join(`flex`, `items-center`, `justify-center`)}>
-        Stop Info
-      </h1>
-      <Link
-        to="/trips/trip-id-goes-here/"
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
-      >
-        Return to trip dashboard
-      </Link>
-      <Link
-        to="/profile"
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
-      >
-        Return to profile
-      </Link>
-      <Link
-        to="/trips/trip-id-goes-here/stops"
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
-      >
-        Return to Stops List
-      </Link>
+    <div
+      className={join(
+        `absolute`,
+        `w-full`,
+        `h-full`,
+        `top-0`,
+        `bg-[#2f3e46]`,
+        `text-white`,
+        `font-semibold`,
+      )}
+    >
+      <div className={join(`flex`, `items-center`, `mt-10`)}>
+        <Form method="post">
+          <SearchBar
+            name="search"
+            placeholder="Add stop..."
+            className={join(`h-[39px]`, `w-[80vw]`, `ml-3`)}
+          />
+        </Form>
+        <Link to="../" className={join(`mx-auto`)}>
+          Cancel
+        </Link>
+      </div>
+      <Outlet context={actionData} />
     </div>
   )
 }

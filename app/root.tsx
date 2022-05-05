@@ -8,8 +8,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "remix"
 import type { LinksFunction, MetaFunction, LoaderFunction } from "remix"
+
+import comboboxStyles from "@reach/combobox/styles.css"
 
 import { join } from "~/utils"
 
@@ -19,6 +22,7 @@ import tailwindStylesheetUrl from "./styles/tailwind.css"
 
 export const links: LinksFunction = () => {
   return [
+    { rel: `stylesheet`, href: comboboxStyles },
     { rel: `stylesheet`, href: tailwindStylesheetUrl },
     { rel: `stylesheet`, href: ourStyles },
   ]
@@ -26,19 +30,9 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => ({
   charset: `utf-8`,
-  title: `Remix Notes`,
+  title: `GoGoYonder`,
   viewport: `width=device-width,initial-scale=1`,
 })
-
-type LoaderData = {
-  user: Awaited<ReturnType<typeof getUser>>
-}
-
-export const loader: LoaderFunction = async ({ request }) => {
-  return json<LoaderData>({
-    user: await getUser(request),
-  })
-}
 
 const App: FC = () => {
   return (

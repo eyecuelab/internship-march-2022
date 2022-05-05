@@ -97,6 +97,7 @@ const NewExpense: FC = () => {
       <ModalBackdrop
         onClick={() => navigate(`/trips/${params.tripId}/expenses`)}
       />
+
       <Modal className={join(...centered)}>
         <div
           className={join(`pt-2`)}
@@ -104,9 +105,11 @@ const NewExpense: FC = () => {
         >
           <SvgSwipeButton />
         </div>
+
         <AddButtonText className={join(`mr-48`, `p-8`)}>
           Add Expense
         </AddButtonText>
+
         <form method="post">
           <p>
             <InputLabel className={join(`mr-56`)}>
@@ -124,15 +127,6 @@ const NewExpense: FC = () => {
               </p>
             </InputLabel>
           </p>
-          {/* <div className={join(`absolute`, `bg-[rgba(255,0,0)]`, `flex`)}>
-            <SvgBackButton />
-            <input
-              className={join(`bg-transparent`)}
-              type="text"
-              name="total"
-              placeholder="Search"
-            />
-          </div> */}
           {actionData?.userId && outputError(actionData.userId)}
           {actionData?.tripId && outputError(actionData.tripId)}
           {actionData?.inputDescription &&
