@@ -14,8 +14,8 @@ import {
 } from "~/models/attendee.server"
 import { getTripById } from "~/models/trip.server"
 import { requireUserId } from "~/session.server"
-import { join, formatStops } from "~/utils"
-import type { FormattedStop } from "~/utils"
+import { join, formatStops, formatTrip } from "~/utils"
+import type { TripWithFormattedStops } from "~/utils"
 
 import {
   TripLiContainer,
@@ -30,8 +30,6 @@ import {
   DangerBtn,
 } from "../../styles/styledComponents"
 import NavBar from "../navbar"
-
-type TripWithFormattedStops = Trip & { stops: FormattedStop[] }
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
@@ -48,9 +46,7 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
     pending.map(async (attendee) => {
       const trip = await getTripById(attendee.tripId)
       if (trip) {
-        const fs = formatStops(trip.stops)
-        const { stops, ...rest } = trip
-        const newTrip: TripWithFormattedStops = { stops: fs, ...rest }
+        const newTrip: TripWithFormattedStops = formatTrip(trip)
         pendingArray.push(newTrip)
       }
     }),
@@ -59,9 +55,7 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
     accepted.map(async (attendee) => {
       const trip = await getTripById(attendee.tripId)
       if (trip) {
-        const fs = formatStops(trip.stops)
-        const { stops, ...rest } = trip
-        const newTrip: TripWithFormattedStops = { stops: fs, ...rest }
+        const newTrip: TripWithFormattedStops = formatTrip(trip)
         acceptedArray.push(newTrip)
       }
     }),
@@ -128,11 +122,14 @@ const Index: FC = () => {
         {data.trips.pending.map((trip) => (
           <TripLiContainer key={trip.id}>
             <TripLiImage src="https://images.unsplash.com/photo-1541570213932-8cd806e3f8f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHJvYWQlMjB0cmlwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=400&q=60" />
+            <TripLiTitle>{trip.nickName}</TripLiTitle>
             <TripLiDetail>
               {trip.stops.find((s) => s.index == 0)?.apiResult?.name || `TBD`}
               <span className="mx-5">→</span>
-              {trip.stops.find((s) => s.index == trip.stops.length - 1)
-                ?.apiResult?.name || `TBD`}
+              {trip.stops.length > 1
+                ? trip.stops.find((s) => s.index == trip.stops.length - 1)
+                    ?.apiResult?.name
+                : `TBD`}
             </TripLiDetail>
             <TripHr />
             <TripLiFlex>
@@ -174,8 +171,10 @@ const Index: FC = () => {
               <TripLiDetail>
                 {trip.stops.find((s) => s.index == 0)?.apiResult?.name || `TBD`}
                 <span className="mx-5">→</span>
-                {trip.stops.find((s) => s.index == trip.stops.length - 1)
-                  ?.apiResult?.name || `TBD`}
+                {trip.stops.length > 1
+                  ? trip.stops.find((s) => s.index == trip.stops.length - 1)
+                      ?.apiResult?.name
+                  : `TBD`}
               </TripLiDetail>
               <TripHr />
               <TripLiFlex>

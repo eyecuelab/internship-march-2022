@@ -2,7 +2,7 @@ import { useMemo } from "react"
 
 import { useMatches } from "remix"
 
-import type { Stop } from "@prisma/client"
+import type { Stop, Trip } from "@prisma/client"
 
 import type { User } from "~/models/user.server"
 
@@ -81,6 +81,9 @@ export type FormattedStop = {
   createdAt: Date
   updatedAt: Date
 }
+
+export type TripWithFormattedStops = Trip & { stops: FormattedStop[] }
+
 export function formatStops(stops: Stop[]): FormattedStop[] {
   const fstops: FormattedStop[] = []
   stops.map((s) => {
@@ -96,6 +99,14 @@ export function formatStops(stops: Stop[]): FormattedStop[] {
     fstops.push(fs)
   })
   return fstops
+}
+export function formatTrip(
+  trip: Trip & { stops: Stop[] },
+): TripWithFormattedStops {
+  const fs = formatStops(trip.stops)
+  const { stops, ...rest } = trip
+  const newTrip: TripWithFormattedStops = { stops: fs, ...rest }
+  return newTrip
 }
 export const findCenter = (pos1: number, pos2: number): number => {
   return (pos1 + pos2) / 2
