@@ -254,6 +254,7 @@ export const TripLiTitle = styled.h1`
   font-size: 18px;
   line-height: 22px;
   text-transform: capitalize;
+  margin-bottom: 0.5em;
 `
 export const TripLiFlex = styled.div`
   display: flex;

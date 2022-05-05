@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import type { FC } from "react"
 
 import type { LoaderFunction } from "remix"
@@ -23,7 +23,7 @@ import { requireUserId } from "~/session.server"
 import mapStyles from "~/styles/mapStyles"
 import SvgBullseye from "~/styles/SVGR/SVGBullseye"
 import type { FormattedStop } from "~/utils"
-import { formatStops, join } from "~/utils"
+import { formatStops, join, findCenter, findDistance } from "~/utils"
 
 import NavBar from "./navbar"
 
@@ -38,10 +38,7 @@ const mapContainerStyle = {
   width: `100vw`,
   height: `100vh`,
 }
-const center = {
-  lat: 45.5152,
-  lng: -122.6784,
-}
+
 // These need to be decided on as a team
 const options = {
   styles: mapStyles,
@@ -67,9 +64,11 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
   const apiKey = process.env.MAP_API
   const userId = await requireUserId(request)
   const upcomingTrip = await getUpcomingTripByUserId(userId)
+  const stops = upcomingTrip ? formatStops(upcomingTrip.stops) : null
+
   return {
     apiKey,
-    upcomingTrip,
+    stops,
   }
 }
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -82,9 +81,29 @@ const Map: FC = () => {
     googleMapsApiKey: data.apiKey,
     libraries: libraries,
   })
-
-  const stops = data.upcomingTrip ? formatStops(data.upcomingTrip.stops) : null
-
+  const defaultCenter = {
+    lat: 45.5152,
+    lng: -122.6784,
+  }
+  const [center, setCenter] = useState(defaultCenter)
+  const [zoom, setZoom] = useState(8)
+  useEffect(() => {
+    if (data.stops.length > 1) {
+      const start = data.stops[0].apiResult.geometry.location
+      const end = data.stops[data.stops.length - 1].apiResult.geometry.location
+      const lat = findCenter(start.lat, end.lat)
+      const lng = findCenter(start.lng, start.lng)
+      setCenter({ lat, lng })
+      setZoom(6.5)
+    }
+    if (data.stops.length === 1) {
+      setCenter({
+        lat: data.stops[0].apiResult.geometry.location.lat,
+        lng: data.stops[0].apiResult.geometry.location.lng,
+      })
+      setZoom(11)
+    }
+  }, [])
   const mapRef: React.MutableRefObject<google.maps.Map | null> =
     React.useRef(null)
   const onMapLoad = React.useCallback((map) => {
@@ -99,6 +118,7 @@ const Map: FC = () => {
 
   if (loadError) return <h1>`Error loading maps`</h1>
   if (!isLoaded) return <h1>`Loading Maps`</h1>
+
   return (
     <div>
       <div className={join(`absolute`, `top-1.5`, `right-14`, `z-10`)}>
@@ -118,13 +138,13 @@ const Map: FC = () => {
       </div>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
-        zoom={8}
-        center={stops ? stops[0].apiResult?.geometry.location : center}
+        zoom={zoom}
+        center={center}
         options={options}
         onLoad={onMapLoad}
       >
-        {stops
-          ? stops.map((s: FormattedStop) => (
+        {data.stops
+          ? data.stops.map((s: FormattedStop) => (
               <Marker key={s.index} position={s.apiResult?.geometry.location} />
             ))
           : null}
