@@ -119,7 +119,7 @@ export async function getUpcomingTripByUserId(userId: Attendee[`userId`]) {
   })
   return nextTrip
     ? nextTrip
-    : recentAccepted
+    : typeof recentAccepted !== `undefined`
     ? await getTripById(recentAccepted.tripId)
     : null
 }
