@@ -15,7 +15,7 @@ import { requireUserId } from "~/session.server"
 import { RoundedRectangle } from "~/styles/styledComponents"
 import { join } from "~/utils"
 
-//---------------------------Loader
+//---------------------------Loader: Get
 
 // setting a type to loaderData, which will be the same as typeof getLoaderData
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
@@ -25,6 +25,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return json(await getLoaderData(request, params))
 }
 
+// Request: info from the database, Params: info from the url
 // pass in Request as a get request from server, pass in params as a way to parse out data from url
 const getLoaderData = async (request: Request, params: Params<string>) => {
   // eslint-disable-next-line prefer-destructuring
@@ -38,7 +39,7 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
   return getAttendeeById(tripId, userId)
 }
 
-//---------------------------Action
+//---------------------------Action: Delete, Update, Create
 
 // actions are used for post, put, patch, and delete requests
 // this action function is getting

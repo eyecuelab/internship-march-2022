@@ -16,10 +16,11 @@ export async function getTripById(id: Trip[`id`]) {
     },
     include: {
       stops: true,
+      attendees: true,
     },
   })
 }
-
+// tripId, attendees,start and end dates, start and end location, stops[]
 export async function createTrip(
   trip: Pick<Trip, `nickName` | `ownerId`>,
 ): Promise<Trip> {

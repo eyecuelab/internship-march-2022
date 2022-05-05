@@ -2,11 +2,13 @@ import { link } from "fs"
 
 import type { FC } from "react"
 
-import { Link, Outlet } from "remix"
+import { Link, Outlet, NavLink } from "remix"
 
 import { join } from "~/utils"
 
-const TripOverview: FC = () => {
+import AttendeesLayout from "./attendees"
+
+const TripIndex: FC = () => {
   const linkStyles = [
     `flex`,
     `items-center`,
@@ -27,14 +29,20 @@ const TripOverview: FC = () => {
   return (
     <div>
       <Link to="/home" className={join(...linkStyles)}>
-        X
+        X asdfasdfs
       </Link>
       <h1 className={join(`flex`, `items-center`, `justify-center`)}>
         Trip name goes here
       </h1>
+      {/* <NavLink>
+        <AttendeesLayout />
+      </NavLink> */}
       <Outlet />
     </div>
   )
 }
+//to: `/home`,
 
-export default TripOverview
+// index.tsx --> Overview / Stops
+
+export default TripIndex
