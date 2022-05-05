@@ -5,6 +5,7 @@ import { Link, json, Form, redirect, useActionData, useLoaderData } from "remix"
 
 import invariant from "tiny-invariant"
 
+import TripView from "~/components/TripView"
 import {
   createAttendee,
   getUpcomingTripByUserId,
@@ -20,7 +21,7 @@ import {
   TitleText,
   WideButton,
 } from "~/styles/styledComponents"
-import { join } from "~/utils"
+import { join, formatTrip } from "~/utils"
 
 import NavBar from "./navbar"
 
@@ -29,9 +30,11 @@ type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 const getLoaderData = async (request: Request) => {
   const userId = await getUserId(request)
   invariant(userId, `userId is required`)
-  const upcomingTrip = getUpcomingTripByUserId(userId)
+  const upcomingTrip = await getUpcomingTripByUserId(userId)
+  invariant(upcomingTrip, `must have upcomingTrip`)
+  const trip = formatTrip(upcomingTrip)
 
-  return upcomingTrip
+  return trip
 }
 export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>(await getLoaderData(request))
@@ -48,6 +51,10 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
 
   const nickName = formData.get(`nickName`)
+  const inputStartDate = formData.get(`startDate`)
+  const inputEndDate = formData.get(`endDate`)
+  const startDate = inputStartDate ? new Date(inputStartDate.toString()) : null
+  const endDate = inputEndDate ? new Date(inputEndDate.toString()) : null
 
   const errors: ActionData = {
     nickName: nickName ? null : `nickName is required`,
@@ -60,7 +67,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   invariant(typeof nickName === `string`, `nickName must be a string`)
 
-  const trip = await createTrip({ nickName, ownerId })
+  const trip = await createTrip({ nickName, ownerId, startDate, endDate })
 
   const tripId = trip.id
   const userId = ownerId
@@ -73,8 +80,9 @@ export const action: ActionFunction = async ({ request }) => {
 
 const Home: FC = () => {
   const data = useLoaderData<LoaderData>()
+  const trip = data
 
-  console.log(data)
+  console.log(trip)
 
   const errors = useActionData()
   const inputClassName = `w-full rounded border border-gray-500 px-2 py-1 text-lg`
@@ -122,7 +130,7 @@ const Home: FC = () => {
           <span className={join(`ml-8`)}>Current Trip</span>
         </TitleText>
       </div>
-      <div>Trip Component Here</div>
+      <TripView trip={trip} />
       <NavBar />
     </div>
   )

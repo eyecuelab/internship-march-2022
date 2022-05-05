@@ -95,6 +95,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 const Index: FC = () => {
   const data = useLoaderData<LoaderData>()
+  console.log(data)
   const categoryStyles = [
     `flex`,
     `items-center`,
