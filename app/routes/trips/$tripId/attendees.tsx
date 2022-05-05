@@ -8,7 +8,7 @@ import invariant from "tiny-invariant"
 
 import { getAttendeesByTripId } from "~/models/attendee.server"
 import { getTripById } from "~/models/trip.server"
-import { TitleText, Avatar } from "~/styles/styledComponents"
+import { TitleText, Avatar, RoundedRectangle } from "~/styles/styledComponents"
 import { join } from "~/utils"
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
@@ -51,29 +51,40 @@ const AttendeesLayout: FC = () => {
     `sm:px-8`,
   ]
   const defaultAvatar = `public/img/default-avatar.jpg`
+  const rectangleStyles = [`flex`, `mx-2`]
   const avatarDivStyles = [`ml-2`, `flex`]
   const titleDivStyles = [`ml-4`, `text-left`, `flex-1`]
 
   return (
     <div>
       <div>
-        <TitleText>
-          <span className={join(`ml-8`)}>Travelers</span>
-        </TitleText>
-        <ul>
-          {data.attendees.map((attendee) => (
-            <li key={attendee.user.id + attendee.user.id}>
-              <span className={join(...avatarDivStyles)}>
-                <Avatar src={attendee.user.avatarUrl || defaultAvatar} />
-              </span>
-              <span className={join(...titleDivStyles)}>
-                <TitleText> {attendee.user.userName}</TitleText>
-              </span>
-            </li>
-          ))}
-        </ul>
+        <div>
+          <RoundedRectangle className={join(...rectangleStyles)}>
+            <div className={join(`flex-col`)}>
+              <TitleText>
+                <div className={join(`ml-8`, `mb-3`)}>Travelers</div>
+              </TitleText>
+              <div>
+                <ul className={join(`mx-6`)}>
+                  {data.attendees.map((attendee) => (
+                    <li
+                      className={join(`flex-row`, `flex`, `items-center`)}
+                      key={attendee.user.id + attendee.user.id}
+                    >
+                      <span className={join(...avatarDivStyles)}>
+                        <Avatar src={attendee.user.avatarUrl || defaultAvatar} />
+                      </span>
+                      <span className={join(...titleDivStyles)}>
+                        <TitleText>{attendee.user.userName}</TitleText>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </RoundedRectangle>
+        </div>
       </div>
-      <Outlet />
       <Link to="edit/" className={join()}>
         Edit
       </Link>
