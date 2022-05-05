@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { Attendee, User, Trip, Stop, Decider } from "@prisma/client"
 
+import type { FullTrip } from "~/utils"
+
 import { prisma } from "../db.server"
 import { getTripById } from "./trip.server"
-type FullTrip = Trip & {
-  stops: Stop[]
-  decider: Decider[]
-  attendees: Attendee[]
-}
+
 export type { Attendee }
 
 export async function getAttendees() {
@@ -60,13 +58,11 @@ export async function getAttendeeById(
     },
   })
 }
-
 export async function createAttendee(
   attendee: Pick<Attendee, `tripId` | `userId`>,
 ) {
   return prisma.attendee.create({ data: attendee })
 }
-
 export async function updateAttendee(
   tripId: Attendee[`tripId`],
   userId: Attendee[`userId`],
@@ -81,7 +77,6 @@ export async function updateAttendee(
     },
   })
 }
-
 export async function deleteAttendee(
   tripId: Attendee[`tripId`],
   userId: Attendee[`userId`],
@@ -92,11 +87,16 @@ export async function deleteAttendee(
     },
   })
 }
-
+type NullFreeAttendee = {
+  tripId: string
+  userId: string
+  isAccepted: Date
+  createdAt: Date
+  updatedAt: Date
+}
 export async function getUpcomingTripByUserId(userId: Attendee[`userId`]) {
   const attendeeOn = await getAttendeesByUserId(userId)
   const trips: FullTrip[] = []
-
   await Promise.all(
     attendeeOn.map(async (attendee) => {
       const trip = await getTripById(attendee.tripId)
@@ -112,16 +112,28 @@ export async function getUpcomingTripByUserId(userId: Attendee[`userId`]) {
       }
     }
   })
-  const recentAccepted = attendeeOn.find((a) => {
-    if (a.isAccepted) {
-      if (a.isAccepted < new Date()) {
-        return a
+  const acceptedTrips: NullFreeAttendee[] = []
+  attendeeOn.map((a) => {
+    if (a.isAccepted !== null) {
+      const b: NullFreeAttendee = {
+        tripId: a.tripId,
+        userId: a.userId,
+        isAccepted: a.isAccepted,
+        createdAt: a.createdAt,
+        updatedAt: a.updatedAt,
       }
+      acceptedTrips.push(b)
     }
   })
+  const recentTime = Math.max(
+    ...acceptedTrips.map((a) => a.isAccepted.getTime()),
+  )
+  const recentTrip = acceptedTrips.find(
+    (t) => t.isAccepted.getTime() === recentTime,
+  )
   return nextTrip
     ? nextTrip
-    : recentAccepted
-    ? await getTripById(recentAccepted.tripId)
+    : typeof recentTrip !== `undefined`
+    ? await getTripById(recentTrip.tripId)
     : null
 }
