@@ -1,7 +1,7 @@
 import type { FC } from "react"
 
 import type { LoaderFunction } from "remix"
-import { Outlet, json, useLoaderData, Link } from "remix"
+import { Outlet, json, useLoaderData, Link, Form } from "remix"
 
 import type { Trip } from "@prisma/client"
 
@@ -14,6 +14,7 @@ import {
   ProH4,
   ProBody,
   ProTripImage,
+  MainBtn,
 } from "~/styles/styledComponents"
 import SvgBackButton from "~/styles/SVGR/SvgBackButton"
 import SvgGear from "~/styles/SVGR/SvgGear"
@@ -90,6 +91,10 @@ const Index: FC = () => {
         <div className={join(`text-center`, `-ml-20`, `p-8`)}>
           <SubHeader>Recent Trips</SubHeader>
         </div>
+
+        <Form action="/logout" method="post">
+          <MainBtn>Logout</MainBtn>
+        </Form>
 
         <ul>
           {trips.map((trip: Trip) => (
