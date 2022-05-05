@@ -41,6 +41,7 @@ async function seed() {
             },
           },
           userName: user.userName,
+          avatarUrl: user.avatarUrl,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
         },
@@ -58,7 +59,7 @@ async function seed() {
     }),
   )
   await Promise.all(
-    getDeciders().map((decider) => {
+    getDecider().map((decider) => {
       return prisma.decider.create({ data: decider })
     }),
   )
@@ -80,7 +81,7 @@ const getUsers = (): User[] => {
       id: `cl1xv8xul0010qz1dmv2l3jqy`,
       email: `kim@test`,
       userName: `one`,
-      avatarUrl: `testurlone`,
+      avatarUrl: `https://images.unsplash.com/photo-1533738363-b7f9aef128ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80`,
       createdAt: new Date(0),
       updatedAt: new Date(0),
     },
@@ -88,7 +89,7 @@ const getUsers = (): User[] => {
       id: `cl1ihz4wr02309c1dbp8gi835`,
       email: `ella@test`,
       userName: `two`,
-      avatarUrl: `testurltwo`,
+      avatarUrl: `https://images.unsplash.com/photo-1497329440692-92a8710c8f18?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDB8fGdvb2Z5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=700&q=60`,
       createdAt: new Date(0),
       updatedAt: new Date(0),
     },
@@ -96,7 +97,7 @@ const getUsers = (): User[] => {
       id: `cl1xvbab00028qz1d1e0u5h63`,
       email: `jeff@test`,
       userName: `three`,
-      avatarUrl: `testurlthree`,
+      avatarUrl: `https://images.unsplash.com/photo-1529466924508-a1761f426c75?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1035&q=80`,
       createdAt: new Date(0),
       updatedAt: new Date(0),
     },
@@ -104,7 +105,7 @@ const getUsers = (): User[] => {
       id: `cl1xwwtyf0007jj1dl1yiycqb`,
       email: `jacob@test`,
       userName: `three`,
-      avatarUrl: `testurlthree`,
+      avatarUrl: `https://images.unsplash.com/photo-1540968221243-29f5d70540bf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80`,
       createdAt: new Date(0),
       updatedAt: new Date(0),
     },
@@ -114,6 +115,7 @@ const getTrips = (): Trip[] => {
   return [
     {
       id: `cl1xvci7b0050qz1d3o01tyg1`,
+      deciderId: `cl2pcwfus01059ooyle0i7l1r`,
       ownerId: `cl1xv8xul0010qz1dmv2l3jqy`,
       startDate: null,
       endDate: null,
@@ -127,6 +129,7 @@ const getTrips = (): Trip[] => {
     },
     {
       id: `cl1xvd63a0068qz1dbhh557su`,
+      deciderId: `cl2pcviv900719ooyfr13urm4`,
       ownerId: `cl1ihz4wr02309c1dbp8gi835`,
       startDate: null,
       endDate: null,
@@ -140,6 +143,7 @@ const getTrips = (): Trip[] => {
     },
     {
       id: `cl1xvdwqy0085qz1dfy8rscc9`,
+      deciderId: `cl2pcvepo00489ooy1y7176bb`,
       ownerId: `cl1xvbab00028qz1d1e0u5h63`,
       startDate: null,
       endDate: null,
@@ -153,6 +157,7 @@ const getTrips = (): Trip[] => {
     },
     {
       id: `cl1xwxl5a0024jj1d78omqrta`,
+      deciderId: `cl2pcur0g00199ooynzsn6q5f`,
       ownerId: `cl1xwwtyf0007jj1dl1yiycqb`,
       startDate: null,
       endDate: null,
@@ -266,20 +271,12 @@ const getAttendees = (): Attendee[] => {
     },
   ]
 }
-const getDeciders = (): Pick<Decider, `tripId`>[] => {
+const getDecider = (): Pick<Decider, `id` | `tripId`>[] => {
   return [
-    {
-      tripId: `cl1xvci7b0050qz1d3o01tyg1`,
-    },
-    {
-      tripId: `cl1xvd63a0068qz1dbhh557su`,
-    },
-    {
-      tripId: `cl1xvdwqy0085qz1dfy8rscc9`,
-    },
-    {
-      tripId: `cl1xwxl5a0024jj1d78omqrta`,
-    },
+    { id: `cl2pcwfus01059ooyle0i7l1r`, tripId: `cl1xvci7b0050qz1d3o01tyg1` },
+    { id: `cl2pcviv900719ooyfr13urm4`, tripId: `cl1xvd63a0068qz1dbhh557su` },
+    { id: `cl2pcvepo00489ooy1y7176bb`, tripId: `cl1xvdwqy0085qz1dfy8rscc9` },
+    { id: `cl2pcur0g00199ooynzsn6q5f`, tripId: `cl1xwxl5a0024jj1d78omqrta` },
   ]
 }
 

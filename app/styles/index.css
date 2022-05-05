@@ -7,3 +7,28 @@ body {
 * {
   font-family: "Lato", sans-serif;
 }
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  color:    white;
+  font-family: "Lato", sans-serif;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+ color:    white;
+ font-family: "Lato", sans-serif;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+ color:    white;
+ font-family: "Lato", sans-serif;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color:    white;
+ font-family: "Lato", sans-serif;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+ color:    white;
+ font-family: "Lato", sans-serif;
+}
+
+::placeholder { /* Most modern browsers support this now. */
+ color:    white;
+ font-family: "Lato", sans-serif;
+}

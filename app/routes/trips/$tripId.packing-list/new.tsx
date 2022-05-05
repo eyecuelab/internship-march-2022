@@ -1,16 +1,39 @@
 /* eslint-disable prettier/prettier */
 import type { FocusEvent, FC } from "react"
 
-import { redirect, Form, Link, json, useActionData, useLoaderData } from "remix"
 import type { ActionFunction, LoaderFunction } from "remix"
+import {
+  redirect, Form, Link, json, useActionData, useLoaderData,
+  Link,
+  json,
+  Form,
+  redirect,
+  useActionData,
+  useParams,
+  useLoaderData,
+  useNavigate,
+} from "remix"
 
 import type { Item, Attendee, User, Trip } from "@prisma/client"
 import type { Params } from "react-router"
 import invariant from "tiny-invariant"
 
-import { getAttendeeById} from "~/models/attendee.server"
+import { getAttendeeById } from "~/models/attendee.server"
 import { createItem } from "~/models/item.server"
 import { requireUserId } from "~/session.server"
+import {
+  MainBtn,
+  InputField,
+  InputLabel,
+  ErrorDiv,
+  Header,
+  SubHeader,
+  ModalBackdrop,
+  Modal,
+  AddButtonText,
+  InputFieldMid,
+} from "~/styles/styledComponents"
+import SvgSwipeButton from "~/styles/SVGR/SvgSwipeButton"
 import { join } from "~/utils"
 
 const inputClassName = `join(
@@ -41,7 +64,7 @@ type ActionData =
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
-const getLoaderData = async (request: Request,params: Params<string>) => {
+const getLoaderData = async (request: Request, params: Params<string>) => {
   // eslint-disable-next-line prefer-destructuring
   const userId = await requireUserId(request)
   // eslint-disable-next-line prefer-destructuring
@@ -85,28 +108,53 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 const AddItem: FC = () => {
   const errors = useActionData()
+  const params = useParams()
+  const navigate = useNavigate()
+  const centered = [`flex`, `items-center`, `justify-center`, `flex-col`]
   return (
     <div>
-      <h1 className={join(`flex`, `items-center`, `justify-center`)}>
-        Add Item
-      </h1>
+      <ModalBackdrop
+        onClick={() => navigate(`/trips/${params.tripId}/packing-list`)}
+      />
 
-      <Form method="post">
-        <p>
-          <label>
-            Item Description:{` `}
-            {errors?.description ? (
-              <em className="text-red-600">{errors.description}</em>
-            ) : null}
-            <input type="text" name="description" className={inputClassName} />
-          </label>
-        </p>
-        <p>
-          <button type="submit" className={inputClassName}>
-            Add Item
-          </button>
-        </p>
-      </Form>
+      <Modal className={join(...centered)}>
+
+        <div
+          className={join(`pt-2`)}
+          onClick={() => navigate(`/trips/${params.tripId}/packing-list`)}
+        >
+          <SvgSwipeButton />
+        </div>
+
+
+        <AddButtonText className={join(`mr-48`, `p-8`)}>
+          Add Item
+        </AddButtonText>
+
+
+
+
+        <Form method="post">
+          <p>
+            <InputLabel>
+              Item Description:{` `}
+              {errors?.description ? (
+                <em className="text-red-600">{errors.description}</em>
+              ) : null}
+              <InputFieldMid type="text" name="description" className={inputClassName} />
+            </InputLabel>
+          </p>
+          <p className={join(`mt-8`, `pb-16`)}>
+            <MainBtn type="submit">
+              Add Item
+            </MainBtn>
+          </p>
+        </Form>
+
+
+
+
+      </Modal>
     </div>
   )
 }

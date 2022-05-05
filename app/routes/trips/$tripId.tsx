@@ -33,7 +33,7 @@ const TripOverview: FC = () => {
         Trip name goes here
       </h1>
       <Outlet />
-      <Link to="edit/" className={join()}>
+      <Link to="edit/" className={join(...linkStyles)}>
         Edit
       </Link>
       <Link to="packing-list/" className={join(...linkStyles)}>

@@ -5,7 +5,7 @@ import { prisma } from "../db.server"
 
 export type { Trip }
 
-export async function getTrips(): Promise<Trip[]> {
+export async function getTrips() {
   return prisma.trip.findMany()
 }
 
@@ -15,13 +15,20 @@ export async function getTripById(id: Trip[`id`]) {
       id,
     },
     include: {
-      stops: true,
+      stops: {},
+      decider: {},
+      attendees: {},
     },
   })
 }
 
-export async function createTrip(
-  trip: Pick<Trip, `nickName` | `ownerId`>,
-): Promise<Trip> {
+export async function createTrip(trip: Pick<Trip, `nickName` | `ownerId`>) {
   return prisma.trip.create({ data: trip })
+}
+
+export async function updateTrip(id: Trip[`id`], deciderId: Trip[`deciderId`]) {
+  return prisma.trip.update({
+    where: { id },
+    data: { deciderId },
+  })
 }

@@ -6,7 +6,8 @@ import { Link, json, Form, redirect, useActionData } from "remix"
 import invariant from "tiny-invariant"
 
 import { createAttendee } from "~/models/attendee.server"
-import { createTrip } from "~/models/trip.server"
+import { createDecider } from "~/models/decider.server"
+import { createTrip, updateTrip } from "~/models/trip.server"
 import { requireUserId } from "~/session.server"
 import { join } from "~/utils"
 
@@ -38,7 +39,9 @@ export const action: ActionFunction = async ({ request }) => {
   const tripId = trip.id
   const userId = ownerId
   await createAttendee({ tripId, userId })
-
+  const decider = await createDecider({ tripId })
+  invariant(decider, `decider not created succesfully`)
+  await updateTrip(tripId, decider.id)
   return redirect(`/trips`)
 }
 

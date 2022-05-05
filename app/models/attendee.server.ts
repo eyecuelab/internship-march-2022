@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import type { Attendee, User, Trip } from "@prisma/client"
+import type { Attendee, User, Trip, Stop, Decider } from "@prisma/client"
+
+import type { FullTrip } from "~/utils"
 
 import { prisma } from "../db.server"
+import { getTripById } from "./trip.server"
 
 export type { Attendee }
 
@@ -23,6 +26,17 @@ export async function getAttendeesByTripId(tripId: Trip[`id`]) {
       expenses: {},
       packingList: {},
       trip: {},
+    },
+  })
+}
+
+export async function getAttendeeNames(tripId: Trip[`id`]) {
+  return prisma.attendee.findMany({
+    where: {
+      tripId: tripId,
+    },
+    include: {
+      user: {},
     },
   })
 }
@@ -64,4 +78,48 @@ export async function updateAttendee(
       isAccepted: date,
     },
   })
+}
+
+export async function deleteAttendee(
+  tripId: Attendee[`tripId`],
+  userId: Attendee[`userId`],
+) {
+  return prisma.attendee.delete({
+    where: {
+      tripId_userId: { tripId, userId },
+    },
+  })
+}
+
+export async function getUpcomingTripByUserId(userId: Attendee[`userId`]) {
+  const attendeeOn = await getAttendeesByUserId(userId)
+  const trips: FullTrip[] = []
+
+  await Promise.all(
+    attendeeOn.map(async (attendee) => {
+      const trip = await getTripById(attendee.tripId)
+      if (trip) {
+        trips.push(trip)
+      }
+    }),
+  )
+  const nextTrip = trips.find((t) => {
+    if (t.startDate) {
+      if (t.startDate > new Date()) {
+        return t
+      }
+    }
+  })
+  const recentAccepted = attendeeOn.find((a) => {
+    if (a.isAccepted) {
+      if (a.isAccepted < new Date()) {
+        return a
+      }
+    }
+  })
+  return nextTrip
+    ? nextTrip
+    : typeof recentAccepted !== `undefined`
+    ? await getTripById(recentAccepted.tripId)
+    : null
 }
