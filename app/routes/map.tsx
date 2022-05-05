@@ -88,20 +88,22 @@ const Map: FC = () => {
   const [center, setCenter] = useState(defaultCenter)
   const [zoom, setZoom] = useState(8)
   useEffect(() => {
-    if (data.stops.length > 1) {
-      const start = data.stops[0].apiResult.geometry.location
-      const end = data.stops[data.stops.length - 1].apiResult.geometry.location
-      const lat = findCenter(start.lat, end.lat)
-      const lng = findCenter(start.lng, start.lng)
-      setCenter({ lat, lng })
-      setZoom(6.5)
-    }
-    if (data.stops.length === 1) {
-      setCenter({
-        lat: data.stops[0].apiResult.geometry.location.lat,
-        lng: data.stops[0].apiResult.geometry.location.lng,
-      })
-      setZoom(11)
+    if (data.stops) {
+      if (data.stops.length > 1) {
+        const start = data.stops[0].apiResult.geometry.location
+        const end = data.stops[data.stops.length - 1].apiResult.geometry.location
+        const lat = findCenter(start.lat, end.lat)
+        const lng = findCenter(start.lng, start.lng)
+        setCenter({ lat, lng })
+        setZoom(6.5)
+      }
+      if (data.stops.length === 1) {
+        setCenter({
+          lat: data.stops[0].apiResult.geometry.location.lat,
+          lng: data.stops[0].apiResult.geometry.location.lng,
+        })
+        setZoom(11)
+      }
     }
   }, [])
   const mapRef: React.MutableRefObject<google.maps.Map | null> =

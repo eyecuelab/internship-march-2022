@@ -90,11 +90,16 @@ export async function deleteAttendee(
     },
   })
 }
-
+type NullFreeAttendee = {
+  tripId: string
+  userId: string
+  isAccepted: Date
+  createdAt: Date
+  updatedAt: Date
+}
 export async function getUpcomingTripByUserId(userId: Attendee[`userId`]) {
   const attendeeOn = await getAttendeesByUserId(userId)
   const trips: FullTrip[] = []
-
   await Promise.all(
     attendeeOn.map(async (attendee) => {
       const trip = await getTripById(attendee.tripId)
@@ -110,16 +115,28 @@ export async function getUpcomingTripByUserId(userId: Attendee[`userId`]) {
       }
     }
   })
-  const recentAccepted = attendeeOn.find((a) => {
-    if (a.isAccepted) {
-      if (a.isAccepted < new Date()) {
-        return a
+  const acceptedTrips: NullFreeAttendee[] = []
+  attendeeOn.map((a) => {
+    if (a.isAccepted !== null) {
+      const b: NullFreeAttendee = {
+        tripId: a.tripId,
+        userId: a.userId,
+        isAccepted: a.isAccepted,
+        createdAt: a.createdAt,
+        updatedAt: a.updatedAt,
       }
+      acceptedTrips.push(b)
     }
   })
+  const recentTime = Math.max(
+    ...acceptedTrips.map((a) => a.isAccepted.getTime()),
+  )
+  const recentTrip = acceptedTrips.find(
+    (t) => t.isAccepted.getTime() === recentTime,
+  )
   return nextTrip
     ? nextTrip
-    : typeof recentAccepted !== `undefined`
-    ? await getTripById(recentAccepted.tripId)
+    : typeof recentTrip !== `undefined`
+    ? await getTripById(recentTrip.tripId)
     : null
 }
