@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { Attendee, User, Trip, Stop, Decider } from "@prisma/client"
 
+import type { FullTrip } from "~/utils"
+
 import { prisma } from "../db.server"
 import { getTripById } from "./trip.server"
 
@@ -88,11 +90,7 @@ export async function deleteAttendee(
     },
   })
 }
-type FullTrip = Trip & {
-  stops: Stop[]
-  decider: Decider | null
-  attendees: Attendee[]
-}
+
 export async function getUpcomingTripByUserId(userId: Attendee[`userId`]) {
   const attendeeOn = await getAttendeesByUserId(userId)
   const trips: FullTrip[] = []

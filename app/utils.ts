@@ -2,7 +2,7 @@ import { useMemo } from "react"
 
 import { useMatches } from "remix"
 
-import type { Stop, Trip } from "@prisma/client"
+import type { Stop, Trip, Decider, Attendee } from "@prisma/client"
 
 import type { User } from "~/models/user.server"
 
@@ -59,7 +59,11 @@ export function formatUrl(url: string): string {
 
   return url.replace(searchRegExp, replaceWith)
 }
-
+export type FullTrip = Trip & {
+  stops: Stop[]
+  decider: Decider | null
+  attendees: Attendee[]
+}
 type FormattedGeometry = {
   location: google.maps.LatLng
   viewport: Record<string, Record<string, number>>
@@ -100,9 +104,7 @@ export function formatStops(stops: Stop[]): FormattedStop[] {
   })
   return fstops
 }
-export function formatTrip(
-  trip: Trip & { stops: Stop[] },
-): TripWithFormattedStops {
+export function formatTrip(trip: FullTrip): TripWithFormattedStops {
   const fs = formatStops(trip.stops)
   const { stops, ...rest } = trip
   const newTrip: TripWithFormattedStops = { stops: fs, ...rest }
