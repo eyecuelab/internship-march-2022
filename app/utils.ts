@@ -59,10 +59,24 @@ export function formatUrl(url: string): string {
 
   return url.replace(searchRegExp, replaceWith)
 }
+
+type FormattedGeometry = {
+  location: google.maps.LatLng
+  viewport: Record<string, Record<string, number>>
+}
+type FormattedApiResult = {
+  geometry: FormattedGeometry
+  icon: string
+  name: string
+  place_id: string
+  rating: number
+  user_ratings_total: number
+}
+
 export type FormattedStop = {
   id: string
   tripId: string
-  apiResult: Record<string, number | string> | null
+  apiResult: FormattedApiResult
   index: number
   createdAt: Date
   updatedAt: Date
@@ -82,4 +96,15 @@ export function formatStops(stops: Stop[]): FormattedStop[] {
     fstops.push(fs)
   })
   return fstops
+}
+export const findCenter = (pos1: number, pos2: number): number => {
+  return (pos1 + pos2) / 2
+}
+export const findDistance = (
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+): number => {
+  return Math.hypot(x2 - x1, y2 - y1)
 }
