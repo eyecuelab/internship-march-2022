@@ -11,10 +11,9 @@ import {
   useSearchParams,
 } from "remix"
 
-import { MainBtn } from "app/styles/styledComponents"
-
 import { verifyLogin } from "~/models/user.server"
 import { createUserSession, getUserId } from "~/session.server"
+import { MainBtn } from "~/styles/styledComponents"
 import { join, validateEmail } from "~/utils"
 
 export const loader: LoaderFunction = async ({ request }) => {

@@ -17,7 +17,7 @@ type ActionData =
     }
   | undefined
 
-export const action: ActionFunction = async (request: Request) => {
+export const action: ActionFunction = async ({ request }) => {
   const ownerId = await requireUserId(request)
   const formData = await request.formData()
 
@@ -34,7 +34,11 @@ export const action: ActionFunction = async (request: Request) => {
 
   invariant(typeof nickName === `string`, `nickName must be a string`)
 
-  const trip = await createTrip({ nickName, ownerId })
+  const trip = await createTrip({
+    nickName,
+    owner: { connect: { id: ownerId } },
+    deciderId: null,
+  })
 
   const tripId = trip.id
   const userId = ownerId

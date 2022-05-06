@@ -1,15 +1,23 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { Trip } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 
 import { prisma } from "../db.server"
 
 export type { Trip }
 
-export async function getTrips() {
+export async function getTrips(): Promise<Trip[]> {
   return prisma.trip.findMany()
 }
 
-export async function getTripById(id: Trip[`id`]) {
+const tripWithRelations = Prisma.validator<Prisma.TripArgs>()({
+  include: { stops: true, decider: true, attendees: true },
+})
+
+type TripWithRelations = Prisma.TripGetPayload<typeof tripWithRelations>
+
+export async function getTripById(
+  id: Trip[`id`],
+): Promise<TripWithRelations | null> {
   return prisma.trip.findUnique({
     where: {
       id,
@@ -22,13 +30,14 @@ export async function getTripById(id: Trip[`id`]) {
   })
 }
 
-export async function createTrip(
-  trip: Pick<Trip, `endDate` | `nickName` | `ownerId` | `startDate`>,
-) {
+export async function createTrip(trip: Prisma.TripCreateInput): Promise<Trip> {
   return prisma.trip.create({ data: trip })
 }
 
-export async function updateTrip(id: Trip[`id`], deciderId: Trip[`deciderId`]) {
+export async function updateTrip(
+  id: Trip[`id`],
+  deciderId: Trip[`deciderId`],
+): Promise<Trip> {
   return prisma.trip.update({
     where: { id },
     data: { deciderId },
