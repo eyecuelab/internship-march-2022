@@ -6,31 +6,45 @@ import { prisma } from "../db.server"
 
 export type { Stop }
 
+export async function getStopById(id: Stop[`id`]) {
+  return prisma.stop.findFirst({ where: { id } })
+}
 export async function getStopsByTripId(tripId: Trip[`id`]) {
   return prisma.stop.findMany({ where: { tripId } })
 }
 export async function createStop(
   stop: Pick<Stop, `apiResult` | `index` | `tripId`>,
 ) {
-  await validateIndex(stop)
   return prisma.stop.create({ data: stop })
 }
 
-const validateIndex = async (
-  stop: Pick<Stop, `apiResult` | `index` | `tripId`>,
-) => {
+const validateIndex = async (stop: Pick<Stop, `id` | `index` | `tripId`>) => {
   const tripStops = await getStopsByTripId(stop.tripId)
-  return await tripStops.map(async (s) => {
-    if (s.index >= stop.index) {
-      s.index++
-      await updateStop(s)
+  const stopInDb = await getStopById(stop.id)
+  invariant(stopInDb, `not a valid stop`)
+  tripStops.map(async (s) => {
+    if (stop.index < stopInDb.index) {
+      //moved down
+      if (s.index === stop.index) {
+        s.index--
+        updateStop(s)
+      }
+    }
+    if (stop.index < stopInDb.index) {
+      //moved up
+      if (s.index === stop.index) {
+        s.index++
+        updateStop(s)
+      }
     }
   })
+  return tripStops
 }
 
 export async function updateStop(
   stop: Pick<Stop, `apiResult` | `id` | `index` | `tripId`>,
 ) {
+  await validateIndex(stop)
   return prisma.stop.update({
     where: {
       id: stop.id,
@@ -79,3 +93,12 @@ export async function deleteStopById(id: Stop[`id`], tripId: Stop[`tripId`]) {
     },
   })
 }
+
+/*
+  Have: If a stop is deleted all stops with a higher index subtract by 1
+
+  Need: If a stop is moved down 1 index I need the stop that is at that current index
+  to move up 1
+        If a stop is moved up 1 index I need the stop that is at that current index to move down 1
+
+*/

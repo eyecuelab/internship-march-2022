@@ -31,11 +31,10 @@ const getLoaderData = async (request: Request) => {
   const userId = await getUserId(request)
   invariant(userId, `userId is required`)
   const upcomingTrip = await getUpcomingTripByUserId(userId)
-  if (upcomingTrip) {
-    invariant(upcomingTrip, `must have upcomingTrip`)
-    const trip = formatTrip(upcomingTrip)
-    return trip
-  }
+  invariant(upcomingTrip, `must have upcomingTrip`)
+  const trip = formatTrip(upcomingTrip)
+
+  return trip
 }
 export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>(await getLoaderData(request))

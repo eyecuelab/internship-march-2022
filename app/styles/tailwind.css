@@ -913,6 +913,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(132 169 140 / var(--tw-bg-opacity));
 }
 
+.bg-\[\#2F3E46\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(47 62 70 / var(--tw-bg-opacity));
+}
+
 .bg-\[color\:rgba\(11\2c 26\2c 7\2c 0\.46\)\] {
   background-color: rgba(11,26,7,0.46);
 }
@@ -940,11 +945,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-gray-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
-}
-
-.bg-\[\#2F3E46\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(47 62 70 / var(--tw-bg-opacity));
 }
 
 .bg-emerald-400 {
@@ -1162,6 +1162,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-\[\#FF5E03\] {
+  --tw-text-opacity: 1;
+  color: rgb(255 94 3 / var(--tw-text-opacity));
+}
+
 .text-\[color\:rgb\(229\2c 222\2c 228\)\] {
   --tw-text-opacity: 1;
   color: rgb(229 222 228 / var(--tw-text-opacity));
@@ -1205,11 +1210,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-yellow-700 {
   --tw-text-opacity: 1;
   color: rgb(161 98 7 / var(--tw-text-opacity));
-}
-
-.text-\[\#FF5E03\] {
-  --tw-text-opacity: 1;
-  color: rgb(255 94 3 / var(--tw-text-opacity));
 }
 
 .underline {

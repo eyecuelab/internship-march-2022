@@ -3,14 +3,11 @@ import type { FC } from "react"
 import type { LoaderFunction, ActionFunction } from "remix"
 import { Link, useLoaderData, Form, json } from "remix"
 
-import type { Trip, Stop } from "@prisma/client"
 import type { Params } from "react-router"
 import invariant from "tiny-invariant"
 
-import { getAttendeeById } from "~/models/attendee.server"
-import { deleteStopById } from "~/models/stop.server"
+import { deleteStopById, getStopById, updateStop } from "~/models/stop.server"
 import { getTripById } from "~/models/trip.server"
-import { requireUserId } from "~/session.server"
 import { RoundedRectangle } from "~/styles/styledComponents"
 import { join, formatStops } from "~/utils"
 import type { FormattedStop } from "~/utils"
@@ -37,9 +34,25 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData()
   const id = formData.get(`stopId`)
+  const upIndex = formData.get(`upIndex`)
+  const downIndex = formData.get(`downIndex`)
   invariant(id, `Did not find a valid id`)
+  const stop = await getStopById(id.toString())
+  invariant(stop, `Did not find stop`)
   invariant(params.tripId, `Did not find a trip id`)
-  return await deleteStopById(id.toString(), params.tripId)
+  const trip = await getTripById(stop.tripId)
+  invariant(trip, `Did not find trip`)
+  if (upIndex && stop.index < trip.stops.length - 1) {
+    stop.index++
+    updateStop(stop)
+  }
+  if (downIndex && stop.index > 0) {
+    stop.index--
+    updateStop(stop)
+  }
+  if (!upIndex && !downIndex) {
+    return await deleteStopById(id.toString(), params.tripId)
+  }
 }
 const Stops: FC = () => {
   const data = useLoaderData()
@@ -51,7 +64,7 @@ const Stops: FC = () => {
       {data.stops.map((stop: FormattedStop) => (
         <RoundedRectangle key={stop.id} className={join(`flex`)}>
           <img
-            src={stop.apiResult?.icon.toString()}
+            src={stop.apiResult.icon}
             className={join(
               `flex`,
               `items-center`,
@@ -64,6 +77,34 @@ const Stops: FC = () => {
             <h1 className={join(`text-base`)}>{stop.apiResult?.name}</h1>
             <h1>{stop.apiResult?.formatted_address}</h1>
           </div>
+          <Form
+            method="post"
+            className={join(
+              `ml-auto`,
+              `mr-0`,
+              `flex`,
+              `items-center`,
+              `justify-center`,
+            )}
+          >
+            <input hidden readOnly name="upIndex" value={stop.index} />
+            <input hidden readOnly name="stopId" value={stop.id} />
+            <button type="submit">Up</button>
+          </Form>
+          <Form
+            method="post"
+            className={join(
+              `ml-auto`,
+              `mr-0`,
+              `flex`,
+              `items-center`,
+              `justify-center`,
+            )}
+          >
+            <input hidden readOnly name="downIndex" value={stop.index} />
+            <input hidden readOnly name="stopId" value={stop.id} />
+            <button type="submit">Down</button>
+          </Form>
           <Form
             method="post"
             className={join(
