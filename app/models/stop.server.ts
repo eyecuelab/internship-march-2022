@@ -17,30 +17,30 @@ export async function createStop(
 ) {
   return prisma.stop.create({ data: stop })
 }
-
+//STILL NEEDS TO TEST. WIP
 const validateIndex = async (stop: Pick<Stop, `id` | `index` | `tripId`>) => {
   const tripStops = await getStopsByTripId(stop.tripId)
   const stopInDb = await getStopById(stop.id)
   invariant(stopInDb, `not a valid stop`)
-  tripStops.map(async (s) => {
-    if (stop.index < stopInDb.index) {
-      //moved down
-      if (s.index === stop.index) {
-        s.index--
-        updateStop(s)
-      }
-    }
-    if (stop.index < stopInDb.index) {
-      //moved up
-      if (s.index === stop.index) {
-        s.index++
-        updateStop(s)
-      }
-    }
+  prisma.stop.findFirst({
+    where: {
+      index: {
+        equals: stop.index,
+      },
+      id: {
+        not: stopInDb.id,
+      },
+    },
   })
   return tripStops
 }
+/*
+  Have: If a stop is deleted all stops with a higher index subtract by 1
 
+  Need: If a stop is moved down 1 index I need the stop that is at that current index
+  to move up 1
+  If a stop is moved up 1 index I need the stop that is at that current index to move down 1
+*/
 export async function updateStop(
   stop: Pick<Stop, `apiResult` | `id` | `index` | `tripId`>,
 ) {
@@ -93,12 +93,3 @@ export async function deleteStopById(id: Stop[`id`], tripId: Stop[`tripId`]) {
     },
   })
 }
-
-/*
-  Have: If a stop is deleted all stops with a higher index subtract by 1
-
-  Need: If a stop is moved down 1 index I need the stop that is at that current index
-  to move up 1
-        If a stop is moved up 1 index I need the stop that is at that current index to move down 1
-
-*/

@@ -21,7 +21,7 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
   invariant(trip, `Trip must exist`)
 
   const formattedStops = formatStops(trip.stops)
-  formattedStops.sort((a, b) => (a.index < b.index ? 1 : -1))
+  formattedStops.sort((a, b) => (a.index > b.index ? 1 : -1))
   return {
     stops: formattedStops,
     apiKey: process.env.MAP_API,
@@ -44,15 +44,16 @@ export const action: ActionFunction = async ({ request, params }) => {
   invariant(trip, `Did not find trip`)
   if (upIndex && stop.index < trip.stops.length - 1) {
     stop.index++
-    updateStop(stop)
+    return await updateStop(stop)
   }
   if (downIndex && stop.index > 0) {
     stop.index--
-    updateStop(stop)
+    return await updateStop(stop)
   }
   if (!upIndex && !downIndex) {
     return await deleteStopById(id.toString(), params.tripId)
   }
+  return null
 }
 const Stops: FC = () => {
   const data = useLoaderData()
@@ -74,7 +75,10 @@ const Stops: FC = () => {
             )}
           />
           <div>
-            <h1 className={join(`text-base`)}>{stop.apiResult?.name}</h1>
+            <h1 className={join(`text-base`)}>
+              {stop.index}
+              {stop.apiResult?.name}
+            </h1>
             <h1>{stop.apiResult?.formatted_address}</h1>
           </div>
           <Form
