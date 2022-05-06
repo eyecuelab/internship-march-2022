@@ -24,6 +24,7 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
   invariant(trip, `Trip must exist`)
 
   const formattedStops = formatStops(trip.stops)
+  formattedStops.sort((a, b) => (a.index < b.index ? 1 : -1))
   return {
     stops: formattedStops,
     apiKey: process.env.MAP_API,

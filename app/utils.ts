@@ -70,6 +70,7 @@ type FormattedGeometry = {
 }
 type FormattedApiResult = {
   geometry: FormattedGeometry
+  formatted_address: string
   icon: string
   name: string
   place_id: string

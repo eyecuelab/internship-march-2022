@@ -14,6 +14,8 @@ import invariant from "tiny-invariant"
 import StopResult from "~/components/StopResult"
 import { getStopsByTripId, createStop } from "~/models/stop.server"
 
+import type { ActionData } from "../new"
+
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const apiResult = formData.get(`result`)?.toString()
@@ -29,7 +31,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 const NewStopSearch: FC = () => {
-  const context = useOutletContext()
+  const context: ActionData = useOutletContext()
   const { tripId } = useParams()
   return (
     <div>
