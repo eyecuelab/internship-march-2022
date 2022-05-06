@@ -68,7 +68,12 @@ export const action: ActionFunction = async ({ request }) => {
 
   invariant(typeof nickName === `string`, `nickName must be a string`)
 
-  const trip = await createTrip({ nickName, ownerId, startDate, endDate })
+  const trip = await createTrip({
+    nickName,
+    owner: { connect: { id: ownerId } },
+    startDate,
+    endDate,
+  })
 
   const tripId = trip.id
   const userId = ownerId
@@ -122,7 +127,7 @@ const Home: FC = () => {
             <input type="text" name="endLocation" />
           </div> */}
           <p className={join(`py-6`)}>
-            <WideButton type="submit">Let's GoGo!</WideButton>
+            <WideButton type="submit">Let&apos;s GoGo!</WideButton>
           </p>
         </Form>
       </div>

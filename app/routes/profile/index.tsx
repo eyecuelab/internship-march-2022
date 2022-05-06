@@ -43,15 +43,15 @@ const Index: FC = () => {
   const trips = data?.user?.trips
 
   //Dates
-  const convertStringToDate = (inputDate: string) => {
-    return (inputDate ? new Date(inputDate) : new Date(0)).toLocaleDateString()
+  const convertStringToDate = (inputDate: Date | string | null | undefined) => {
+    return (inputDate ? new Date(inputDate) : new Date()).toLocaleDateString()
   }
   const createdDate = data.user?.createdAt
   const profileCreatedDate = convertStringToDate(createdDate)
 
   //Attendees
   const attendees = data?.user?.attendees
-  const attendeesCount = attendees.length
+  const attendeesCount = attendees?.length
 
   return (
     <div className="flex-col">
@@ -78,7 +78,7 @@ const Index: FC = () => {
           <SvgProfileDial />
         </div>
         <div className={join(`text-center`)}>
-          <ProHugeNumber>{trips.length}</ProHugeNumber>
+          <ProHugeNumber>{trips?.length}</ProHugeNumber>
           <ProH4>Total Trips</ProH4>
           <ProBody>
             Member Since{` `}
@@ -97,7 +97,7 @@ const Index: FC = () => {
         </Form>
 
         <ul>
-          {trips.map((trip: Trip) => (
+          {trips?.map((trip: Trip) => (
             <div
               key={trip.id}
               className={join(`flex`, `items-center`, `mb-20`, `justify-center`)}
