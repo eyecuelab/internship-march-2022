@@ -22,7 +22,9 @@ export async function getTripById(id: Trip[`id`]) {
   })
 }
 
-export async function createTrip(trip: Pick<Trip, `nickName` | `ownerId`>) {
+export async function createTrip(
+  trip: Pick<Trip, `endDate` | `nickName` | `ownerId` | `startDate`>,
+) {
   return prisma.trip.create({ data: trip })
 }
 

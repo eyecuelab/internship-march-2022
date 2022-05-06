@@ -14,7 +14,7 @@ export const MainBtn = styled.button`
   border-radius: 15px;
 `
 export const WideButton = styled.button`
-  width: 315px;
+  width: 100%;
   height: 56px;
   margin: auto;
   background: #cad2c5;
@@ -65,6 +65,9 @@ export const SearchBar = styled.input`
     color: white;
   }
 `
+export const SideBySideInputs = styled.div`
+  margin: auto;
+`
 export const MapInputField = styled(ComboboxInput)`
   font-family: "Lato";
   width: 342px;
@@ -89,7 +92,7 @@ export const InputLabel = styled.label`
   color: #ffffff;
 `
 export const InputField = styled.input`
-width: 315px;
+width: 100%;
 weight: semi-bold;
 height: 55px;
 color: black;

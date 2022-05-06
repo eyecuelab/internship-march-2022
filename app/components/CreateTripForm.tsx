@@ -17,7 +17,7 @@ type ActionData =
     }
   | undefined
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async (request: Request) => {
   const ownerId = await requireUserId(request)
   const formData = await request.formData()
 
@@ -40,7 +40,7 @@ export const action: ActionFunction = async ({ request }) => {
   const userId = ownerId
   await createAttendee({ tripId, userId })
   const decider = await createDecider({ tripId })
-  invariant(decider, `decider not created succesfully`)
+  invariant(decider, `decider not created successfully`)
   await updateTrip(tripId, decider.id)
   return redirect(`/trips`)
 }
@@ -65,59 +65,9 @@ const NewTrip: FC = () => {
           </label>
         </p>
         <p className="text-right">
-          <button
-            type="submit"
-            className="rounded bg-blue-500 py-2 px-4 
-            text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
-          >
-            Create Trip
-          </button>
+          <button type="submit">Create Trip</button>
         </p>
       </Form>
-      <Link
-        to="/trips"
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
-      >
-        Return to trips
-      </Link>
-      <Link
-        to="/profile"
-        className={join(
-          `flex`,
-          `items-center`,
-          `justify-center`,
-          `rounded-md`,
-          `border`,
-          `border-transparent`,
-          `bg-white`,
-          `px-4`,
-          `py-3`,
-          `text-base`,
-          `font-medium`,
-          `text-yellow-700`,
-          `shadow-sm`,
-          `hover:bg-yellow-50`,
-          `sm:px-8`,
-        )}
-      >
-        Return to profile
-      </Link>
     </div>
   )
 }

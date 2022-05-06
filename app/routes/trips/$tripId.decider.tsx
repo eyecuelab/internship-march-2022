@@ -77,6 +77,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 const Decider: FC = () => {
   const data = useLoaderData<LoaderData>()
+
   const date = data?.updatedAt ? new Date(data?.updatedAt) : new Date(0)
   const day = date?.toLocaleDateString()
   const time = date?.toLocaleTimeString()
