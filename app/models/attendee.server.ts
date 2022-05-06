@@ -58,13 +58,11 @@ export async function getAttendeeById(
     },
   })
 }
-
 export async function createAttendee(
   attendee: Pick<Attendee, `tripId` | `userId`>,
 ) {
   return prisma.attendee.create({ data: attendee })
 }
-
 export async function updateAttendee(
   tripId: Attendee[`tripId`],
   userId: Attendee[`userId`],
@@ -79,7 +77,6 @@ export async function updateAttendee(
     },
   })
 }
-
 export async function deleteAttendee(
   tripId: Attendee[`tripId`],
   userId: Attendee[`userId`],
