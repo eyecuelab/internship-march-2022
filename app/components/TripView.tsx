@@ -78,6 +78,7 @@ const TripView: FC<TripViewProps> = ({ trip, isAccepted = true }) => {
               </Form>
             </>
           )}
+
         </TripLiContainer>
       </ul>
     </div>

@@ -112,6 +112,19 @@ export const Avatar = styled.img`
   height: 50px;
   border-radius: 50%;
 `
+export const HomePageImg = styled.img`
+  width: 100%;
+  height: max-content;
+  margin: auto;
+  border-radius: 15px;
+`
+export const PhotoOverlay = styled.div`
+width: 100%;
+height: max-content;
+margin: auto;
+background:background: rgba(11, 26, 7, 0.46);
+border-radius: 15px
+`
 export const RoundedRectangle = styled.div`
   height: max-content;
   margin: auto;
@@ -314,4 +327,60 @@ export const ProTripImage = styled.div`
   flex-wrap: wrap;
   align-content: center;
   place-content: center;
+`
+
+export const ProfileFormInputFrame = styled.div`
+  width: 276px;
+  weight: semi-bold;
+  height: 55px;
+  color: black;
+  padding-left: 1.5em;
+  padding-top: 0.25em;
+  border-radius: 15px;
+  background-color: #ffffff;
+  align-content: center;
+  margin-bottom: 2em;
+`
+
+export const ProfileFormPlaceholder = styled.text`
+  font-size: 10px;
+  font-weight: 500;
+  color: #c4c4c4;
+`
+export const ProfileFormInputText = styled.input`
+  font-size: 11px;
+  height: 20px;
+  width: 80%;
+  font-weight: 500;
+  color: #000000;
+`
+export const ProfileFormCancelBtn = styled.button`
+  box-sizing: border-box;
+  background: rgba(202, 210, 197, 0);
+  font-family: "Lato", sans-serif;
+  color: #ffffff;
+  border: 1px solid #cad2c5;
+  height: 56px;
+  border-radius: 15px;
+  text-align: center;
+  margin-right: 5px;
+  width: 135px;
+`
+export const ProfileFormSubmitBtn = styled.button`
+  box-sizing: border-box;
+  background: #cad2c5;
+  font-family: "Lato", sans-serif;
+  color: #2f3e46;
+  height: 56px;
+  border-radius: 15px;
+  text-align: center;
+  margin-left: 5px;
+  width: 135px;
+`
+export const ProfileAvatarMain = styled.img`
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background-color: green;
+  border: 2px solid #ffffff;
 `
