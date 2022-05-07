@@ -9,6 +9,7 @@ import invariant from "tiny-invariant"
 import { deleteStopById, getStopById, updateStop } from "~/models/stop.server"
 import { getTripById } from "~/models/trip.server"
 import { RoundedRectangle } from "~/styles/styledComponents"
+import SvgCloseCircle from "~/styles/SVGR/SvgCloseCircle"
 import { join, formatStops } from "~/utils"
 import type { FormattedStop } from "~/utils"
 
@@ -75,11 +76,33 @@ const Stops: FC = () => {
             )}
           />
           <div>
-            <h1 className={join(`text-base`)}>
-              {stop.index}
-              {stop.apiResult?.name}
-            </h1>
+            <h1 className={join(`text-base`)}>{stop.apiResult?.name}</h1>
             <h1>{stop.apiResult?.formatted_address}</h1>
+          </div>
+          <div className={join(`flex`, `ml-auto`)}>
+            <Form
+              method="post"
+              className={join(
+                `ml-auto`,
+                `mr-0`,
+                `flex`,
+                `items-center`,
+                `justify-center`,
+              )}
+            >
+              <input hidden readOnly name="upIndex" value={stop.index} />
+              <input hidden readOnly name="stopId" value={stop.id} />
+              <button type="submit" className={join(`text-3xl`)}>
+                ↓
+              </button>
+            </Form>
+            <Form method="post" className={join(`ml-3`)}>
+              <input hidden readOnly name="downIndex" value={stop.index} />
+              <input hidden readOnly name="stopId" value={stop.id} />
+              <button type="submit" className={join(`text-3xl`)}>
+                ↑
+              </button>
+            </Form>
           </div>
           <Form
             method="post"
@@ -91,36 +114,10 @@ const Stops: FC = () => {
               `justify-center`,
             )}
           >
-            <input hidden readOnly name="upIndex" value={stop.index} />
             <input hidden readOnly name="stopId" value={stop.id} />
-            <button type="submit">Up</button>
-          </Form>
-          <Form
-            method="post"
-            className={join(
-              `ml-auto`,
-              `mr-0`,
-              `flex`,
-              `items-center`,
-              `justify-center`,
-            )}
-          >
-            <input hidden readOnly name="downIndex" value={stop.index} />
-            <input hidden readOnly name="stopId" value={stop.id} />
-            <button type="submit">Down</button>
-          </Form>
-          <Form
-            method="post"
-            className={join(
-              `ml-auto`,
-              `mr-0`,
-              `flex`,
-              `items-center`,
-              `justify-center`,
-            )}
-          >
-            <input hidden readOnly name="stopId" value={stop.id} />
-            <button type="submit">Delete</button>
+            <button type="submit">
+              <SvgCloseCircle />
+            </button>
           </Form>
         </RoundedRectangle>
       ))}

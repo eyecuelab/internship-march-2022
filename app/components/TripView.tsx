@@ -50,7 +50,7 @@ const LinkComponents: FC<TripViewProps> = ({ trip }) => {
     </>
   )
 }
-const TripView: FC<TripViewProps> = ({ trip, isAccepted }) => {
+const TripView: FC<TripViewProps> = ({ trip, isAccepted = true }) => {
   return (
     <div>
       <ul>

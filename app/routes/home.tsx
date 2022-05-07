@@ -89,8 +89,6 @@ const Home: FC = () => {
   const data = useLoaderData<LoaderData>()
   const trip = data?.trip
 
-  console.log(trip)
-
   const errors = useActionData()
   const inputClassName = `w-full rounded border border-gray-500 px-2 py-1 text-lg`
 

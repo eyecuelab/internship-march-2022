@@ -17,34 +17,34 @@ export async function createStop(
 ) {
   return prisma.stop.create({ data: stop })
 }
-//STILL NEEDS TO TEST. WIP
+
 const validateIndex = async (stop: Pick<Stop, `id` | `index` | `tripId`>) => {
-  const tripStops = await getStopsByTripId(stop.tripId)
-  const stopInDb = await getStopById(stop.id)
-  invariant(stopInDb, `not a valid stop`)
-  prisma.stop.findFirst({
+  const stopDB = await getStopById(stop.id)
+  invariant(stopDB, `not a valid stop`)
+  const stopToUpdate = await prisma.stop.findFirst({
     where: {
       index: {
         equals: stop.index,
       },
       id: {
-        not: stopInDb.id,
+        not: stopDB.id,
       },
     },
   })
-  return tripStops
+  if (stopToUpdate) {
+    stopDB.index > stop.index ? stopToUpdate.index++ : stopToUpdate.index--
+    await updateStop(stopToUpdate, true)
+  }
+  // 1&2 were the same id, 3 had same index but diff id, TEST PASS
 }
-/*
-  Have: If a stop is deleted all stops with a higher index subtract by 1
 
-  Need: If a stop is moved down 1 index I need the stop that is at that current index
-  to move up 1
-  If a stop is moved up 1 index I need the stop that is at that current index to move down 1
-*/
 export async function updateStop(
   stop: Pick<Stop, `apiResult` | `id` | `index` | `tripId`>,
+  isLoop = false,
 ) {
-  await validateIndex(stop)
+  if (!isLoop) {
+    await validateIndex(stop)
+  }
   return prisma.stop.update({
     where: {
       id: stop.id,
