@@ -35,7 +35,6 @@ const validateIndex = async (stop: Pick<Stop, `id` | `index` | `tripId`>) => {
     stopDB.index > stop.index ? stopToUpdate.index++ : stopToUpdate.index--
     await updateStop(stopToUpdate, true)
   }
-  // 1&2 were the same id, 3 had same index but diff id, TEST PASS
 }
 
 export async function updateStop(
