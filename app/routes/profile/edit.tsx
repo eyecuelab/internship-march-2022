@@ -16,20 +16,20 @@ import invariant from "tiny-invariant"
 import { getUserById, updateUserById } from "~/models/user.server"
 import { requireUserId } from "~/session.server"
 import {
-  MainBtn,
-  ClearBtn,
-  InputLabel,
-  ModalBackdrop,
-  Modal,
-  AddButtonText,
-  InputFieldMid,
   ProfileFormInputFrame,
   ProfileFormPlaceholder,
   ProfileFormInputText,
   ProfileFormCancelBtn,
   ProfileFormSubmitBtn,
+  ProRoundedRectangle,
+  ProfileAvatarEdit,
+  ProfileAvatarImg,
+  ProfileAvatarImgEdit,
+  ProAvatarInput,
 } from "~/styles/styledComponents"
 import SvgBackButton from "~/styles/SVGR/SvgBackButton"
+import SvgDefaultAvatar from "~/styles/SVGR/SvgDefaultAvatar"
+import SvgPencil from "~/styles/SVGR/SvgPencil"
 import SvgSwipeButton from "~/styles/SVGR/SvgSwipeButton"
 import { join } from "~/utils"
 
@@ -70,6 +70,7 @@ export const action: ActionFunction = async ({ request }) => {
   const finalUserName = formUserName === `` ? existingUserName : formUserName
 
 
+
   invariant(typeof formUserId === `string`, `userId must be a string`)
   invariant(typeof finalEmail === `string`, `email must be a string`)
   invariant(typeof finalUserName === `string`, `username must be a string`)
@@ -97,6 +98,11 @@ const Edit: FC = () => {
   const data = useLoaderData()
   const user = data?.user
   const userId = user.id
+  const avatar = user?.avatarUrl ? (
+    user?.avatarUrl
+  ) : (
+    <SvgDefaultAvatar />)
+  // console.log(avatar)
   // const state: "idle" | "success" | "error" = actionData?.
 
 
@@ -123,6 +129,36 @@ const Edit: FC = () => {
         <div>
 
           <div className={join(`flex`, `justify-center`, `flex-col`, `align-middle`, `ml-4`)}>
+            <ProRoundedRectangle className={join(`items-center`, `grid grid-cols-4`, `justify-between`)}>
+
+              <ProfileAvatarEdit
+                className={join(`flex`, `items-center`, `place-content-center`, `col-start-1`, `col-span-1`, `w-fit`)}
+              >
+                {typeof avatar === `string` ? (
+                  <ProfileAvatarImgEdit src={avatar} />
+                ) : (
+                  avatar
+                )}
+                {/* <SvgDefaultAvatar /> */}
+              </ProfileAvatarEdit>
+
+              <div className={join(`flex-col`, `col-start-2`, `col-span-2`, `w-3/5`, `pl-2`, `pr-2`, `mr-3`)}>
+                <div className={join(`mt-30`)}>
+                  <ProfileFormPlaceholder>Photo URL</ProfileFormPlaceholder>
+                </div>
+
+                <div className={join(`mt-30`)}>
+                  <p className={join(`text-white/100`, `text-xs`)}>{avatar.slice(0, 28)}</p>
+                </div>
+
+                <div className={join(`-mt-1`, `flex`)}>
+                  <ProAvatarInput type="email" name="email" className={join(`mt-2`, `pr-2`)} />
+                </div>
+              </div>
+
+              <SvgPencil className={join(`col-start-4`, `col-span-1`, `w-fit`, `mr-2`)} />
+
+            </ProRoundedRectangle>
             <ProfileFormInputFrame>
 
               <div className={join(`mt-30`)}>
@@ -132,7 +168,7 @@ const Edit: FC = () => {
 
               <div className={join(`-mt-1`)}>
 
-                <ProfileFormInputText type="email" name="email" className={join(`focus:pointer-events-none`)} />
+                <ProfileFormInputText type="email" name="email" className={join(`items-center`)} />
               </div>
             </ProfileFormInputFrame>
 
@@ -148,7 +184,7 @@ const Edit: FC = () => {
 
               <div className={join(`-mt-1`)}>
 
-                <ProfileFormInputText type="userName" name="userName" />
+                <ProfileFormInputText type="userName" name="userName" className={join(`items-center`)} />
               </div>
 
             </ProfileFormInputFrame>

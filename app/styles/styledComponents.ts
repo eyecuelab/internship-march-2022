@@ -335,11 +335,11 @@ export const ProfileFormInputFrame = styled.div`
   height: 55px;
   color: black;
   padding-left: 1.5em;
-  padding-top: 0.25em;
   border-radius: 15px;
   background-color: #ffffff;
   align-content: center;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
+  border: solid 1.5px #84a98c;
 `
 
 export const ProfileFormPlaceholder = styled.text`
@@ -377,10 +377,46 @@ export const ProfileFormSubmitBtn = styled.button`
   margin-left: 5px;
   width: 135px;
 `
-export const ProfileAvatarMain = styled.img`
+export const ProfileAvatarMain = styled.div`
   width: 85px;
   height: 85px;
   border-radius: 50%;
-  background-color: green;
+  background-color: #52796f;
   border: 2px solid #ffffff;
+`
+export const ProfileAvatarEdit = styled.div`
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #52796f;
+  border: 2px solid #ffffff;
+`
+export const ProfileAvatarImg = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+`
+export const ProfileAvatarImgEdit = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+`
+export const ProRoundedRectangle = styled.div`
+  margin: auto;
+  margin-top: 1em;
+  margin-bottom: 3em;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  font-size: 0.5em;
+  width: 276px;
+  height: 75px;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  align-content: center;
+  display: flex;
+`
+export const ProAvatarInput = styled.input`
+  background: rgba(255, 255, 255, 0);
+  width: 100%;
+  height: 15px;
 `
