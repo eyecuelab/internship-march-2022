@@ -59,20 +59,24 @@ export const action: ActionFunction = async ({ request }) => {
   const user = await getUserById(userId)
   const existingEmail = user?.email
   const existingUserName = user?.userName
+  const existingAvatar = user?.avatarUrl
   const formData = await request.formData()
   const formUserId = formData.get(`userId`)
 
   const formEmail = formData.get(`email`)
 
   const formUserName = formData.get(`userName`)
+  const formAvatarUrl = formData.get(`avatarURL`)
   const finalEmail = formEmail === `` ? existingEmail : formEmail
   const finalUserName = formUserName === `` ? existingUserName : formUserName
+  const finalAvatar = formAvatarUrl === `` ? existingAvatar : formAvatarUrl
 
 
 
   invariant(typeof formUserId === `string`, `userId must be a string`)
   invariant(typeof finalEmail === `string`, `email must be a string`)
   invariant(typeof finalUserName === `string`, `username must be a string`)
+  invariant(typeof finalAvatar === `string`, `url must be a string`)
   // const errors: ActionData = {
   //   userId: formUserId ? null : `userId is required`,
   //   email: formEmail ? null : `email is required`,
@@ -86,7 +90,7 @@ export const action: ActionFunction = async ({ request }) => {
   // }
 
 
-  await updateUserById(formUserId, finalEmail, finalUserName)
+  await updateUserById(formUserId, finalEmail, finalUserName, finalAvatar)
 
   return redirect(`/profile`)
 }
@@ -185,20 +189,10 @@ const Edit: FC = () => {
               </div>
 
 
-
-              {/* ======================================= */}
-              {/* ======================================= */}
-              {/* ======================================= */}
-              {/* ======================================= */}
-
               <div onClick={showAvatarInput} className={join(`hover:cursor-pointer`)}>
                 <SvgPencil />
               </div>
 
-              {/* ======================================= */}
-              {/* ======================================= */}
-              {/* ======================================= */}
-              {/* ======================================= */}
 
             </ProRoundedRectangle>
             <ProfileFormInputFrame>
