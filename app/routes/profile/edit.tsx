@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import type { FC } from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import type { ActionFunction, LoaderFunction } from "remix"
 import {
@@ -24,14 +24,12 @@ import {
   ProfileFormSubmitBtn,
   ProRoundedRectangle,
   ProfileAvatarEdit,
-  ProfileAvatarImg,
   ProfileAvatarImgEdit,
   ProAvatarInput,
 } from "~/styles/styledComponents"
 import SvgBackButton from "~/styles/SVGR/SvgBackButton"
 import SvgDefaultAvatar from "~/styles/SVGR/SvgDefaultAvatar"
 import SvgPencil from "~/styles/SVGR/SvgPencil"
-import SvgSwipeButton from "~/styles/SVGR/SvgSwipeButton"
 import { join } from "~/utils"
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
@@ -103,27 +101,30 @@ const Edit: FC = () => {
     user?.avatarUrl
   ) : (
     <SvgDefaultAvatar />)
-
-
   const avatarShort = user?.avatarUrl ? (
     (avatar).slice(0, 28)
   ) : (
     `Avatar not set`)
 
 
-
-
-  // const avatarShort= (avatar).slice(0, 28)
-  console.log(avatarShort)
-  // const state: "idle" | "success" | "error" = actionData?.
-
-
   const [avatarInput, setAvatarInput] = useState(false)
+  const [avatarValue, setAvatarValue] = useState(true)
 
   const showAvatarInput = () => {
-    setAvatarInput(!avatarInput)
+    setAvatarInput(true)
+    setAvatarValue(false)
   }
+  useEffect(() => {
+    console.log(`useEffectRan`)
+    console.log(avatarInput)
+  }, [avatarInput])
+
+
+
+
   const centered = [`flex`, `items-center`, `place-content-center`, `flex-col`]
+
+
   return (
     <div className={join(...centered)}>
 
@@ -156,7 +157,6 @@ const Edit: FC = () => {
                 ) : (
                   avatar
                 )}
-                {/* <SvgDefaultAvatar /> */}
               </ProfileAvatarEdit>
 
               <div className={join(`flex-col`, `col-start-2`, `col-span-2`, `w-3/5`, `pl-2`, `pr-2`, `mr-3`)}>
@@ -164,14 +164,19 @@ const Edit: FC = () => {
                   <ProfileFormPlaceholder>Photo URL</ProfileFormPlaceholder>
                 </div>
 
-                <div className={join(`mt-30`)}>
-                  <p className={join(`text-white/100`, `text-xs`)}>
-                    {avatarShort}
-                  </p>
-                </div>
+                {
+                  avatarValue && (
+
+                    <div className={join(`mt-30`)}>
+                      <p className={join(`text-white/100`, `text-xs`)}>
+                        {avatarShort}
+                      </p>
+                    </div>
+                  )
+                }
+
 
                 {avatarInput && (
-
                   <div className={join(`-mt-1`, `flex`)}>
                     <ProAvatarInput type="string" name="avatarURL" className={join(`mt-2`, `pr-2`)} />
                   </div>
@@ -179,12 +184,21 @@ const Edit: FC = () => {
 
               </div>
 
-              <button onClick={showAvatarInput}>
 
-                <SvgPencil className={join(`col-start-4`, `col-span-1`, `w-fit`, `mr-2`)} />
-                {/* <SvgPencil className={join(`col-start-4`, `col-span-1`, `w-fit`, `mr-2`)} /> */}
-              </button>
 
+              {/* ======================================= */}
+              {/* ======================================= */}
+              {/* ======================================= */}
+              {/* ======================================= */}
+
+              <div onClick={showAvatarInput} className={join(`hover:cursor-pointer`)}>
+                <SvgPencil />
+              </div>
+
+              {/* ======================================= */}
+              {/* ======================================= */}
+              {/* ======================================= */}
+              {/* ======================================= */}
 
             </ProRoundedRectangle>
             <ProfileFormInputFrame>
