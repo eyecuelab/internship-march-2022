@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import type { FC } from "react"
+import { useState } from "react"
 
 import type { ActionFunction, LoaderFunction } from "remix"
 import {
@@ -102,10 +103,26 @@ const Edit: FC = () => {
     user?.avatarUrl
   ) : (
     <SvgDefaultAvatar />)
-  // console.log(avatar)
+
+
+  const avatarShort = user?.avatarUrl ? (
+    (avatar).slice(0, 28)
+  ) : (
+    `Avatar not set`)
+
+
+
+
+  // const avatarShort= (avatar).slice(0, 28)
+  console.log(avatarShort)
   // const state: "idle" | "success" | "error" = actionData?.
 
 
+  const [avatarInput, setAvatarInput] = useState(false)
+
+  const showAvatarInput = () => {
+    setAvatarInput(!avatarInput)
+  }
   const centered = [`flex`, `items-center`, `place-content-center`, `flex-col`]
   return (
     <div className={join(...centered)}>
@@ -148,15 +165,26 @@ const Edit: FC = () => {
                 </div>
 
                 <div className={join(`mt-30`)}>
-                  <p className={join(`text-white/100`, `text-xs`)}>{avatar.slice(0, 28)}</p>
+                  <p className={join(`text-white/100`, `text-xs`)}>
+                    {avatarShort}
+                  </p>
                 </div>
 
-                <div className={join(`-mt-1`, `flex`)}>
-                  <ProAvatarInput type="email" name="email" className={join(`mt-2`, `pr-2`)} />
-                </div>
+                {avatarInput && (
+
+                  <div className={join(`-mt-1`, `flex`)}>
+                    <ProAvatarInput type="string" name="avatarURL" className={join(`mt-2`, `pr-2`)} />
+                  </div>
+                )}
+
               </div>
 
-              <SvgPencil className={join(`col-start-4`, `col-span-1`, `w-fit`, `mr-2`)} />
+              <button onClick={showAvatarInput}>
+
+                <SvgPencil className={join(`col-start-4`, `col-span-1`, `w-fit`, `mr-2`)} />
+                {/* <SvgPencil className={join(`col-start-4`, `col-span-1`, `w-fit`, `mr-2`)} /> */}
+              </button>
+
 
             </ProRoundedRectangle>
             <ProfileFormInputFrame>

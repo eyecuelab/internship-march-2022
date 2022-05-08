@@ -74,14 +74,14 @@ const Index: FC = () => {
 
   //Main Data
   const data = useLoaderData<LoaderData>()
-  console.log(data)
-  console.log(`===========`)
-  console.log(data.user)
-  console.log(`===========`)
-  console.log(data.trips)
+  // console.log(data)
+  // console.log(`===========`)
+  // console.log(data.user)
+  // console.log(`===========`)
+  // console.log(data.trips)
   const user = data?.user
   const trips = data?.trips
-  console.log(typeof data.user?.avatarUrl)
+  // console.log(typeof data.user?.avatarUrl)
 
   //avatar
   const avatar = data.user?.avatarUrl ? (
@@ -89,14 +89,14 @@ const Index: FC = () => {
   ) : (
     <SvgDefaultAvatar />
   ) // change with default avatar link
-  console.log(avatar)
+  // console.log(avatar)
 
   //Dates
   const convertStringToDate = (inputDate: string) => {
     return (inputDate ? new Date(inputDate) : new Date(0)).toLocaleDateString()
   }
   const createdDate = data.user?.createdAt
-  console.log(typeof createdDate)
+  // console.log(typeof createdDate)
   const profileCreatedDate = convertStringToDate(createdDate.toString())
 
   //Attendees
@@ -150,12 +150,12 @@ const Index: FC = () => {
               <ProfileAvatarMain
                 className={join(`flex`, `items-center`, `place-content-center`)}
               >
-                {/* {typeof avatar === `string` ? (
+                {typeof avatar === `string` ? (
                   <ProfileAvatarImg src={avatar} />
                 ) : (
                   avatar
-                )} */}
-                <SvgDefaultAvatar />
+                )}
+                {/* <SvgDefaultAvatar /> */}
               </ProfileAvatarMain>
             </div>
             <div>
