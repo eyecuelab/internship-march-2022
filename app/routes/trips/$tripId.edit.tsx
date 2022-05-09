@@ -33,10 +33,14 @@ import {
   Avatar,
   CostDescription,
   SubHeader,
+  SaveButton,
+  SmClearBtn,
 } from "~/styles/styledComponents"
 import SvgAddButton from "~/styles/SVGR/SvgAddButton"
 import SvgBackButton from "~/styles/SVGR/SvgBackButton"
 import { join } from "~/utils"
+
+const DEFAULT_DATE = new Date()
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
@@ -45,7 +49,11 @@ const getLoaderData = async (params: Params<string>) => {
   const trip = await getTripById(params.tripId)
   const attendees = await getAttendeesByTripId(params.tripId)
   invariant(attendees, `need attendees`)
-  return { trip, attendees }
+  invariant(trip, `need a trip`)
+  const startDate = trip.startDate?.toISOString().substring(0, 10)
+  const endDate = trip.endDate?.toISOString().substring(0, 10)
+  const defaultDate = new Date().toISOString().substring(0, 10)
+  return { trip, attendees, startDate, endDate, defaultDate }
 }
 export const loader: LoaderFunction = async ({ params }) => {
   return json<LoaderData>(await getLoaderData(params))
@@ -66,6 +74,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const inputEndDate = formData.get(`endDate`)
   const startDate = inputStartDate ? new Date(inputStartDate.toString()) : null
   const endDate = inputEndDate ? new Date(inputEndDate.toString()) : null
+  const currentDate = new Date().toString()
 
   // const errors: ActionData = {
   //   tripId: tripId ? null : `not a valid id`,
@@ -77,9 +86,9 @@ export const action: ActionFunction = async ({ request, params }) => {
   //   return json<ActionData>(errors)
   // }
 
-  // invariant(tripId, `tripId is not defined`)
+  invariant(tripId, `tripId must be defined`)
 
-  const trip = await updateTripDates({ tripId, startDate, endDate })
+  const trip = await updateTripDates(tripId, startDate, endDate)
 
   return redirect(`/trips/${tripId}/`)
 }
@@ -87,6 +96,8 @@ export const action: ActionFunction = async ({ request, params }) => {
 const Edit: FC = () => {
   const data = useLoaderData<LoaderData>()
   const tripId = useParams()
+  const currentStartDate = data.startDate ? data.startDate : data.defaultDate
+  const currentEndDate = data.endDate ? data.endDate : data.defaultDate
 
   const defaultAvatar = `public/img/default-avatar.jpg`
   const rectangleStyles = [`flex`, `mx-2`]
@@ -95,7 +106,9 @@ const Edit: FC = () => {
   const backButtonHeaderRow = [`flex`, `mt-12`, `mb-16`]
   const costAmountStyles = [`flex-1`, `text-right`, `mr-2`]
   const centered = [`items-center`, `flex-col`, `mx-8`]
-  const inputGrid = [`grid grid-flow-col grid-rows-2 gap-2`]
+  const inputGrid = [`grid grid-flow-col grid-rows-2 gap-4`]
+  const negativeMargin = [`-mt-4`]
+  const buttonFlex = [`flex`, `items-centered`, `gap-4`]
   return (
     <div>
       <div className={join(...backButtonHeaderRow)}>
@@ -109,12 +122,25 @@ const Edit: FC = () => {
       <Form method="post">
         <div className={join(...inputGrid)}>
           <AddButtonText>Start Date</AddButtonText>
-          <InputField type="date" name="startDate" />
+          <div className={join(...negativeMargin)}>
+            <InputField
+              type="date"
+              name="startDate"
+              defaultValue={currentStartDate}
+            />
+          </div>
           <AddButtonText>End Date</AddButtonText>
-          <InputField type="date" name="endDate" />
+          <div className={join(...negativeMargin)}>
+            <InputField
+              type="date"
+              name="endDate"
+              defaultValue={currentEndDate}
+            />
+          </div>
         </div>
-        <p className={join(`py-6`)}>
-          <button type="submit">Let&apos;s GoGo!</button>
+        <p className={join(`py-6`, ...buttonFlex)}>
+          <SmClearBtn>Cancel</SmClearBtn>
+          <SaveButton type="submit">Save</SaveButton>
         </p>
       </Form>
     </div>

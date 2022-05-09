@@ -66,11 +66,11 @@ export const action: ActionFunction = async ({ request, params }) => {
   const winner = attendeeArray[Math.floor(Math.random() * attendeeArray.length)]
   invariant(winner, `winner is not defined`)
 
-  // const decider = await updateDeciderByDeciderId(
-  //   trip.deciderId,
-  //   winner.userName,
-  //   winner.avatarUrl,
-  // )
+  const decider = await updateDeciderByDeciderId(
+    trip.deciderId,
+    winner.userName,
+    winner.avatarUrl,
+  )
 
   return redirect(`/trips/${tripId}/decider/`)
 }

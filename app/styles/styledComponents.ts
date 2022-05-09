@@ -30,10 +30,17 @@ export const SmMainBtn = styled(MainBtn)`
   width: 153px;
   height: 56px;
 `
-export const SmClearBtn = styled(ClearBtn)`
-  width: 153px;
+export const SaveButton = styled(MainBtn)`
+  width: 100%;
   height: 56px;
+`
+export const SmClearBtn = styled.button`
+  width: 100%;
+  height: 56px;
+  background: border-color;
+  border: 1px solid rgba(202, 210, 197, 1);
   color: #ffffff;
+  border-radius: 15px;
 `
 
 export const Header = styled.h1`
@@ -94,6 +101,13 @@ export const InputLabel = styled.label`
 export const InputField = styled.input`
 width: 100%;
 weight: semi-bold;
+height: 55px;
+color: black;
+padding .5em;
+border-radius: 15px;`
+
+export const DateInputField = styled.input`
+width: ${(props) => (props.width ? props.width : `100%`)};
 height: 55px;
 color: black;
 padding .5em;
