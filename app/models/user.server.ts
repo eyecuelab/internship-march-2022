@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { Password, User } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import bcrypt from "bcryptjs"
 import { data } from "msw/lib/types/context"
 
@@ -12,7 +13,15 @@ export async function getUsers(): Promise<User[]> {
   return prisma.user.findMany()
 }
 
-export async function getUserById(id: User[`id`]): Promise<User | null> {
+const userWithRelations = Prisma.validator<Prisma.UserArgs>()({
+  include: { trips: true, attendees: true },
+})
+
+type UserWithRelations = Prisma.UserGetPayload<typeof userWithRelations>
+
+export async function getUserById(
+  id: User[`id`],
+): Promise<UserWithRelations | null> {
   return prisma.user.findUnique({
     where: { id },
     include: { trips: true, attendees: true },

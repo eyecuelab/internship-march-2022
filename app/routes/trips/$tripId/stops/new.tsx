@@ -8,6 +8,8 @@ import invariant from "tiny-invariant"
 import { SearchBar } from "~/styles/styledComponents"
 import { formatUrl, join } from "~/utils"
 
+export type ActionData = Awaited<ReturnType<typeof action>>
+
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const search = formData.get(`search`)

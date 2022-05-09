@@ -16,12 +16,14 @@ import { getUserId, requireUserId } from "~/session.server"
 import {
   AddButtonText,
   Header,
+  HomePageImg,
   InputField,
+  PhotoOverlay,
   SideBySideInputs,
   TitleText,
   WideButton,
 } from "~/styles/styledComponents"
-import { join, formatTrip } from "~/utils"
+import { TripWithFormattedStops, join, formatTrip } from "~/utils"
 
 import NavBar from "./navbar"
 
@@ -31,13 +33,18 @@ const getLoaderData = async (request: Request) => {
   const userId = await getUserId(request)
   invariant(userId, `userId is required`)
   const upcomingTrip = await getUpcomingTripByUserId(userId)
-  invariant(upcomingTrip, `must have upcomingTrip`)
+  if (!upcomingTrip) {
+    return null
+  }
   const trip = formatTrip(upcomingTrip)
-
   return trip
 }
 export const loader: LoaderFunction = async ({ request }) => {
-  return json<LoaderData>(await getLoaderData(request))
+  const data = await getLoaderData(request)
+  if (data === null) {
+    return null
+  }
+  return json<LoaderData>(data)
 }
 
 type ActionData =
@@ -67,7 +74,12 @@ export const action: ActionFunction = async ({ request }) => {
 
   invariant(typeof nickName === `string`, `nickName must be a string`)
 
-  const trip = await createTrip({ nickName, ownerId, startDate, endDate })
+  const trip = await createTrip({
+    nickName,
+    owner: { connect: { id: ownerId } },
+    startDate,
+    endDate,
+  })
 
   const tripId = trip.id
   const userId = ownerId
@@ -79,10 +91,8 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 const Home: FC = () => {
-  const data = useLoaderData<LoaderData>()
-  const trip = data
-
-  console.log(trip)
+  const trip = useLoaderData<LoaderData>()
+  const defaultPhoto = `public/img/dashboard.jpg`
 
   const errors = useActionData()
   const inputClassName = `w-full rounded border border-gray-500 px-2 py-1 text-lg`
@@ -110,9 +120,9 @@ const Home: FC = () => {
           </p>
           <div className={join(...inputGrid)}>
             <AddButtonText>Start Date</AddButtonText>
-            <input type="date" name="startDate" />
+            <InputField type="date" name="startDate" />
             <AddButtonText>End Date</AddButtonText>
-            <input type="date" name="endDate" />
+            <InputField type="date" name="endDate" />
           </div>
           {/* <div className={join(...inputGrid)}>
             <AddButtonText>Start Location</AddButtonText>
@@ -121,7 +131,7 @@ const Home: FC = () => {
             <input type="text" name="endLocation" />
           </div> */}
           <p className={join(`py-6`)}>
-            <WideButton type="submit">Let's GoGo!</WideButton>
+            <WideButton type="submit">Let&apos;s GoGo!</WideButton>
           </p>
         </Form>
       </div>
@@ -130,7 +140,13 @@ const Home: FC = () => {
           <span className={join(`ml-8`)}>Current Trip</span>
         </TitleText>
       </div>
-      <TripView trip={trip} />
+      {!trip && (
+        <div>
+          <PhotoOverlay />
+          <HomePageImg src={defaultPhoto} />
+        </div>
+      )}
+      {trip && <TripView trip={trip} />}
       <NavBar />
     </div>
   )

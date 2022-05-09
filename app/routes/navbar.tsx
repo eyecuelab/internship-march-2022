@@ -1,7 +1,4 @@
-import { SlowBuffer } from "buffer"
-
 import type { FC } from "react"
-import { useState } from "react"
 
 import NavButton from "~/components/NavButton"
 import SvgHome from "~/styles/SVGR/SvgHome"
