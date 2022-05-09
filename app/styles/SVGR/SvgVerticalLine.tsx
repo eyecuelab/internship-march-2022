@@ -1,7 +1,7 @@
 import * as React from "react"
 import type { FC } from "react"
 
-const SvgSvgVerticalLine: FC = (props) => (
+const SvgVerticalLine: FC = (props) => (
   <svg
     width={1}
     height={74}
@@ -13,4 +13,4 @@ const SvgSvgVerticalLine: FC = (props) => (
   </svg>
 )
 
-export default SvgSvgVerticalLine
+export default SvgVerticalLine

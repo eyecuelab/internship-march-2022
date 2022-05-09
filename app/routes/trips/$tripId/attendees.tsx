@@ -10,9 +10,12 @@ import { getAttendeesByTripId } from "~/models/attendee.server"
 import { getTripById } from "~/models/trip.server"
 import { TitleText, Avatar, RoundedRectangle } from "~/styles/styledComponents"
 import SvgCoins from "~/styles/SVGR/SvgCoins"
+import SvgCostSharing from "~/styles/SVGR/SvgCostSharing"
+import SvgDecider from "~/styles/SVGR/SvgDecider"
 import SvgDice from "~/styles/SVGR/SvgDice"
-import SvgSvgHorizontalLine from "~/styles/SVGR/SvgHorizontalLine"
+import SvgHorizontalLine from "~/styles/SVGR/SvgHorizontalLine"
 import SvgLuggage from "~/styles/SVGR/SvgLuggage"
+import SvgPackingList from "~/styles/SVGR/SvgPackingList"
 import SvgVerticalLine from "~/styles/SVGR/SvgVerticalLine"
 import { formatTrip, join } from "~/utils"
 
@@ -44,6 +47,8 @@ const AttendeesLayout: FC = () => {
   const rectangleStyles = [`flex`, `mx-2`]
   const avatarDivStyles = [`ml-2`, `flex`]
   const titleDivStyles = [`ml-4`, `flex-1`]
+  const linkStyles = [`flex space-x-4`, `mb-4`, `pl-4`]
+  const lineStyles = [`mb-2px`]
 
   return (
     <div>
@@ -76,8 +81,8 @@ const AttendeesLayout: FC = () => {
                 </TitleText>
               </div>
             </div>
-            <SvgSvgHorizontalLine />
-            <div className={join(`mt-3`, `flex-col`, `mt-2px`)}>
+            <SvgHorizontalLine />
+            <div className={join(`mt-3`, `flex-col`)}>
               <TitleText>
                 <div className={join(`ml-8`, `mb-3`)}>Travelers</div>
               </TitleText>
@@ -103,17 +108,27 @@ const AttendeesLayout: FC = () => {
         </div>
       </div>
       <RoundedRectangle className={join(...rectangleStyles, `flex-col`)}>
-        <Link to="packing-list/" className={join()}>
-          <SvgLuggage />
-          Packing List
+        <Link
+          to="/trips/${data.tripId}/packing-list/"
+          className={join(...linkStyles)}
+        >
+          <SvgLuggage /> <SvgPackingList />
         </Link>
-        <Link to="expenses/" className={join()}>
+        <SvgHorizontalLine />
+        <Link
+          to="/trips/${data.tripId}/expenses/"
+          className={join(...linkStyles, `mt-4`)}
+        >
           <SvgCoins />
-          Expenses
+          <SvgCostSharing />
         </Link>
-        <Link to="decider/" className={join()}>
+        <SvgHorizontalLine />
+        <Link
+          to="/trips/${data.tripId}/decider/"
+          className={join(...linkStyles, `mt-4`)}
+        >
           <SvgDice />
-          Decider
+          <SvgDecider />
         </Link>
       </RoundedRectangle>
     </div>
