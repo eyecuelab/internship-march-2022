@@ -42,6 +42,9 @@ export const SmClearBtn = styled.button`
   color: #ffffff;
   border-radius: 15px;
 `
+export const Hr = styled.hr`
+  border: 1px solid rgba(255, 255, 255, 0.19);
+`
 
 export const Header = styled.h1`
   font-family: "Playfair Display", serif;

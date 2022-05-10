@@ -81,7 +81,7 @@ export async function deleteAttendee(
   tripId: Attendee[`tripId`],
   userId: Attendee[`userId`],
 ) {
-  return prisma.attendee.delete({
+  prisma.attendee.delete({
     where: {
       tripId_userId: { tripId, userId },
     },

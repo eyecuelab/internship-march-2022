@@ -89,7 +89,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 const Index: FC = () => {
   const data = useLoaderData<LoaderData>()
-  console.log(data)
+
   const categoryStyles = [
     `flex`,
     `items-center`,
@@ -116,7 +116,7 @@ const Index: FC = () => {
     `sm:px-8`,
   ]
   return (
-    <div>
+    <div className={join(`pb-24`)}>
       <Header>Your Trips</Header>
       <h1 className={join(...categoryStyles)}>Trip Requests</h1>
       <ul>

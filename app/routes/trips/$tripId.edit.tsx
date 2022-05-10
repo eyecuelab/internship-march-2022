@@ -10,6 +10,7 @@ import {
   useSearchParams,
   Outlet,
   Form,
+  useFetcher,
 } from "remix"
 
 import type { Expense } from "@prisma/client"
@@ -17,7 +18,7 @@ import { Trip, Attendee, User } from "@prisma/client"
 import type { Params } from "react-router"
 import invariant from "tiny-invariant"
 
-import { getAttendeesByTripId } from "~/models/attendee.server"
+import { getAttendeesByTripId, deleteAttendee } from "~/models/attendee.server"
 import { getTripById, updateTripDates } from "~/models/trip.server"
 import {
   MainBtn,
@@ -35,9 +36,11 @@ import {
   SubHeader,
   SaveButton,
   SmClearBtn,
+  Hr,
 } from "~/styles/styledComponents"
 import SvgAddButton from "~/styles/SVGR/SvgAddButton"
 import SvgBackButton from "~/styles/SVGR/SvgBackButton"
+import SvgCloseCircleWhite from "~/styles/SVGR/SvgCloseCircleWhite"
 import { join } from "~/utils"
 
 const DEFAULT_DATE = new Date()
@@ -68,6 +71,8 @@ type ActionData =
   | undefined
 
 export const action: ActionFunction = async ({ request, params }) => {
+  //Date Editing
+  console.log(`action function`)
   const formData = await request.formData()
   const { tripId } = params
   const inputStartDate = formData.get(`startDate`)
@@ -85,16 +90,23 @@ export const action: ActionFunction = async ({ request, params }) => {
   // if (hasErrors) {
   //   return json<ActionData>(errors)
   // }
-
   invariant(tripId, `tripId must be defined`)
 
+  const userId = formData.get(`userId`)
+  if (userId) {
+    await deleteAttendee(tripId, userId.toString())
+    return redirect(`/trips/${tripId}/edit`)
+  }
   const trip = await updateTripDates(tripId, startDate, endDate)
-
   return redirect(`/trips/${tripId}/`)
 }
 
 const Edit: FC = () => {
   const data = useLoaderData<LoaderData>()
+  const { attendees } = data
+  const fetcher = useFetcher()
+  console.log(data.trip)
+
   const tripId = useParams()
   const currentStartDate = data.startDate ? data.startDate : data.defaultDate
   const currentEndDate = data.endDate ? data.endDate : data.defaultDate
@@ -110,7 +122,7 @@ const Edit: FC = () => {
   const negativeMargin = [`-mt-4`]
   const buttonFlex = [`flex`, `items-centered`, `gap-4`]
   return (
-    <div>
+    <div className={join(`pb-24`)}>
       <div className={join(...backButtonHeaderRow)}>
         <Link to={`/trips/${tripId}`}>
           <div className={join(`ml-8`)}>
@@ -138,11 +150,41 @@ const Edit: FC = () => {
             />
           </div>
         </div>
-        <p className={join(`py-6`, ...buttonFlex)}>
-          <SmClearBtn>Cancel</SmClearBtn>
-          <SaveButton type="submit">Save</SaveButton>
-        </p>
       </Form>
+      <RoundedRectangle>
+        <TitleText>
+          <span className={join(`ml-8`)}>Travelers</span>
+        </TitleText>
+        <ul>
+          {attendees.map((attendee) =>
+            attendee.userId !== attendee.trip.ownerId ? (
+              <Form method="post" key={attendee.userId}>
+                <div>
+                  <li>
+                    <div className={join(...avatarDivStyles)}>
+                      <Avatar src={attendee.user.avatarUrl || defaultAvatar} />
+                    </div>
+                    <div className={join(...titleDivStyles)}>
+                      <TitleText>{attendee.user.userName}</TitleText>
+                    </div>
+                    <div className={join(...costAmountStyles)}>
+                      <button type="submit">
+                        <SvgCloseCircleWhite />
+                      </button>
+                    </div>
+                    <Hr />
+                  </li>
+                </div>
+                <input hidden readOnly name="userId" value={attendee.userId} />
+              </Form>
+            ) : null,
+          )}
+        </ul>
+      </RoundedRectangle>
+      <p className={join(`py-6`, ...buttonFlex)}>
+        <SmClearBtn>Cancel</SmClearBtn>
+        <SaveButton type="submit">Save</SaveButton>
+      </p>
     </div>
   )
 }
