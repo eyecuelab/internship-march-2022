@@ -115,10 +115,11 @@ const Edit: FC = () => {
   const avatarDivStyles = [`ml-2`, `flex`]
   const titleDivStyles = [`ml-4`, `text-left`, `flex-1`]
   const backButtonHeaderRow = [`flex`, `mt-12`, `mb-16`]
-  const costAmountStyles = [`flex-1`, `text-right`, `mr-2`]
+  const costAmountStyles = [`flex-1`, `text-right`, `mr-2`, `py-`]
   const inputGrid = [`grid grid-flow-col grid-rows-2 gap-8`]
+  const travelersGrid = [`grid grid-flow-col grid-rows-2 gap-8`]
   const negativeMargin = [`-mt-6`]
-  const buttonFlex = [`flex`, `items-centered`, `gap-8`]
+  const flexItems = [`flex`, `items-centered`, `gap-8`]
 
   return (
     <div className={join(`mx-8`)}>
@@ -154,11 +155,12 @@ const Edit: FC = () => {
             <TitleText>
               <span className={join(`ml-8`)}>Travelers</span>
             </TitleText>
+
             <ul>
               {attendees.map((attendee) =>
                 attendee.userId !== attendee.trip.ownerId ? (
                   <Form method="post" key={attendee.userId}>
-                    <div>
+                    <div className={join(`py-6`)}>
                       <li>
                         <div className={join(...avatarDivStyles)}>
                           <Avatar
@@ -198,7 +200,7 @@ const Edit: FC = () => {
             </AddButtonText>
           </RoundedRectangle>
         </div>
-        <p className={join(`py-8`, ...buttonFlex)}>
+        <p className={join(`py-8`, ...flexItems)}>
           <SmClearBtn>Cancel</SmClearBtn>
           <SaveButton type="submit">Save</SaveButton>
         </p>
