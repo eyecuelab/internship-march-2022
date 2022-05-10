@@ -33,7 +33,6 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
   const trip = formatTrip(tempTrip)
   invariant(attendees, `need attendeesId`)
   return { trip, attendees }
-  console.log(tripId)
 }
 
 // tripId, attendees,start and end dates, start and end location, stops[]
@@ -58,10 +57,10 @@ const AttendeesLayout: FC = () => {
             <div className={join(`flex`, `content-start`)}>
               <div className={join(`pr-10`, `ml-8`, `mb-3`)}>
                 <TitleText className={join(`mb-3`)}>Starts</TitleText>
-                <TitleText>
+                <TitleText fontWeight={400} fontSize={`14px`}>
                   {data.trip.startDate ? data.trip.startDate : `00/00/00`}
                 </TitleText>
-                <TitleText>
+                <TitleText fontWeight={400} fontSize={`14px`}>
                   {data.trip.stops[0]
                     ? data.trip.stops[-1].apiResult.name
                     : `TBD`}
@@ -71,10 +70,10 @@ const AttendeesLayout: FC = () => {
 
               <div className={join(`pl-10`, `ml-6`)}>
                 <TitleText className={join(`mb-3`)}>Ends</TitleText>
-                <TitleText>
+                <TitleText fontWeight={400} fontSize={`14px`}>
                   {data.trip.endDate ? data.trip.endDate : `00/00/00`}
                 </TitleText>
-                <TitleText>
+                <TitleText fontWeight={400} fontSize={`14px`}>
                   {data.trip.stops[-1]
                     ? data.trip.stops[-1].apiResult.name
                     : `TBD`}
@@ -97,7 +96,9 @@ const AttendeesLayout: FC = () => {
                         <Avatar src={attendee.user.avatarUrl || defaultAvatar} />
                       </span>
                       <span className={join(...titleDivStyles)}>
-                        <TitleText>{attendee.user.userName}</TitleText>
+                        <TitleText fontWeight={500} fontSize={`14px`}>
+                          {attendee.user.userName}
+                        </TitleText>
                       </span>
                     </li>
                   ))}
@@ -109,14 +110,14 @@ const AttendeesLayout: FC = () => {
       </div>
       <RoundedRectangle className={join(...rectangleStyles, `flex-col`)}>
         <Link
-          to="/trips/${data.tripId}/packing-list/"
+          to={`/trips/${data.trip.id}/packing-list/`}
           className={join(...linkStyles)}
         >
           <SvgLuggage /> <SvgPackingList />
         </Link>
         <SvgHorizontalLine />
         <Link
-          to="/trips/${data.tripId}/expenses/"
+          to={`/trips/${data.trip.id}/expenses/`}
           className={join(...linkStyles, `mt-4`)}
         >
           <SvgCoins />
@@ -124,7 +125,7 @@ const AttendeesLayout: FC = () => {
         </Link>
         <SvgHorizontalLine />
         <Link
-          to="/trips/${data.tripId}/decider/"
+          to={`/trips/${data.trip.id}/decider/`}
           className={join(...linkStyles, `mt-4`)}
         >
           <SvgDice />

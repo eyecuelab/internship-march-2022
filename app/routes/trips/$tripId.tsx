@@ -2,39 +2,53 @@ import { link } from "fs"
 
 import type { FC } from "react"
 
-import { Link, Outlet } from "remix"
+import type { LoaderFunction } from "remix"
+import { Link, Outlet, NavLink, json, useLoaderData } from "remix"
 
-import { join } from "~/utils"
+import type { Params } from "react-router"
+import invariant from "tiny-invariant"
 
-const TripOverview: FC = () => {
-  const linkStyles = [
-    `flex`,
-    `items-center`,
-    `justify-center`,
-    `rounded-md`,
-    `border`,
-    `border-transparent`,
-    `bg-white`,
-    `px-4`,
-    `py-3`,
-    `text-base`,
-    `font-medium`,
-    `text-yellow-700`,
-    `shadow-sm`,
-    `hover:bg-yellow-50`,
-    `sm:px-8`,
-  ]
+import { getTripById } from "~/models/trip.server"
+import { formatTrip, join } from "~/utils"
+
+import AttendeesLayout from "./$tripId/attendees"
+import StopsLayout from "./$tripId/stops"
+
+type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
+
+export const loader: LoaderFunction = async ({ params }) => {
+  return json(await getLoaderData(params))
+}
+
+const getLoaderData = async (params: Params<string>) => {
+  const { tripId } = params
+  invariant(tripId, `must have tripId`)
+  const trip = await getTripById(tripId)
+  invariant(trip, `trip must exist`)
+  return trip
+  console.log(trip)
+}
+
+const TripDetails: FC = () => {
+  const trip = useLoaderData<LoaderData>()
+
+  console.log(trip)
   return (
     <div>
-      <Link to="/home" className={join(...linkStyles)}>
-        X
+      <Link to="/home" className={join()}>
+        X asdfasdfs
       </Link>
-      <h1 className={join(`flex`, `items-center`, `justify-center`)}>
-        Trip name goes here
-      </h1>
-      <Outlet />
+      <div className={join(`mx-8`)}>
+        <h1 className={join(`flex`, `items-center`, `justify-center`)}>
+          Trip name goes here
+        </h1>
+        <NavLink to={`/trips/${trip.id}`}>{/* <AttendeesLayout /> */}</NavLink>
+      </div>
     </div>
   )
 }
+//to: `/home`,
 
-export default TripOverview
+// index.tsx --> Overview / Stops
+
+export default TripDetails

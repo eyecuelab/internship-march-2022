@@ -192,33 +192,36 @@ export const Modal = styled.div`
 `
 export const CostAmount = styled.h3`
   font-family: Lato;
-  font-style: SemiBold;
+  font-weight: 600;
   font-size: 18px;
   color: #ffffff;
   align: right;
 `
-export const TitleText = styled.h3`
+export const TitleText = styled.h3<{
+  fontWeight?: 400 | 500 | 600
+  fontSize?: `12px` | `14px` | `16px`
+}>`
   font-family: Lato;
-  font-style: SemiBold;
-  font-size: 16px;
+  font-weight: ${(props) => (props.fontWeight ? props.fontWeight : 600)};
+  font-size: ${(props) => (props.fontSize ? props.fontSize : `16px`)};
   color: #ffffff;
 `
 export const TitleTextDark = styled.h3`
   font-family: Lato;
-  font-style: SemiBold;
+  font-weight: 600;
   font-size: 16px;
   color: #2a3840;
 `
 export const CostDescription = styled.h4`
   font-family: Lato;
-  font-style: SemiBold;
+  font-weight: 600;
   font-size: 16px;
   color: #ffffff;
 `
 export const AddButtonText = styled.h4`
-Font family: Lato;
-Font style: Bold;
-Font size: 14px;
+font-family: Lato;
+font-weight: 900;
+Font-size: 14px;
 Line height: 17px;
 Line height: 100%;
 color: #ffffff;
