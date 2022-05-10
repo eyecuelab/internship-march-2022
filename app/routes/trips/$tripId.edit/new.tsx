@@ -28,6 +28,7 @@ import {
   ModalBackdrop,
   Modal,
   AddButtonText,
+  InputFieldMid,
 } from "~/styles/styledComponents"
 import SvgSwipeButton from "~/styles/SVGR/SvgSwipeButton"
 import { join, validateEmail } from "~/utils"
@@ -97,43 +98,48 @@ const NewAttendee: FC = () => {
     )
   }
 
-  const centered = [`flex`, `items-center`, `justify-center`, `flex-col`]
+  const centered = [
+    `flex`,
+    `items-center`,
+    `justify-center`,
+    `flex-col`,
+    `-ml-8`,
+  ]
 
   return (
     <div>
       <ModalBackdrop onClick={() => navigate(`/trips/${params.tripId}/edit`)} />
-      <Modal className={join(...centered)}>
-        <div
-          className={join(`pt-2`)}
-          onClick={() => navigate(`/trips/${params.tripId}/edit`)}
-        >
-          <SvgSwipeButton />
-        </div>
+      <Modal>
+        <div className={join(...centered)}>
+          <div
+            className={join(`pt-2`)}
+            onClick={() => navigate(`/trips/${params.tripId}/edit`)}
+          >
+            <SvgSwipeButton />
+          </div>
 
-        <AddButtonText className={join(`mr-48`, `p-8`)}>
-          Add Traveler
-        </AddButtonText>
-        <Form method="post">
-          <div className={join(`text-center`, `my-5`)}>
+          <AddButtonText className={join(`mr-48`, `p-8`)}>
+            Add Traveler
+          </AddButtonText>
+          <Form method="post">
             <input type="hidden" name="tripId" value={data.trip.id} />
-            <InputLabel>
-              User Email:
-              <InputField
-                type="text"
-                name="email"
-                className={join(`mx-auto`, `block`, `mt-xl`)}
-                //margin-top: 10em
-              />
-            </InputLabel>
-            <br />
+            <p>
+              <InputLabel>
+                User Email
+                <p>
+                  <InputFieldMid type="text" name="email" />
+                </p>
+              </InputLabel>
+            </p>
 
             {actionData?.tripId && outputError(actionData.tripId)}
             {actionData?.user && outputError(actionData.user)}
             {actionData?.email && outputError(actionData.email)}
-
-            <MainBtn type="submit">Add Attendee</MainBtn>
-          </div>
-        </Form>
+            <p className={join(`mt-8`, `pb-16`)}>
+              <MainBtn type="submit">Add Attendee</MainBtn>
+            </p>
+          </Form>
+        </div>
       </Modal>
     </div>
   )

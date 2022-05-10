@@ -186,7 +186,7 @@ const Edit: FC = () => {
                 ) : null,
               )}
             </ul>
-            <Outlet />
+
             <AddButtonText>
               <Link to={`new`}>
                 <span className={join(`flex`, `m-8`)}>
@@ -203,6 +203,9 @@ const Edit: FC = () => {
           <SaveButton type="submit">Save</SaveButton>
         </p>
       </Form>
+      <div className={join(`-ml-8`)}>
+        <Outlet />
+      </div>
     </div>
   )
 }
