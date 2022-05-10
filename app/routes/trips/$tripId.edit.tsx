@@ -94,10 +94,11 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const userId = formData.get(`userId`)
   if (userId) {
+    console.log(`deleting`)
     await deleteAttendee(tripId, userId.toString())
     return redirect(`/trips/${tripId}/edit`)
   }
-  const trip = await updateTripDates(tripId, startDate, endDate)
+  await updateTripDates(tripId, startDate, endDate)
   return redirect(`/trips/${tripId}/`)
 }
 
@@ -107,7 +108,7 @@ const Edit: FC = () => {
   const fetcher = useFetcher()
   console.log(data.trip)
 
-  const tripId = useParams()
+  const params = useParams()
   const currentStartDate = data.startDate ? data.startDate : data.defaultDate
   const currentEndDate = data.endDate ? data.endDate : data.defaultDate
 
@@ -124,7 +125,7 @@ const Edit: FC = () => {
   return (
     <div className={join(`pb-24`)}>
       <div className={join(...backButtonHeaderRow)}>
-        <Link to={`/trips/${tripId}`}>
+        <Link to={`/trips/${params.tripId}`}>
           <div className={join(`ml-8`)}>
             <SvgBackButton />
           </div>
