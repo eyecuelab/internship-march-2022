@@ -24,13 +24,13 @@ const NavButton: FC<NavButtonProps> = ({ to, Icon, text }) => {
     `rounded-lg`,
   ]
   const centered = [`flex`, `items-center`, `justify-center`]
-
+  const sizing = [`py-3`, `px-24`]
   return (
     <NavButtonWrapper className={join(...buttonStyles)}>
       <NavLink
         to={to}
         className={({ isActive }) =>
-          isActive ? join(...activeStyle) : undefined
+          isActive ? join(...activeStyle) : join(...sizing)
         }
       >
         {({ isActive }) =>
