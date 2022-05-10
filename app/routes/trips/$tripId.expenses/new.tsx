@@ -24,11 +24,11 @@ import {
   MainBtn,
   InputField,
   InputLabel,
-  ErrorDiv,
   Header,
   SubHeader,
   ModalBackdrop,
   Modal,
+  ErrorDiv,
   AddButtonText,
   InputFieldMid,
 } from "~/styles/styledComponents"

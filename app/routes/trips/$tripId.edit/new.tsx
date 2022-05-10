@@ -9,6 +9,7 @@ import {
   useActionData,
   useParams,
   useLoaderData,
+  useNavigate,
 } from "remix"
 
 import { useCatch } from "@remix-run/react"
@@ -18,15 +19,18 @@ import { createAttendee } from "~/models/attendee.server"
 import type { Trip } from "~/models/trip.server"
 import { getTripById } from "~/models/trip.server"
 import { getUserByEmail } from "~/models/user.server"
-import { join, validateEmail } from "~/utils"
-
 import {
   MainBtn,
   InputField,
   InputLabel,
   Header,
   ErrorDiv,
-} from "../../../../styles/styledComponents"
+  ModalBackdrop,
+  Modal,
+  AddButtonText,
+} from "~/styles/styledComponents"
+import SvgSwipeButton from "~/styles/SVGR/SvgSwipeButton"
+import { join, validateEmail } from "~/utils"
 
 type LoaderData = {
   trip: Trip
@@ -75,12 +79,14 @@ export const action: ActionFunction = async ({ request }) => {
   invariant(typeof userId === `string`, `userId must be a string`)
 
   await createAttendee({ tripId, userId })
-  return redirect(`/trips`)
+  return redirect(`/trips/${tripId}/edit`)
 }
 
 const NewAttendee: FC = () => {
+  const params = useParams()
   const data = useLoaderData<LoaderData>()
   const actionData = useActionData()
+  const navigate = useNavigate()
 
   const outputError = (errorMessage: string) => {
     return (
@@ -91,30 +97,44 @@ const NewAttendee: FC = () => {
     )
   }
 
+  const centered = [`flex`, `items-center`, `justify-center`, `flex-col`]
+
   return (
     <div>
-      <Header>Add New Attendee</Header>
-      <Form method="post">
-        <div className={join(`text-center`, `my-5`)}>
-          <input type="hidden" name="tripId" value={data.trip.id} />
-          <InputLabel>
-            User Email:
-            <InputField
-              type="text"
-              name="email"
-              className={join(`mx-auto`, `block`, `mt-xl`)}
-              //margin-top: 10em
-            />
-          </InputLabel>
-          <br />
-
-          {actionData?.tripId && outputError(actionData.tripId)}
-          {actionData?.user && outputError(actionData.user)}
-          {actionData?.email && outputError(actionData.email)}
-
-          <MainBtn type="submit">Add Attendee</MainBtn>
+      <ModalBackdrop onClick={() => navigate(`/trips/${params.tripId}/edit`)} />
+      <Modal className={join(...centered)}>
+        <div
+          className={join(`pt-2`)}
+          onClick={() => navigate(`/trips/${params.tripId}/edit`)}
+        >
+          <SvgSwipeButton />
         </div>
-      </Form>
+
+        <AddButtonText className={join(`mr-48`, `p-8`)}>
+          Add Traveler
+        </AddButtonText>
+        <Form method="post">
+          <div className={join(`text-center`, `my-5`)}>
+            <input type="hidden" name="tripId" value={data.trip.id} />
+            <InputLabel>
+              User Email:
+              <InputField
+                type="text"
+                name="email"
+                className={join(`mx-auto`, `block`, `mt-xl`)}
+                //margin-top: 10em
+              />
+            </InputLabel>
+            <br />
+
+            {actionData?.tripId && outputError(actionData.tripId)}
+            {actionData?.user && outputError(actionData.user)}
+            {actionData?.email && outputError(actionData.email)}
+
+            <MainBtn type="submit">Add Attendee</MainBtn>
+          </div>
+        </Form>
+      </Modal>
     </div>
   )
 }

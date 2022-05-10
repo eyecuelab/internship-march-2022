@@ -55,3 +55,9 @@ export async function updateTripDates(
     data: { startDate, endDate },
   })
 }
+
+export async function deleteTrip(id: Trip[`id`]) {
+  return prisma.trip.delete({
+    where: { id },
+  })
+}
