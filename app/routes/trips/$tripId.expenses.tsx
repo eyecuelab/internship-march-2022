@@ -71,6 +71,8 @@ const ExpenseLayout: FC = () => {
   const titleDivStyles = [`ml-4`, `text-left`, `flex-1`]
   const backButtonHeaderRow = [`flex`, `mt-12`, `mb-16`]
   const costAmountStyles = [`flex-1`, `text-right`, `mr-2`]
+  const addButtonText = [`font-bold`, `text-base`, `text-white`]
+  const labelText = [`font-bold`, `text-base`, `text-[#e4eddf]`]
 
   return (
     <div>
@@ -82,10 +84,7 @@ const ExpenseLayout: FC = () => {
         </Link>
         <SubHeader>Cost Sharing</SubHeader>
       </div>
-
-      <TitleText>
-        <span className={join(`ml-8`)}>Expenses</span>
-      </TitleText>
+      <span className={join(...labelText)}>Expenses</span>
       {data.map((attendee, index) => (
         <div key={attendee.tripId + index}>
           <ul className={join(`mx-8`)}>
@@ -111,9 +110,8 @@ const ExpenseLayout: FC = () => {
         </div>
       ))}
       <br></br>
-      <TitleText>
-        <span className={join(`ml-8`)}>Total Expenses</span>
-      </TitleText>
+
+      <span className={join(`ml-8`, ...labelText)}>Total Expenses</span>
       {data.map((attendee, index) => (
         <div key={attendee.userId}>
           {userTotals[index] ? (
@@ -123,7 +121,7 @@ const ExpenseLayout: FC = () => {
                   <div className={join(...avatarDivStyles)}>
                     <Avatar src={attendee.user.avatarUrl || defaultAvatar} />
                   </div>
-                  <div className={join(...titleDivStyles)}>
+                  <div className={join(...titleDivStyles, ...labelText)}>
                     <TitleText>{attendee.user.userName}</TitleText>
                   </div>
                   <div className={join(...costAmountStyles)}>
@@ -136,13 +134,14 @@ const ExpenseLayout: FC = () => {
         </div>
       ))}
       <Outlet />
-      <AddButtonText>
-        <Link to={`new`}>
-          <span className={join(`flex`, `m-8`)}>
-            <SvgAddButton /> <span className={join(`ml-2`)}>Add Expense</span>
-          </span>
-        </Link>
-      </AddButtonText>
+
+      <Link to={`new`}>
+        <span className={join(`flex`, `m-8`)}>
+          <SvgAddButton />
+          {` `}
+          <span className={join(`ml-2`, ...addButtonText)}>Add Expense</span>
+        </span>
+      </Link>
     </div>
   )
 }

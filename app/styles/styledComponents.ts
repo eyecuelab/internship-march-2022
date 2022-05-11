@@ -103,7 +103,7 @@ export const InputLabel = styled.label`
 `
 export const InputField = styled.input`
 width: 100%;
-weight: semi-bold;
+weight: 600;
 height: 55px;
 color: black;
 padding .5em;
@@ -117,7 +117,7 @@ padding .5em;
 border-radius: 15px;`
 
 export const InputFieldMid = styled.input`
-width: 276px;
+width: 100%
 weight: semi-bold;
 height: 55px;
 color: black;
@@ -216,7 +216,7 @@ export const CostAmount = styled.h3`
 `
 export const TitleText = styled.h3`
   font-family: Lato;
-  font-style: SemiBold;
+  font-weight: 600;
   font-size: 16px;
   color: #ffffff;
 `
@@ -228,13 +228,13 @@ export const TitleTextDark = styled.h3`
 `
 export const CostDescription = styled.h4`
   font-family: Lato;
-  font-style: SemiBold;
+  font-weight; 600;
   font-size: 16px;
   color: #ffffff;
 `
 export const AddButtonText = styled.h4`
-Font family: Lato;
-Font style: Bold;
+font-family: Lato;
+font-weight: 700;
 Font size: 14px;
 Line height: 17px;
 Line height: 100%;

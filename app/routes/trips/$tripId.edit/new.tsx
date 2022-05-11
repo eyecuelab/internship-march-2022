@@ -135,7 +135,7 @@ const NewAttendee: FC = () => {
             {actionData?.tripId && outputError(actionData.tripId)}
             {actionData?.user && outputError(actionData.user)}
             {actionData?.email && outputError(actionData.email)}
-            <p className={join(`mt-8`, `pb-16`)}>
+            <p className={join(`mt-8`, `pt-6`, `pb-24`)}>
               <MainBtn type="submit">Add Attendee</MainBtn>
             </p>
           </Form>

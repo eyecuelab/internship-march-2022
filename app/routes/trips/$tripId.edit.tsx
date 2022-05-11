@@ -111,13 +111,17 @@ const Edit: FC = () => {
   const currentStartDate = data.startDate ? data.startDate : data.defaultDate
   const currentEndDate = data.endDate ? data.endDate : data.defaultDate
 
-  const defaultAvatar = `public/img/default-avatar.jpg`
-  const avatarDivStyles = [`ml-2`, `flex`]
-  const titleDivStyles = [`ml-4`, `text-left`, `flex-1`]
   const backButtonHeaderRow = [`flex`, `mt-12`, `mb-16`]
-  const costAmountStyles = [`flex-1`, `text-right`, `mr-2`, `py-`]
+  const defaultAvatar = `public/img/default-avatar.jpg`
+  const boldText = [`font-bold`, `text-base`]
+  const nameText = [`text-base`]
+
+  const mainFlex = [`flex`]
+  const avatarDiv = [`flex`, `flex-1`, `inline-block`, `pb-8`]
+  const nameDiv = [`flex-1`, `-ml-12`, `text-left`]
+  const deleteDiv = [`flex-1`, `text-right`, `mr-8`]
+
   const inputGrid = [`grid grid-flow-col grid-rows-2 gap-8`]
-  const travelersGrid = [`grid grid-flow-col grid-rows-2 gap-8`]
   const negativeMargin = [`-mt-6`]
   const flexItems = [`flex`, `items-centered`, `gap-8`]
 
@@ -152,9 +156,7 @@ const Edit: FC = () => {
         </div>
         <div className={join(`pt-8`)}>
           <RoundedRectangle>
-            <TitleText>
-              <span className={join(`ml-8`)}>Travelers</span>
-            </TitleText>
+            <span className={join(`ml-8`, ...boldText)}>Travelers</span>
 
             <ul>
               {attendees.map((attendee) =>
@@ -162,18 +164,23 @@ const Edit: FC = () => {
                   <Form method="post" key={attendee.userId}>
                     <div className={join(`py-6`)}>
                       <li>
-                        <div className={join(...avatarDivStyles)}>
-                          <Avatar
-                            src={attendee.user.avatarUrl || defaultAvatar}
-                          />
-                        </div>
-                        <div className={join(...titleDivStyles)}>
-                          <TitleText>{attendee.user.userName}</TitleText>
-                        </div>
-                        <div className={join(...costAmountStyles)}>
-                          <button type="submit">
-                            <SvgCloseCircleWhite />
-                          </button>
+                        <div className={join(...mainFlex)}>
+                          <div className={join(...avatarDiv)}>
+                            <Avatar
+                              src={attendee.user.avatarUrl || defaultAvatar}
+                            />
+                            <span className={join(`ml-4`, ...nameText)}>
+                              {attendee.user.userName}
+                            </span>
+                          </div>
+                          {/* <div className={join(...nameDiv)}>
+                            <TitleText>{attendee.user.userName}</TitleText>
+                          </div> */}
+                          <div className={join(...deleteDiv)}>
+                            <button type="submit" className={join(`pb-8`)}>
+                              <SvgCloseCircleWhite />
+                            </button>
+                          </div>
                         </div>
                         <Hr />
                       </li>
@@ -189,15 +196,13 @@ const Edit: FC = () => {
               )}
             </ul>
 
-            <AddButtonText>
-              <Link to={`new`}>
-                <span className={join(`flex`, `m-8`)}>
-                  <SvgAddButton />
-                  {` `}
-                  <span className={join(`ml-2`)}>Add Traveler</span>
-                </span>
-              </Link>
-            </AddButtonText>
+            <Link to={`new`}>
+              <span className={join(`flex`, `m-8`)}>
+                <SvgAddButton />
+                {` `}
+                <span className={join(...boldText, `ml-2`)}>Add Traveler</span>
+              </span>
+            </Link>
           </RoundedRectangle>
         </div>
         <p className={join(`py-8`, ...flexItems)}>
