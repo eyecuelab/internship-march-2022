@@ -354,3 +354,95 @@ export const ProTripImage = styled.div`
   align-content: center;
   place-content: center;
 `
+
+export const ProfileFormInputFrame = styled.div`
+  width: 276px;
+  weight: semi-bold;
+  height: 55px;
+  color: black;
+  padding-left: 1.5em;
+  border-radius: 15px;
+  background-color: #ffffff;
+  align-content: center;
+  margin-bottom: 1em;
+  border: solid 1.5px #84a98c;
+`
+
+export const ProfileFormPlaceholder = styled.text`
+  font-size: 10px;
+  font-weight: 500;
+  color: #c4c4c4;
+`
+export const ProfileFormInputText = styled.input`
+  font-size: 11px;
+  height: 20px;
+  width: 80%;
+  font-weight: 500;
+  color: #000000;
+`
+export const ProfileFormCancelBtn = styled.button`
+  box-sizing: border-box;
+  background: rgba(202, 210, 197, 0);
+  font-family: "Lato", sans-serif;
+  color: #ffffff;
+  border: 1px solid #cad2c5;
+  height: 56px;
+  border-radius: 15px;
+  text-align: center;
+  margin-right: 5px;
+  width: 135px;
+`
+export const ProfileFormSubmitBtn = styled.button`
+  box-sizing: border-box;
+  background: #cad2c5;
+  font-family: "Lato", sans-serif;
+  color: #2f3e46;
+  height: 56px;
+  border-radius: 15px;
+  text-align: center;
+  margin-left: 5px;
+  width: 135px;
+`
+export const ProfileAvatarMain = styled.div`
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background-color: #52796f;
+  border: 2px solid #ffffff;
+`
+export const ProfileAvatarEdit = styled.div`
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #52796f;
+  border: 2px solid #ffffff;
+`
+export const ProfileAvatarImg = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+`
+export const ProfileAvatarImgEdit = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+`
+export const ProRoundedRectangle = styled.div`
+  margin: auto;
+  margin-top: 1em;
+  margin-bottom: 3em;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  font-size: 0.5em;
+  width: 276px;
+  height: 75px;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  align-content: center;
+  display: flex;
+`
+export const ProAvatarInput = styled.input`
+  background: rgba(255, 255, 255, 0);
+  width: 100%;
+  height: 15px;
+`

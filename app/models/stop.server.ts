@@ -6,31 +6,44 @@ import { prisma } from "../db.server"
 
 export type { Stop }
 
+export async function getStopById(id: Stop[`id`]) {
+  return prisma.stop.findFirst({ where: { id } })
+}
 export async function getStopsByTripId(tripId: Trip[`id`]) {
   return prisma.stop.findMany({ where: { tripId } })
 }
 export async function createStop(
   stop: Pick<Stop, `apiResult` | `index` | `tripId`>,
 ) {
-  await validateIndex(stop)
   return prisma.stop.create({ data: stop })
 }
 
-const validateIndex = async (
-  stop: Pick<Stop, `apiResult` | `index` | `tripId`>,
-) => {
-  const tripStops = await getStopsByTripId(stop.tripId)
-  return await tripStops.map(async (s) => {
-    if (s.index >= stop.index) {
-      s.index++
-      await updateStop(s)
-    }
+const validateIndex = async (stop: Pick<Stop, `id` | `index` | `tripId`>) => {
+  const stopDB = await getStopById(stop.id)
+  invariant(stopDB, `not a valid stop`)
+  const stopToUpdate = await prisma.stop.findFirst({
+    where: {
+      index: {
+        equals: stop.index,
+      },
+      id: {
+        not: stopDB.id,
+      },
+    },
   })
+  if (stopToUpdate) {
+    stopDB.index > stop.index ? stopToUpdate.index++ : stopToUpdate.index--
+    await updateStop(stopToUpdate, true)
+  }
 }
 
 export async function updateStop(
   stop: Pick<Stop, `apiResult` | `id` | `index` | `tripId`>,
+  isLoop = false,
 ) {
+  if (!isLoop) {
+    await validateIndex(stop)
+  }
   return prisma.stop.update({
     where: {
       id: stop.id,

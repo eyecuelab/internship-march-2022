@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import type { FC } from "react"
+import { useState, useEffect } from "react"
 
 import type { ActionFunction, LoaderFunction } from "remix"
 import {
@@ -16,14 +17,19 @@ import invariant from "tiny-invariant"
 import { getUserById, updateUserById } from "~/models/user.server"
 import { requireUserId } from "~/session.server"
 import {
-  MainBtn,
-  InputLabel,
-  ModalBackdrop,
-  Modal,
-  AddButtonText,
-  InputFieldMid,
+  ProfileFormInputFrame,
+  ProfileFormPlaceholder,
+  ProfileFormInputText,
+  ProfileFormCancelBtn,
+  ProfileFormSubmitBtn,
+  ProRoundedRectangle,
+  ProfileAvatarEdit,
+  ProfileAvatarImgEdit,
+  ProAvatarInput,
 } from "~/styles/styledComponents"
-import SvgSwipeButton from "~/styles/SVGR/SvgSwipeButton"
+import SvgBackButton from "~/styles/SVGR/SvgBackButton"
+import SvgDefaultAvatar from "~/styles/SVGR/SvgDefaultAvatar"
+import SvgPencil from "~/styles/SVGR/SvgPencil"
 import { join } from "~/utils"
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
@@ -53,100 +59,202 @@ export const action: ActionFunction = async ({ request }) => {
   const user = await getUserById(userId)
   const existingEmail = user?.email
   const existingUserName = user?.userName
+  const existingAvatar = user?.avatarUrl
   const formData = await request.formData()
   const formUserId = formData.get(`userId`)
 
   const formEmail = formData.get(`email`)
 
   const formUserName = formData.get(`userName`)
+  const formAvatarUrl = formData.get(`avatarURL`)
   const finalEmail = formEmail === `` ? existingEmail : formEmail
   const finalUserName = formUserName === `` ? existingUserName : formUserName
+  const finalAvatar = formAvatarUrl === `` ? existingAvatar : formAvatarUrl
+
 
 
   invariant(typeof formUserId === `string`, `userId must be a string`)
   invariant(typeof finalEmail === `string`, `email must be a string`)
   invariant(typeof finalUserName === `string`, `username must be a string`)
+  invariant(typeof finalAvatar === `string`, `url must be a string`)
+  // const errors: ActionData = {
+  //   userId: formUserId ? null : `userId is required`,
+  //   email: formEmail ? null : `email is required`,
+  //   userName: formUserName ? null : `username is required`,
+  // }
+  // const hasErrors = Object.values(errors).some(
+  //   (errorMessage) => errorMessage
+  // )
+  // if (hasErrors) {
+  //   return json<ActionData>(errors)
+  // }
 
 
-  await updateUserById(formUserId, finalEmail, finalUserName)
+  await updateUserById(formUserId, finalEmail, finalUserName, finalAvatar)
 
   return redirect(`/profile`)
 }
 
-const EditProfile: FC = () => {
+const Edit: FC = () => {
   const errors = useActionData()
   const navigate = useNavigate()
   const data = useLoaderData()
   const user = data?.user
   const userId = user.id
+  const avatar = user?.avatarUrl ? (
+    user?.avatarUrl
+  ) : (
+    <SvgDefaultAvatar />)
+  const avatarShort = user?.avatarUrl ? (
+    (avatar).slice(0, 28)
+  ) : (
+    `Avatar not set`)
 
 
-  const centered = [`flex`, `items-center`, `justify-center`, `flex-col`]
+  const [avatarInput, setAvatarInput] = useState(false)
+  const [avatarValue, setAvatarValue] = useState(true)
+
+  const showAvatarInput = () => {
+    setAvatarInput(true)
+    setAvatarValue(false)
+  }
+  useEffect(() => {
+    console.log(`useEffectRan`)
+    console.log(avatarInput)
+  }, [avatarInput])
+
+
+
+
+  const centered = [`flex`, `items-center`, `place-content-center`, `flex-col`]
+
+
   return (
-    <div>
-      <ModalBackdrop
-        onClick={() => navigate(`/profile`)}
-      />
+    <div className={join(...centered)}>
 
-      <Modal className={join(...centered)}>
-
-        <div
-          className={join(`pt-2`)}
+      <div className={join(`grid`, `grid-cols-3`, `justify-center`, `align-middle`, `w-full`, `pb-20`, `mt-2`, `content-center`)}>
+        <button
+          className={join(`pt-2`, `flex`, `justify-end`, `hover:pointer-events-auto`)}
           onClick={() => navigate(`/profile`)}
         >
-          <SvgSwipeButton />
+          <SvgBackButton />
+        </button>
+        <div className={join(`px-50`, `flex`, `justify-center`, `text-xs`, `items-center`, `text-[#E4EDDF]`)}>
+          Settings
+        </div>
+      </div>
+
+
+
+      <Form method="post">
+        <input type="hidden" name="userId" value={userId} />
+        <div>
+
+          <div className={join(`flex`, `justify-center`, `flex-col`, `align-middle`, `ml-4`)}>
+            <ProRoundedRectangle className={join(`items-center`, `grid grid-cols-4`, `justify-between`)}>
+
+              <ProfileAvatarEdit
+                className={join(`flex`, `items-center`, `place-content-center`, `col-start-1`, `col-span-1`, `w-fit`)}
+              >
+                {typeof avatar === `string` ? (
+                  <ProfileAvatarImgEdit src={avatar} />
+                ) : (
+                  avatar
+                )}
+              </ProfileAvatarEdit>
+
+              <div className={join(`flex-col`, `col-start-2`, `col-span-2`, `w-3/5`, `pl-2`, `pr-2`, `mr-3`)}>
+                <div className={join(`mt-30`)}>
+                  <ProfileFormPlaceholder>Photo URL</ProfileFormPlaceholder>
+                </div>
+
+                {
+                  avatarValue && (
+
+                    <div className={join(`mt-30`)}>
+                      <p className={join(`text-white/100`, `text-xs`)}>
+                        {avatarShort}
+                      </p>
+                    </div>
+                  )
+                }
+
+
+                {avatarInput && (
+                  <div className={join(`-mt-1`, `flex`)}>
+                    <ProAvatarInput type="string" name="avatarURL" className={join(`mt-2`, `pr-2`)} />
+                  </div>
+                )}
+
+              </div>
+
+
+              <div onClick={showAvatarInput} className={join(`hover:cursor-pointer`)}>
+                <SvgPencil />
+              </div>
+
+
+            </ProRoundedRectangle>
+            <ProfileFormInputFrame>
+
+              <div className={join(`mt-30`)}>
+
+                <ProfileFormPlaceholder>Email</ProfileFormPlaceholder>
+              </div>
+
+              <div className={join(`-mt-1`)}>
+
+                <ProfileFormInputText type="email" name="email" className={join(`items-center`)} />
+              </div>
+            </ProfileFormInputFrame>
+
+            {errors?.email ? (
+              <em className="text-red-600">{errors.email}</em>
+            ) : null}
+            <ProfileFormInputFrame>
+
+              <div className={join(`mt-30`)}>
+
+                <ProfileFormPlaceholder>Username</ProfileFormPlaceholder>
+              </div>
+
+              <div className={join(`-mt-1`)}>
+
+                <ProfileFormInputText type="userName" name="userName" className={join(`items-center`)} />
+              </div>
+
+            </ProfileFormInputFrame>
+            {errors?.userName ? (
+              <em className="text-red-600">{errors.userName}</em>
+            ) : null}
+
+
+
+          </div>
+
+
         </div>
 
 
-        <AddButtonText className={join(`mr-48`, `p-8`)}>
-          Update Profile
-        </AddButtonText>
+        <div className={join(`flex`, `flex-row`, `w-276`, `absolute`, `left-0`, `bottom-3`, `h-16`, `w-full`, `place-content-center`)}>
+
+          <ProfileFormCancelBtn className={join(`flex`, `items-center`, `text-xs`, `place-content-center`)}
+            onClick={() => navigate(`/profile`)}>
+            Cancel
+          </ProfileFormCancelBtn>
+
+
+          <ProfileFormSubmitBtn className={join(`flex`, `items-center`, `text-xs`, `place-content-center`)} type="submit">
+            Update Profile
+          </ProfileFormSubmitBtn>
+        </div>
+      </Form >
 
 
 
 
-        <Form method="post">
-          <input type="hidden" name="userId" value={userId} />
-          <div>
-
-            <InputLabel className={join(`mr-56`)}>
-              Email Address{` `}
-              {errors?.email ? (
-                <em className="text-red-600">{errors.email}</em>
-              ) : null}
-              <p>
-
-                <InputFieldMid type="text" name="email" />
-              </p>
-            </InputLabel>
-          </div>
-          <div>
-            <InputLabel>
-              Username{` `}
-              {errors?.userName ? (
-                <em className="text-red-600">{errors.userName}</em>
-              ) : null}
-              <p>
-
-                <InputFieldMid type="text" name="userName" />
-              </p>
-            </InputLabel>
-          </div>
-
-
-          <p className={join(`mt-8`, `pb-16`)}>
-            <MainBtn type="submit">
-              Update Profile
-            </MainBtn>
-          </p>
-        </Form>
-
-
-
-
-      </Modal>
-    </div>
+    </div >
   )
 }
 
-export default EditProfile
+export default Edit
