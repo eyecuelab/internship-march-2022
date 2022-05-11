@@ -92,16 +92,18 @@ export const action: ActionFunction = async ({ request }) => {
 
 const Home: FC = () => {
   const trip = useLoaderData<LoaderData>()
-  const defaultPhoto = `public/img/dashboard.jpg`
+  const defaultPhoto = `/img/dashboard.jpg`
+  console.log(defaultPhoto)
 
   const errors = useActionData()
   const inputClassName = `w-full rounded border border-gray-500 px-2 py-1 text-lg`
 
   const centered = [`items-center`, `flex-col`, `mx-8`]
   const inputGrid = [`grid grid-flow-col grid-rows-2 gap-2`]
+  const negativeMargin = [`-mt-2`]
 
   return (
-    <div>
+    <div className={join(`pb-24`)}>
       <Header>Welcome!</Header>
       <TitleText>
         <span className={join(`ml-8`)}>Plan a Trip</span>
@@ -120,9 +122,13 @@ const Home: FC = () => {
           </p>
           <div className={join(...inputGrid)}>
             <AddButtonText>Start Date</AddButtonText>
-            <InputField type="date" name="startDate" />
+            <div className={join(...negativeMargin)}>
+              <InputField type="date" name="startDate" />
+            </div>
             <AddButtonText>End Date</AddButtonText>
-            <InputField type="date" name="endDate" />
+            <div className={join(...negativeMargin)}>
+              <InputField type="date" name="endDate" />
+            </div>
           </div>
           {/* <div className={join(...inputGrid)}>
             <AddButtonText>Start Location</AddButtonText>

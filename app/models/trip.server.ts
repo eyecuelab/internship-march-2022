@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { Trip } from "@prisma/client"
 import { Prisma } from "@prisma/client"
 
@@ -41,5 +42,22 @@ export async function updateTrip(
   return prisma.trip.update({
     where: { id },
     data: { deciderId },
+  })
+}
+
+export async function updateTripDates(
+  id: Trip[`id`],
+  startDate: Trip[`startDate`],
+  endDate: Trip[`endDate`],
+) {
+  return prisma.trip.update({
+    where: { id },
+    data: { startDate, endDate },
+  })
+}
+
+export async function deleteTrip(id: Trip[`id`]) {
+  return prisma.trip.delete({
+    where: { id },
   })
 }

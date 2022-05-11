@@ -87,7 +87,7 @@ const Index: FC = () => {
   ]
 
   return (
-    <div>
+    <div className={join(`pb-24`)}>
       <Header>Your Trips</Header>
       <h1 className={join(...categoryStyles)}>Trip Requests</h1>
       <ul>

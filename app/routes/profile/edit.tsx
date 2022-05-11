@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import type { FC } from "react"
+import { useState, useEffect } from "react"
 
 import type { ActionFunction, LoaderFunction } from "remix"
 import {
@@ -16,21 +17,19 @@ import invariant from "tiny-invariant"
 import { getUserById, updateUserById } from "~/models/user.server"
 import { requireUserId } from "~/session.server"
 import {
-  MainBtn,
-  ClearBtn,
-  InputLabel,
-  ModalBackdrop,
-  Modal,
-  AddButtonText,
-  InputFieldMid,
   ProfileFormInputFrame,
   ProfileFormPlaceholder,
   ProfileFormInputText,
   ProfileFormCancelBtn,
   ProfileFormSubmitBtn,
+  ProRoundedRectangle,
+  ProfileAvatarEdit,
+  ProfileAvatarImgEdit,
+  ProAvatarInput,
 } from "~/styles/styledComponents"
 import SvgBackButton from "~/styles/SVGR/SvgBackButton"
-import SvgSwipeButton from "~/styles/SVGR/SvgSwipeButton"
+import SvgDefaultAvatar from "~/styles/SVGR/SvgDefaultAvatar"
+import SvgPencil from "~/styles/SVGR/SvgPencil"
 import { join } from "~/utils"
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
@@ -60,19 +59,24 @@ export const action: ActionFunction = async ({ request }) => {
   const user = await getUserById(userId)
   const existingEmail = user?.email
   const existingUserName = user?.userName
+  const existingAvatar = user?.avatarUrl
   const formData = await request.formData()
   const formUserId = formData.get(`userId`)
 
   const formEmail = formData.get(`email`)
 
   const formUserName = formData.get(`userName`)
+  const formAvatarUrl = formData.get(`avatarURL`)
   const finalEmail = formEmail === `` ? existingEmail : formEmail
   const finalUserName = formUserName === `` ? existingUserName : formUserName
+  const finalAvatar = formAvatarUrl === `` ? existingAvatar : formAvatarUrl
+
 
 
   invariant(typeof formUserId === `string`, `userId must be a string`)
   invariant(typeof finalEmail === `string`, `email must be a string`)
   invariant(typeof finalUserName === `string`, `username must be a string`)
+  invariant(typeof finalAvatar === `string`, `url must be a string`)
   // const errors: ActionData = {
   //   userId: formUserId ? null : `userId is required`,
   //   email: formEmail ? null : `email is required`,
@@ -86,7 +90,7 @@ export const action: ActionFunction = async ({ request }) => {
   // }
 
 
-  await updateUserById(formUserId, finalEmail, finalUserName)
+  await updateUserById(formUserId, finalEmail, finalUserName, finalAvatar)
 
   return redirect(`/profile`)
 }
@@ -97,10 +101,34 @@ const Edit: FC = () => {
   const data = useLoaderData()
   const user = data?.user
   const userId = user.id
-  // const state: "idle" | "success" | "error" = actionData?.
+  const avatar = user?.avatarUrl ? (
+    user?.avatarUrl
+  ) : (
+    <SvgDefaultAvatar />)
+  const avatarShort = user?.avatarUrl ? (
+    (avatar).slice(0, 28)
+  ) : (
+    `Avatar not set`)
+
+
+  const [avatarInput, setAvatarInput] = useState(false)
+  const [avatarValue, setAvatarValue] = useState(true)
+
+  const showAvatarInput = () => {
+    setAvatarInput(true)
+    setAvatarValue(false)
+  }
+  useEffect(() => {
+    console.log(`useEffectRan`)
+    console.log(avatarInput)
+  }, [avatarInput])
+
+
 
 
   const centered = [`flex`, `items-center`, `place-content-center`, `flex-col`]
+
+
   return (
     <div className={join(...centered)}>
 
@@ -123,6 +151,50 @@ const Edit: FC = () => {
         <div>
 
           <div className={join(`flex`, `justify-center`, `flex-col`, `align-middle`, `ml-4`)}>
+            <ProRoundedRectangle className={join(`items-center`, `grid grid-cols-4`, `justify-between`)}>
+
+              <ProfileAvatarEdit
+                className={join(`flex`, `items-center`, `place-content-center`, `col-start-1`, `col-span-1`, `w-fit`)}
+              >
+                {typeof avatar === `string` ? (
+                  <ProfileAvatarImgEdit src={avatar} />
+                ) : (
+                  avatar
+                )}
+              </ProfileAvatarEdit>
+
+              <div className={join(`flex-col`, `col-start-2`, `col-span-2`, `w-3/5`, `pl-2`, `pr-2`, `mr-3`)}>
+                <div className={join(`mt-30`)}>
+                  <ProfileFormPlaceholder>Photo URL</ProfileFormPlaceholder>
+                </div>
+
+                {
+                  avatarValue && (
+
+                    <div className={join(`mt-30`)}>
+                      <p className={join(`text-white/100`, `text-xs`)}>
+                        {avatarShort}
+                      </p>
+                    </div>
+                  )
+                }
+
+
+                {avatarInput && (
+                  <div className={join(`-mt-1`, `flex`)}>
+                    <ProAvatarInput type="string" name="avatarURL" className={join(`mt-2`, `pr-2`)} />
+                  </div>
+                )}
+
+              </div>
+
+
+              <div onClick={showAvatarInput} className={join(`hover:cursor-pointer`)}>
+                <SvgPencil />
+              </div>
+
+
+            </ProRoundedRectangle>
             <ProfileFormInputFrame>
 
               <div className={join(`mt-30`)}>
@@ -132,7 +204,7 @@ const Edit: FC = () => {
 
               <div className={join(`-mt-1`)}>
 
-                <ProfileFormInputText type="email" name="email" className={join(`focus:pointer-events-none`)} />
+                <ProfileFormInputText type="email" name="email" className={join(`items-center`)} />
               </div>
             </ProfileFormInputFrame>
 
@@ -148,7 +220,7 @@ const Edit: FC = () => {
 
               <div className={join(`-mt-1`)}>
 
-                <ProfileFormInputText type="userName" name="userName" />
+                <ProfileFormInputText type="userName" name="userName" className={join(`items-center`)} />
               </div>
 
             </ProfileFormInputFrame>

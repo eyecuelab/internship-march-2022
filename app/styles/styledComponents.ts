@@ -29,10 +29,20 @@ export const SmMainBtn = styled(MainBtn)`
   width: 153px;
   height: 56px;
 `
-export const SmClearBtn = styled(ClearBtn)`
-  width: 153px;
+export const SaveButton = styled(MainBtn)`
+  width: 100%;
   height: 56px;
+`
+export const SmClearBtn = styled.button`
+  width: 100%;
+  height: 56px;
+  background: border-color;
+  border: 1px solid rgba(202, 210, 197, 1);
   color: #ffffff;
+  border-radius: 15px;
+`
+export const Hr = styled.hr`
+  border: 1px solid rgba(255, 255, 255, 0.19);
 `
 
 export const Header = styled.h1`
@@ -94,14 +104,21 @@ export const InputLabel = styled.label`
 `
 export const InputField = styled.input`
 width: 100%;
-weight: semi-bold;
+weight: 600;
+height: 55px;
+color: black;
+padding .5em;
+border-radius: 15px;`
+
+export const DateInputField = styled.input`
+width: ${(props) => (props.width ? props.width : `100%`)};
 height: 55px;
 color: black;
 padding .5em;
 border-radius: 15px;`
 
 export const InputFieldMid = styled.input`
-width: 276px;
+width: 100%
 weight: semi-bold;
 height: 55px;
 color: black;
@@ -255,12 +272,21 @@ export const TripBtn = styled(MainBtn)`
 `
 export const DangerBtn = styled(TripBtn)`
   background: #2f3e46;
+  width: 100%;
   color: #ff5e03;
   margin-bottom: 1rem;
   margin-top: 0px;
   background-[#2F3E46];
   color: text-[#FF5E03];
 `
+export const DeleteTripButton = styled.button`
+  width: 100%;
+  height: 56px;
+  margin: auto;
+  background: #cad2c5;
+  border-radius: 15px;
+`
+
 export const TripLiContainer = styled.li`
   background: #52796f;
   font-family: "Lato";
@@ -350,11 +376,11 @@ export const ProfileFormInputFrame = styled.div`
   height: 55px;
   color: black;
   padding-left: 1.5em;
-  padding-top: 0.25em;
   border-radius: 15px;
   background-color: #ffffff;
   align-content: center;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
+  border: solid 1.5px #84a98c;
 `
 
 export const ProfileFormPlaceholder = styled.text`
@@ -392,13 +418,50 @@ export const ProfileFormSubmitBtn = styled.button`
   margin-left: 5px;
   width: 135px;
 `
-export const ProfileAvatarMain = styled.img`
+export const ProfileAvatarMain = styled.div`
   width: 85px;
   height: 85px;
   border-radius: 50%;
-  background-color: green;
+  background-color: #52796f;
   border: 2px solid #ffffff;
 `
 export const TripNav = styled(RoundedRectangle)`
   padding: 0.5em;
+`
+
+export const ProfileAvatarEdit = styled.div`
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #52796f;
+  border: 2px solid #ffffff;
+`
+export const ProfileAvatarImg = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+`
+export const ProfileAvatarImgEdit = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+`
+export const ProRoundedRectangle = styled.div`
+  margin: auto;
+  margin-top: 1em;
+  margin-bottom: 3em;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  font-size: 0.5em;
+  width: 276px;
+  height: 75px;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  align-content: center;
+  display: flex;
+`
+export const ProAvatarInput = styled.input`
+  background: rgba(255, 255, 255, 0);
+  width: 100%;
+  height: 15px;
 `

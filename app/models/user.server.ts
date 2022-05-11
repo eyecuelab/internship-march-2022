@@ -38,12 +38,14 @@ export async function updateUserById(
   id: User[`id`],
   email: User[`email`],
   userName: User[`userName`],
+  avatarUrl: User[`avatarUrl`],
 ): Promise<User | null> {
   return prisma.user.update({
     where: { id },
     data: {
       email: email,
       userName: userName,
+      avatarUrl: avatarUrl,
     },
   })
 }

@@ -1,4 +1,5 @@
 import type { FC } from "react"
+import { useContext } from "react"
 
 import {
   json,
@@ -17,6 +18,7 @@ import comboboxStyles from "@reach/combobox/styles.css"
 import { join } from "~/utils"
 
 import { getUser } from "./session.server"
+import StylesContext from "./styles-context"
 import ourStyles from "./styles/index.css"
 import tailwindStylesheetUrl from "./styles/tailwind.css"
 
@@ -35,12 +37,13 @@ export const meta: MetaFunction = () => ({
 })
 
 const App: FC = () => {
+  const styles = useContext(StylesContext)
   return (
     <html lang="en" className="h-full">
       <head>
         <Meta />
         <Links />
-        {typeof document === `undefined` ? `__STYLES__` : null}
+        {styles}
       </head>
       <body className={join(`h-full`, `bg-[#2F3E46DE]`)}>
         <Outlet />
