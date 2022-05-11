@@ -106,6 +106,7 @@ const Edit: FC = () => {
   const data = useLoaderData<LoaderData>()
   const { attendees } = data
   const fetcher = useFetcher()
+  console.log(data.trip)
 
   const params = useParams()
   const currentStartDate = data.startDate ? data.startDate : data.defaultDate
@@ -117,7 +118,7 @@ const Edit: FC = () => {
   const nameText = [`text-base`]
 
   const mainFlex = [`flex`]
-  const avatarDiv = [`flex`, `flex-1`, `inline-block`, `pb-8`]
+  const avatarDiv = [`flex`, `flex-1`, `pb-8`]
   const nameDiv = [`flex-1`, `-ml-12`, `text-left`]
   const deleteDiv = [`flex-1`, `text-right`, `mr-8`]
 
@@ -166,9 +167,11 @@ const Edit: FC = () => {
                       <li>
                         <div className={join(...mainFlex)}>
                           <div className={join(...avatarDiv)}>
-                            <Avatar
-                              src={attendee.user.avatarUrl || defaultAvatar}
-                            />
+                            <span className={join(`ml-8`)}>
+                              <Avatar
+                                src={attendee.user.avatarUrl || defaultAvatar}
+                              />
+                            </span>
                             <span className={join(`ml-4`, ...nameText)}>
                               {attendee.user.userName}
                             </span>

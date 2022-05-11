@@ -93,7 +93,7 @@ model Expense {
   total       Int
   tripId      String
   userId      String
-  attendee    Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onUpdate: Cascade)
+  attendee    Attendee @relation(fields: [tripId, userId], references: [tripId, userId], onDelete: Cascade, onUpdate: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

@@ -257,12 +257,21 @@ export const TripBtn = styled(MainBtn)`
 `
 export const DangerBtn = styled(TripBtn)`
   background: #2f3e46;
+  width: 100%;
   color: #ff5e03;
   margin-bottom: 1rem;
   margin-top: 0px;
   background-[#2F3E46];
   color: text-[#FF5E03];
 `
+export const DeleteTripButton = styled.button`
+  width: 100%;
+  height: 56px;
+  margin: auto;
+  background: #cad2c5;
+  border-radius: 15px;
+`
+
 export const TripLiContainer = styled.li`
   background: #52796f;
   font-family: "Lato";
