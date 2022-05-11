@@ -3,7 +3,6 @@ import { Link } from "remix"
 
 import { ComboboxInput } from "@reach/combobox"
 import styled from "styled-components"
-
 // font-family: 'Lato', sans-serif;
 // font-family: 'Playfair Display', serif;
 
@@ -39,8 +38,10 @@ export const SmClearBtn = styled(ClearBtn)`
 export const Header = styled.h1`
   font-family: "Playfair Display", serif;
   font-size: 2em;
+  font-weight: 700;
   margin: 1em auto 1em 1em;
   color: #ffffff;
+  z-index: 1;
 `
 
 export const SubHeader = styled.h3`
@@ -112,6 +113,17 @@ export const Avatar = styled.img`
   height: 50px;
   border-radius: 50%;
 `
+export const TripDashboardImg = styled.div`
+  background-image: url("/img/new-mountains.jpeg");
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-clip: border-box;
+  width: 100%;
+  height: 50vh;
+`
+
 export const HomePageImg = styled.img`
   width: 100%;
   height: max-content;
@@ -198,8 +210,8 @@ export const CostAmount = styled.h3`
   align: right;
 `
 export const TitleText = styled.h3<{
-  fontWeight?: 400 | 500 | 600
-  fontSize?: `12px` | `14px` | `16px`
+  fontWeight?: 400 | 500 | 600 | 700
+  fontSize?: `12px` | `14px` | `16px` | `18px`
 }>`
   font-family: Lato;
   font-weight: ${(props) => (props.fontWeight ? props.fontWeight : 600)};
@@ -386,4 +398,7 @@ export const ProfileAvatarMain = styled.img`
   border-radius: 50%;
   background-color: green;
   border: 2px solid #ffffff;
+`
+export const TripNav = styled(RoundedRectangle)`
+  padding: 0.5em;
 `

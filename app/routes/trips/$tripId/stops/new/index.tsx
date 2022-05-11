@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
   const index = stops.length > 2 ? stops.length - 1 : stops.length
   await createStop({ apiResult, tripId, index })
 
-  return redirect(`/trips/${tripId}/stops`)
+  return redirect(`/trips/${tripId}/stops/`)
 }
 
 const NewStopSearch: FC = () => {

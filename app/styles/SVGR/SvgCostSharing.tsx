@@ -1,7 +1,9 @@
+/* eslint-disable max-len */
+
 import * as React from "react"
 import type { FC } from "react"
 
-const SvgCostSharing = (props) => (
+const SvgCostSharing: FC = (props) => (
   <svg
     width={219}
     height={20}

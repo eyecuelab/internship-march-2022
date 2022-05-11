@@ -11,9 +11,8 @@ import { getTripById } from "~/models/trip.server"
 import { TitleText, Avatar, RoundedRectangle } from "~/styles/styledComponents"
 import SvgCoins from "~/styles/SVGR/SvgCoins"
 import SvgCostSharing from "~/styles/SVGR/SvgCostSharing"
-import SvgDecider from "~/styles/SVGR/SvgDecider"
 import SvgDice from "~/styles/SVGR/SvgDice"
-import SvgHorizontalLine from "~/styles/SVGR/SvgHorizontalLine"
+import SvgForwardButton from "~/styles/SVGR/SvgForwardButton"
 import SvgLuggage from "~/styles/SVGR/SvgLuggage"
 import SvgPackingList from "~/styles/SVGR/SvgPackingList"
 import SvgVerticalLine from "~/styles/SVGR/SvgVerticalLine"
@@ -32,6 +31,7 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
   invariant(tempTrip, `need tripId`)
   const trip = formatTrip(tempTrip)
   invariant(attendees, `need attendeesId`)
+  console.log(trip.stops)
   return { trip, attendees }
 }
 
@@ -40,35 +40,43 @@ const getLoaderData = async (request: Request, params: Params<string>) => {
 const AttendeesLayout: FC = () => {
   const data = useLoaderData<LoaderData>()
 
-  console.log(data)
-
   const defaultAvatar = `public/img/default-avatar.jpg`
-  const rectangleStyles = [`flex`, `mx-2`]
+  const rectangleStyles = [`flex`, `mx-2`, `items-center`]
   const avatarDivStyles = [`ml-2`, `flex`]
   const titleDivStyles = [`ml-4`, `flex-1`]
-  const linkStyles = [`flex space-x-4`, `mb-4`, `pl-4`]
-  const lineStyles = [`mb-2px`]
+  const linkStyles = [`flex`, `justify-center`, `w-full`]
+  const packingLinkStyles = [`mb-4`]
+  const costShareLinkStyles = [`my-4`]
+  const deciderLinkStyles = [`mt-4`]
+  const linkItemStyles = [`mx-auto`]
+  const hrStyles = [
+    `border-solid`,
+    `border-1`,
+    `mx-4`,
+    `w-full`,
+    `border-white`,
+    `opacity-20`,
+  ]
 
   return (
     <div>
       <div>
         <div>
           <RoundedRectangle className={join(...rectangleStyles, `flex-col`)}>
-            <div className={join(`flex`, `content-start`)}>
-              <div className={join(`pr-10`, `ml-8`, `mb-3`)}>
+            <div className={join(...linkStyles, `mb-4`)}>
+              <div className={join(`mx-auto`)}>
                 <TitleText className={join(`mb-3`)}>Starts</TitleText>
                 <TitleText fontWeight={400} fontSize={`14px`}>
                   {data.trip.startDate ? data.trip.startDate : `00/00/00`}
                 </TitleText>
                 <TitleText fontWeight={400} fontSize={`14px`}>
                   {data.trip.stops[0]
-                    ? data.trip.stops[-1].apiResult.name
+                    ? data.trip.stops[0].apiResult.name
                     : `TBD`}
                 </TitleText>
               </div>
               <SvgVerticalLine />
-
-              <div className={join(`pl-10`, `ml-6`)}>
+              <div className={join(`mx-auto`)}>
                 <TitleText className={join(`mb-3`)}>Ends</TitleText>
                 <TitleText fontWeight={400} fontSize={`14px`}>
                   {data.trip.endDate ? data.trip.endDate : `00/00/00`}
@@ -80,29 +88,27 @@ const AttendeesLayout: FC = () => {
                 </TitleText>
               </div>
             </div>
-            <SvgHorizontalLine />
-            <div className={join(`mt-3`, `flex-col`)}>
-              <TitleText>
-                <div className={join(`ml-8`, `mb-3`)}>Travelers</div>
+            <hr className={join(...hrStyles)} />
+            <div className={join(`mx-auto`, `w-full`)}>
+              <TitleText className={join(`mx-auto`, `mb-3`, `ml-3`, `mr-auto`)}>
+                Travelers
               </TitleText>
-              <div>
-                <ul className={join(`mx-6`)}>
-                  {data.attendees.map((attendee) => (
-                    <li
-                      className={join(`flex-row`, `flex`, `items-center`)}
-                      key={attendee.user.id + attendee.user.id}
-                    >
-                      <span className={join(...avatarDivStyles)}>
-                        <Avatar src={attendee.user.avatarUrl || defaultAvatar} />
-                      </span>
-                      <span className={join(...titleDivStyles)}>
-                        <TitleText fontWeight={500} fontSize={`14px`}>
-                          {attendee.user.userName}
-                        </TitleText>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+              <div className={join(`flex`, `flex-wrap`)}>
+                {data.attendees.map((attendee, index) => (
+                  <div
+                    className={join(`flex-row`, `flex`, `items-center`, `w-2/4`)}
+                    key={attendee.user.id + attendee.user.id}
+                  >
+                    <span className={join(...avatarDivStyles)}>
+                      <Avatar src={attendee.user.avatarUrl || defaultAvatar} />
+                    </span>
+                    <span className={join(...titleDivStyles)}>
+                      <TitleText fontWeight={500} fontSize={`14px`}>
+                        {attendee.user.userName}
+                      </TitleText>
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </RoundedRectangle>
@@ -111,25 +117,49 @@ const AttendeesLayout: FC = () => {
       <RoundedRectangle className={join(...rectangleStyles, `flex-col`)}>
         <Link
           to={`/trips/${data.trip.id}/packing-list/`}
-          className={join(...linkStyles)}
+          className={join(...linkStyles, ...packingLinkStyles)}
         >
-          <SvgLuggage /> <SvgPackingList />
+          <div className={join(...linkItemStyles, `ml-0`)}>
+            <SvgLuggage />
+          </div>
+
+          <TitleText className={join(...linkItemStyles)} fontWeight={400}>
+            Packing List
+          </TitleText>
+          <div className={join(...linkItemStyles, `mr-0`, `pt-1.5`)}>
+            <SvgForwardButton />
+          </div>
         </Link>
-        <SvgHorizontalLine />
+        <hr className={join(...hrStyles)} />
         <Link
           to={`/trips/${data.trip.id}/expenses/`}
-          className={join(...linkStyles, `mt-4`)}
+          className={join(...linkStyles, ...costShareLinkStyles)}
         >
-          <SvgCoins />
-          <SvgCostSharing />
+          <div className={join(...linkItemStyles, `ml-0`)}>
+            <SvgCoins />
+          </div>
+
+          <TitleText className={join(...linkItemStyles)} fontWeight={400}>
+            Cost Sharing
+          </TitleText>
+          <div className={join(...linkItemStyles, `mr-0`, `pt-1.5`)}>
+            <SvgForwardButton />
+          </div>
         </Link>
-        <SvgHorizontalLine />
+        <hr className={join(...hrStyles)} />
         <Link
           to={`/trips/${data.trip.id}/decider/`}
-          className={join(...linkStyles, `mt-4`)}
+          className={join(...linkStyles, ...deciderLinkStyles)}
         >
-          <SvgDice />
-          <SvgDecider />
+          <div className={join(...linkItemStyles, `ml-0`)}>
+            <SvgDice />
+          </div>
+          <TitleText className={join(...linkItemStyles)} fontWeight={400}>
+            Decider
+          </TitleText>
+          <div className={join(...linkItemStyles, `mr-0`, `pt-1.5`)}>
+            <SvgForwardButton />
+          </div>
         </Link>
       </RoundedRectangle>
     </div>

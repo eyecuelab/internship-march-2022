@@ -1,7 +1,7 @@
 import type { FC } from "react"
 
 import type { LoaderFunction, ActionFunction } from "remix"
-import { Link, useLoaderData, Form, json } from "remix"
+import { Link, useLoaderData, Form, json, redirect } from "remix"
 
 import type { Params } from "react-router"
 import invariant from "tiny-invariant"
@@ -45,24 +45,21 @@ export const action: ActionFunction = async ({ request, params }) => {
   invariant(trip, `Did not find trip`)
   if (upIndex && stop.index < trip.stops.length - 1) {
     stop.index++
-    return await updateStop(stop)
+    await updateStop(stop)
   }
   if (downIndex && stop.index > 0) {
     stop.index--
-    return await updateStop(stop)
+    await updateStop(stop)
   }
   if (!upIndex && !downIndex) {
-    return await deleteStopById(id.toString(), params.tripId)
+    await deleteStopById(id.toString(), params.tripId)
   }
-  return null
+  return redirect(`/trips/${params.tripId}/stops/`)
 }
 const Stops: FC = () => {
   const data = useLoaderData()
   return (
     <div>
-      <h1 className={join(`flex`, `items-center`, `justify-center`)}>
-        Stops List
-      </h1>
       {data.stops.map((stop: FormattedStop) => (
         <RoundedRectangle key={stop.id} className={join(`flex`)}>
           <img
@@ -121,7 +118,9 @@ const Stops: FC = () => {
           </Form>
         </RoundedRectangle>
       ))}
-      <Link to="new">Add Stop</Link>
+      <Link to="new" className={join(`text-white`)}>
+        + Add Stop
+      </Link>
     </div>
   )
 }

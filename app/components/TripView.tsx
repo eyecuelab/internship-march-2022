@@ -56,7 +56,7 @@ const TripView: FC<TripViewProps> = ({ trip, isAccepted = true }) => {
       <ul>
         <TripLiContainer key={trip.id}>
           {isAccepted ? (
-            <Link to={trip.id}>
+            <Link to={`${trip.id}/attendees/`}>
               <LinkComponents trip={trip} />
             </Link>
           ) : (
@@ -78,7 +78,6 @@ const TripView: FC<TripViewProps> = ({ trip, isAccepted = true }) => {
               </Form>
             </>
           )}
-
         </TripLiContainer>
       </ul>
     </div>
