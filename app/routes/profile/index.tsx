@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import type { FC } from "react"
 
 import type { LoaderFunction } from "remix"
@@ -25,6 +24,7 @@ import SvgDefaultAvatar from "~/styles/SVGR/SvgDefaultAvatar"
 import SvgGear from "~/styles/SVGR/SvgGear"
 import SvgTrip from "~/styles/SVGR/SvgPin"
 import SvgProfileDial from "~/styles/SVGR/SvgProfileDial"
+import type { FullTrip } from "~/utils"
 import { join } from "~/utils"
 
 import NavBar from "../navbar"
@@ -36,12 +36,16 @@ const getLoaderData = async (request: Request) => {
   const user = await getUserById(userId)
   invariant(user, `user must exist`)
 
-  const tripList: Trip[] = []
+  const tripList: FullTrip[] = []
+  const today = new Date().getUTCMilliseconds()
+
   await Promise.all(
     user.attendees.map(async (attendee) => {
       const trip = await getTripById(attendee.tripId)
-      if (trip) {
-        tripList.push(trip)
+      if (trip?.endDate) {
+        if (trip.endDate.getUTCMilliseconds() < today) {
+          tripList.push(trip)
+        }
       }
     }),
   )
@@ -69,9 +73,6 @@ const Index: FC = () => {
   }
   const createdDate = data.user?.createdAt
   const profileCreatedDate = convertStringToDate(createdDate.toString())
-
-  const attendees = data?.user?.attendees
-  const attendeesCount = attendees.length
 
   return (
     <>
@@ -121,7 +122,7 @@ const Index: FC = () => {
               </ProfileAvatarMain>
             </div>
             <div>
-              <ProHugeNumber>{attendees.length}</ProHugeNumber>
+              <ProHugeNumber>{trips.length}</ProHugeNumber>
               <ProH4>Total Trips</ProH4>
               <ProBody>
                 Member Since{` `}
@@ -137,7 +138,7 @@ const Index: FC = () => {
           </div>
 
           <ul>
-            {trips.map((trip: Trip) => (
+            {trips.map((trip: FullTrip) => (
               <div key={trip.id} className={join(`mt-5`)}>
                 <Link to={`/trips/${trip.id}/attendees/`}>
                   <div
@@ -160,7 +161,7 @@ const Index: FC = () => {
                           : `tbd`}
                       </ProBody>
                       <ProBody>
-                        {attendeesCount}
+                        {trip.attendees.length}
                         {` `}Travelers
                       </ProBody>
                     </div>

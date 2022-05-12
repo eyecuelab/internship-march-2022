@@ -1,6 +1,6 @@
 import type { FC } from "react"
 
-import { Link, Outlet, NavLink, json, useLoaderData } from "remix"
+import { Link, json, useLoaderData } from "remix"
 import type { LoaderFunction } from "remix"
 
 import type { Params } from "react-router"
@@ -10,10 +10,10 @@ import { getAttendeesByTripId } from "~/models/attendee.server"
 import { getTripById } from "~/models/trip.server"
 import { TitleText, Avatar, RoundedRectangle } from "~/styles/styledComponents"
 import SvgCoins from "~/styles/SVGR/SvgCoins"
-import SvgDice from "~/styles/SVGR/SvgDice"
 import SvgForwardButton from "~/styles/SVGR/SvgForwardButton"
 import SvgLuggage from "~/styles/SVGR/SvgLuggage"
 import SvgVerticalLine from "~/styles/SVGR/SvgVerticalLine"
+import SvgWhiteDice from "~/styles/SVGR/SvgWhiteDice"
 import { formatTrip, join } from "~/utils"
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
@@ -150,7 +150,7 @@ const AttendeesLayout: FC = () => {
           className={join(...linkStyles, ...deciderLinkStyles)}
         >
           <div className={join(...linkItemStyles, `ml-0`)}>
-            <SvgDice />
+            <SvgWhiteDice />
           </div>
           <TitleText className={join(...linkItemStyles)} fontWeight={400}>
             Decider
