@@ -22,6 +22,9 @@ import {
   ModalBackdrop,
   Modal,
   DangerBtn,
+  TripBtn,
+  ClearBtn,
+  EditBtn,
 } from "~/styles/styledComponents"
 import SvgSwipeButton from "~/styles/SVGR/SvgSwipeButton"
 import { join } from "~/utils"
@@ -104,25 +107,33 @@ const DeleteTrip: FC = () => {
       <Modal>
         <div className={join(...centered)}>
           <div
-            className={join(`pt-2`)}
+            className={join(`pt-2`, `mb-10`)}
             onClick={() => navigate(`/trips/${params.tripId}/attendees/`)}
           >
             <SvgSwipeButton />
           </div>
-
-          <div className={join(`p-8`)}>
-            {actionData?.tripId && outputError(actionData.tripId)}
-            {/* {actionData?.user && outputError(actionData.user)}
-              {actionData?.email && outputError(actionData.email)} */}
-            <div onClick={() => navigate(`/trips/${params.tripId}/edit`)}>
-              <DangerBtn>Edit Trip</DangerBtn>
-            </div>
-            <Form method="post">
-              <p className={join(`pb-24`)}>
-                <DangerBtn type="submit">Delete Trip</DangerBtn>
-              </p>
-            </Form>
-          </div>
+          {actionData?.tripId && outputError(actionData.tripId)}
+          <EditBtn
+            className={join(`w-full`, `mx-auto`)}
+            onClick={() => navigate(`/trips/${params.tripId}/edit`)}
+          >
+            Edit Trip
+          </EditBtn>
+          <Form
+            method="post"
+            className={join(
+              `w-full`,
+              `mx-auto`,
+              `flex`,
+              `items-center`,
+              `justify-center`,
+              `mb-10`,
+            )}
+          >
+            <DangerBtn type="submit" className={join(`w-full`, `mx-auto`)}>
+              Delete Trip
+            </DangerBtn>
+          </Form>
         </div>
       </Modal>
     </div>
