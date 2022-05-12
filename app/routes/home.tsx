@@ -23,7 +23,12 @@ import {
   TitleText,
   WideButton,
 } from "~/styles/styledComponents"
-import { TripWithFormattedStops, join, formatTrip } from "~/utils"
+import {
+  TripWithFormattedStops,
+  join,
+  formatTrip,
+  MAX_FORM_LENGTH,
+} from "~/utils"
 
 import NavBar from "./navbar"
 
@@ -116,6 +121,7 @@ const Home: FC = () => {
               <em className="text-red-600">{errors.nickName}</em>
             ) : null}
             <InputField
+              maxLength={MAX_FORM_LENGTH}
               type="text"
               name="nickName"
               placeholder="e.g: Denver Hiking Trip"

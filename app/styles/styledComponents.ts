@@ -278,6 +278,9 @@ export const DangerBtn = styled(TripBtn)`
   background-[#2F3E46];
   color: text-[#FF5E03];
 `
+export const EditBtn = styled(DangerBtn)`
+  color: white;
+`
 export const DeleteTripButton = styled.button`
   width: 100%;
   height: 56px;

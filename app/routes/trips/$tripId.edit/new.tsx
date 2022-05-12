@@ -31,7 +31,7 @@ import {
   InputFieldMid,
 } from "~/styles/styledComponents"
 import SvgSwipeButton from "~/styles/SVGR/SvgSwipeButton"
-import { join, validateEmail } from "~/utils"
+import { join, MAX_FORM_LENGTH, validateEmail } from "~/utils"
 
 type LoaderData = {
   trip: Trip
@@ -127,7 +127,11 @@ const NewAttendee: FC = () => {
               <InputLabel>
                 User Email
                 <p>
-                  <InputFieldMid type="text" name="email" />
+                  <InputFieldMid
+                    maxLength={MAX_FORM_LENGTH}
+                    type="text"
+                    name="email"
+                  />
                 </p>
               </InputLabel>
             </p>

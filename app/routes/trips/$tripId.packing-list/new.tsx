@@ -33,7 +33,7 @@ import {
   InputFieldMid,
 } from "~/styles/styledComponents"
 import SvgSwipeButton from "~/styles/SVGR/SvgSwipeButton"
-import { join } from "~/utils"
+import { join, MAX_FORM_LENGTH } from "~/utils"
 
 const inputClassName = `join(
   flex
@@ -140,7 +140,8 @@ const AddItem: FC = () => {
               {errors?.description ? (
                 <em className="text-red-600">{errors.description}</em>
               ) : null}
-              <InputFieldMid type="text" name="description" className={inputClassName} />
+              <InputFieldMid maxLength={MAX_FORM_LENGTH} 
+              type="text" name="description" className={inputClassName} />
             </InputLabel>
           </p>
           <p className={join(`mt-8`, `pb-16`)}>

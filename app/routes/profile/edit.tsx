@@ -30,7 +30,7 @@ import {
 import SvgBackButton from "~/styles/SVGR/SvgBackButton"
 import SvgDefaultAvatar from "~/styles/SVGR/SvgDefaultAvatar"
 import SvgPencil from "~/styles/SVGR/SvgPencil"
-import { join } from "~/utils"
+import { join, MAX_FORM_LENGTH } from "~/utils"
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
@@ -171,7 +171,7 @@ const Edit: FC = () => {
 
                 {avatarInput && (
                   <div className={join(`-mt-1`, `flex`)}>
-                    <ProAvatarInput type="string" name="avatarURL" className={join(`mt-2`, `pr-2`)} />
+                    <ProAvatarInput maxLength={MAX_FORM_LENGTH} type="string" name="avatarURL" className={join(`mt-2`, `pr-2`)} />
                   </div>
                 )}
 
@@ -209,7 +209,7 @@ const Edit: FC = () => {
 
               <div className={join(`-mt-1`)}>
 
-                <ProfileFormInputText type="userName" name="userName" className={join(`items-center`)} />
+                <ProfileFormInputText maxLength={MAX_FORM_LENGTH} type="userName" name="userName" className={join(`items-center`)} />
               </div>
 
             </ProfileFormInputFrame>

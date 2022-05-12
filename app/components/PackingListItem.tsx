@@ -13,7 +13,7 @@ import {
   TitleTextDark,
 } from "~/styles/styledComponents"
 import SvgCheckCircle from "~/styles/SVGR/SvgCheckCircle"
-import { join } from "~/utils"
+import { join, MAX_FORM_LENGTH } from "~/utils"
 
 import ReturnCheckBox from "./ReturnCheckBox"
 
@@ -30,7 +30,12 @@ const PackingListItem: FC<ItemProps> = ({ item }) => {
       <li key={item.id}>
         <RoundedRectangle className="class=flex justify-between">
           <fetcher.Form method="post">
-            <input type="hidden" name="id" value={item.id} />
+            <input
+              maxLength={MAX_FORM_LENGTH}
+              type="hidden"
+              name="id"
+              value={item.id}
+            />
             <BottomLineDiv className="hover:delay-0 transition delay-150 duration-300">
               <div className="... flex justify-between">
                 <TitleText>{item.description}</TitleText>

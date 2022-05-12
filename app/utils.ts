@@ -122,3 +122,5 @@ export const findDistance = (
 ): number => {
   return Math.hypot(x2 - x1, y2 - y1)
 }
+
+export const MAX_FORM_LENGTH = 22
